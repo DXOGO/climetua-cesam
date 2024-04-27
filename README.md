@@ -2,11 +2,11 @@
 
 
 
-##### To build and run the web app (--build only necessary on first run)
+##### To build and run the web app
 
 ```bash
 cd ./cesam-thredds
-docker-compose -f docker-compose.dev.yml up --build
+docker-compose -f docker-compose.dev.yml up
 ```
 
 ##### To stop the web app
