@@ -1,0 +1,39 @@
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  /* size based on word size */
+}
+
+.toggle.on {
+  background-color: #0A77FF;
+}
+
+.toggle.off {
+  background-color: #C8D0D6;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.label.on {
+  color: #FFFFFF;
+  white-space: nowrap;
+}
+
+.label.off {
+  color: #6B778C;
+  white-space: nowrap;
+}
+
+.toggle.disabled {
+  opacity: 0.5; /* Adjust opacity to visually indicate disabled state */
+  pointer-events: none; /* Disable pointer events to prevent clicking */
+}

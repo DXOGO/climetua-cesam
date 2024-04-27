@@ -1,0 +1,125 @@
+.graph-box-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+}
+
+/* .graph-box-container.large-height {
+    height: 90%;
+}
+
+.graph-box-container.large-width {
+    height: 90%;
+} */
+
+.toggle-box-container-expanded {
+    margin-top: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+}
+
+.toggle-box-container-collapsed {
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+}
+
+.toggle-level {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.level-arrow {
+    transform: scale(2);
+    color: #303236;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.level-title {
+    display: flex;
+    justify-content: center;
+    height: 40px;
+}
+
+.level-text {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: #303236;
+}
+
+.toggle-title span {
+    margin-right: 5px;
+}
+
+.toggle-content-0 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 10px;
+    padding-bottom: 10px;
+    padding-right: 20px;
+    overflow-x: auto;
+    scrollbar-color: #C8D0D6 #EFEFEF;
+    scrollbar-width: thin;
+    scroll-behavior: smooth;
+}
+
+.large-height .toggle-content-0 {
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.large-width .toggle-content-0 {
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.toggle-content-1 {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 10px;
+}
+
+.chart-container {
+    width: 100%;
+    scrollbar-color: #C8D0D6 #EFEFEF;
+    scrollbar-width: thin;
+    scroll-behavior: smooth;
+    overflow-y: hidden;
+    overflow-x: scroll;
+}
+
+.chart-box-text {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    font-size: 14px;
+    font-weight: 400;
+    color: #68727D;
+    align-self: center;
+}
+
+.warning-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: #FF0000;
+}

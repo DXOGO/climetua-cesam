@@ -1,0 +1,175 @@
+.hourly-forecast-box-content {
+    display: flex;
+    background-color: #FFFFFF;
+    width: 12%;
+    min-width: 120px;
+    border-radius: 10px;
+    margin: 1px;
+    box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.02);
+}
+
+.hourly-forecast-container {
+    width: 100%;
+    text-align: center;
+}
+
+.hourly-forecast-hour {
+    border-radius: 10px 10px 0 0;
+    background-color: #C8D0D6;
+    height: 25px;
+    line-height: 25px;
+    font-weight: 500;
+    font-size: 12px;
+}
+
+.hourly-forecast-details {
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.hourly-forecast-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto;
+}
+
+.forecast-temperature {
+    display: flex;
+    padding-left: 5px;
+    padding-right: 5px;
+    justify-content: center;
+}
+
+.forecast-temperature-text {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2B2B2B;
+}
+
+.forecast-temperature-unit {
+    font-size: 16px;
+    font-weight: bold;
+    color: #2B2B2B;
+    margin-top: 6px;
+}
+
+.forecast-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 15px;
+}
+
+.forecast-column-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.forecast-column-data {
+    padding-top: 6px;
+}
+
+/* ----------------collapsed ---------------------- */
+
+.hourly-forecast-box-content-collapsed {
+    background-color: #FFFFFF;
+    align-items: center;
+    border-bottom: 2px solid #EFEFEF;
+    border-radius: 10px;
+}
+
+.hourly-forecast-container-collapsed {
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.hourly-forecast-hour-collapsed {
+    background-color: #C8D0D6;
+    width: 40px;
+    line-height: 26px;
+    font-weight: 500;
+    font-size: 10px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-radius: 10px 0 0 10px;
+}
+
+.hourly-forecast-details-collapsed {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.hourly-forecast-icon-collapsed {
+    width: 30px;
+    height: 30px;
+    margin-left: 5%;
+}
+
+.forecast-temperature-collapsed {
+    display: flex;
+    padding-left: 5%;
+    justify-content: center;
+    width: 20%;
+}
+
+.forecast-temperature-text-collapsed {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2B2B2B;
+}
+
+.forecast-temperature-unit-collapsed {
+    font-size: 12px;
+    font-weight: bold;
+    color: #2B2B2B;
+    margin-top: 3px;
+}
+
+.forecast-row-collapsed {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-left: 20px;
+}
+
+.forecast-row-data-collapsed-precipitation {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 25%;
+
+}.forecast-row-data-collapsed-pressure {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 26%;
+}
+
+.forecast-row-data-collapsed-humidity {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width:20%;
+}
+
+.forecast-row-data-collapsed-wind {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 29%;
+}
+
+/* .forecast-row-data-collapsed {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 25%;
+} */

@@ -1,0 +1,55 @@
+/* WeatherBox.css */
+.weather-box-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0 10px;
+}
+
+@media screen and (min-height: 768px) {
+    .weather-box-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+}
+
+.forecast-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 400;
+    color: #68727D;
+}
+
+.forecast-box-text {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    align-self: flex-start;
+}
+
+.forecast-content-expanded {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    overflow-x: auto;
+    scrollbar-width:thin;
+    scrollbar-color: #C8D0D6 #EFEFEF;
+    padding-bottom: 10px
+
+}
+
+.forecast-content-collapsed {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.radio-options {
+    font-size: 12px;
+}

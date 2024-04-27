@@ -1,0 +1,7 @@
+.chart-container-expanded {
+    width: 100%;
+}
+
+.chart-container-collapsed {
+    min-width: 1400px;
+}
