@@ -5,7 +5,7 @@
 ##### To build and run the web app
 
 ```bash
-cd ./cesam-thredds
+cd ./mctw-cesam
 docker-compose -f docker-compose.dev.yml up
 ```
 
