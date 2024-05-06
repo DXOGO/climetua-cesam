@@ -184,25 +184,6 @@ const initializeMap = async () => {
     );
 
     const baseUrl = 'http://localhost:80/thredds/wms/testAll/wrfpost.nc';
-    // const wmsLayer = L.tileLayer.wms(baseUrl, {
-    //     layers: 'T_2m',
-    //     format: 'image/png',
-    //     transparent: true,
-    //     attribution: 'CESAM',
-    //     styles: 'default',
-    //     colorscalerange: '-10,40',
-    //     belowmincolor: 'extend',
-    //     abovemaxcolor: 'extend',
-    //     uppercase: true,
-    // });
-
-    //const wmsLayerTime = L.timeDimension.layer.wms.timeseries(wmsLayer, {
-    //     updateTimeDimension: true,
-    //     name: "Temperature at 2 m",
-    //     markers: markers,
-    //     enableNewMarkers: true,
-    // })
-    // wmsLayerTime.addTo(map);
 
     layers.forEach(layer => {
         const wmsLayer = L.tileLayer.wms(baseUrl, {
@@ -210,8 +191,8 @@ const initializeMap = async () => {
             format: 'image/png',
             transparent: true,
             attribution: 'CESAM',
-            // styles: getInfo(layer.code)[1],
-            // colorscalerange: getInfo(layer.code)[2],
+            styles: getInfo(layer.code)[1],
+            colorscalerange: getInfo(layer.code)[2],
             belowmincolor: 'extend',
             abovemaxcolor: 'extend',
             uppercase: true,
@@ -226,7 +207,7 @@ const initializeMap = async () => {
 
         baseLayers[layer.name] = wmsLayerTime;
 
-      /*   const legendControl = L.control({ position: 'bottomright' });
+        const legendControl = L.control({ position: 'bottomright' });
         legendControl.onAdd = function (map) {
             const div = L.DomUtil.create('div', 'info legend');
 
@@ -238,27 +219,24 @@ const initializeMap = async () => {
             div.innerHTML += `<img src="http://localhost:80/thredds/wms/testAll/wrfpost.nc?REQUEST=GetLegendGraphic&LAYER=${layer.code}&PALETTE=${palette}&STYLES=${styles}&COLORSCALERANGE=${colorscalerange}" alt="legend" style="height: 250px;">`;
             return div;
         }
-        legendControls.push(legendControl); */
+        legendControls.push(legendControl);
 
         layerControl.addBaseLayer(wmsLayerTime, layer.name);
     });
 
-/*     map.on('baselayerchange', function (eventLayer) {
+    map.on('baselayerchange', function (eventLayer) {
         if (eventLayer.name == 'Topo' || eventLayer.name === 'Satellite') {
-            // Remove existing legend controls
             legendControls.forEach(control => control.remove());
             return;
         }
         const selectedLayerIndex = Object.keys(baseLayers).findIndex(key => key === eventLayer.name);
-        // Remove existing legend controls
         legendControls.forEach(control => control.remove());
 
-        // Add legend control for the selected base layer
         if (selectedLayerIndex !== -1) {
             const selectedLegendControl = legendControls[selectedLayerIndex - 2];
             selectedLegendControl.addTo(map);
         }
-    }); */
+    });
 };
 
 fetchWMSLayers();

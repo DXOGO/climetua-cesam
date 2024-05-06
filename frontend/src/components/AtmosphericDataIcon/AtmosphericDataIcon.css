@@ -15,12 +15,18 @@
 }
 
 .title {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 500;
     color: #68727D;
-    /* width: max-content; */
+    width: max-content;
     display: flex;
     align-items: flex-start;
+}
+
+@media screen and (max-width: 500px) {
+    .title {
+        font-size: 10px;
+    }
 }
 
 .icon-value-row {

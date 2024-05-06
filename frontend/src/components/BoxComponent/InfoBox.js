@@ -22,18 +22,25 @@ const InfoBox = () => {
     
     const [isLoading, setIsLoading] = useState(true);
 
+    useEffect (() => {
+        console.log(isLoading);
+    }, [isLoading]);
+
     const handleButtonClick = (buttonName) => {
         dispatch(setActiveButton(buttonName)); // Dispatch the action
     };
 
-    const now = new Date('2021-07-08T15:00:00.000Z');
+    const nowString = useSelector((state) => state.currentDate);
+    const now = new Date(nowString);
+    now.setMinutes(0)
+    now.setSeconds(0)
     const [currentTemperature, setCurrentTemperature] = useState(0);
     const [currentWind, setCurrentWind] = useState({ speed: 0, direction: 0 });
     const [currentHumidity, setCurrentHumidity] = useState(0);
 
-
     useEffect(() => {
         const fetchDataForCity = async () => {
+            console.log('Fetching data for city: ', city.name);
             try {
                 const response = await fetch(`http://localhost:3001/api/data/${city.id}`);
                 if (!response.ok) {
@@ -41,7 +48,7 @@ const InfoBox = () => {
                 }
                 const data = await response.json();
                 dispatch(fetchDataSuccess(data));
-                
+    
                 const currentData = data.find(item => new Date(item.time).getTime() === now.getTime());
                 const currentTemperature = currentData.T_2m;
                 const currentWind = { speed: currentData.ws_10m, direction: currentData.wd_10m };
@@ -50,15 +57,15 @@ const InfoBox = () => {
                 setCurrentTemperature(currentTemperature);
                 setCurrentWind(currentWind);
                 setCurrentHumidity(currentHumidity);
-                
                 setIsLoading(false);
             } catch (error) {
                 console.error('Error fetching data: ', error);
                 setIsLoading(false);
             }
         }
+        setIsLoading(true);
         fetchDataForCity();
-    }, [city]);
+    }, [dispatch, city]);
 
     const renderState = activeButton === "graph" ? <GraphBox /> : <WeatherBox />;
 
@@ -66,7 +73,15 @@ const InfoBox = () => {
 
     if (isLoading) {
         return (
-            <div></div>
+            <div style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%"
+            
+            }}>
+                <div className="loading-icon" />
+            </div>
         );
     }
 
