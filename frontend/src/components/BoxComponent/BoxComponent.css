@@ -22,13 +22,6 @@
   max-width: 1520px;
   min-width: 1306px;
 }
-/* 
-@media screen and (min-width: 1480px) {
-  .box-container {
-    width: 550px;
-    min-width: 480px;
-  }
-} */
 
 .box-header {
   display: flex;
@@ -51,4 +44,14 @@
   justify-content: center;
   align-items: center;
   height: 100%;
+}
+
+@media screen and (max-width: 500px) {
+  .toggle-icon {
+    display: none;
+  }
+
+  .box-header {
+    height: 20px;
+  }
 }

@@ -29,7 +29,7 @@ const HourlyForecastComponent = ({ hour }) => {
         const direction = wind.direction[index];
         return { speed, direction };
     }
-    
+
     const hourIcon = setWeatherIcon(city.atmosphericDataHourly[hour].precipitation, city.atmosphericDataHourly[hour].clouds, city.atmosphericDataHourly[hour].humidity, hour)
 
     return (
@@ -73,11 +73,12 @@ const HourlyForecastComponent = ({ hour }) => {
                         {hour + ":00"}
                     </div>
                     <div className="hourly-forecast-details-collapsed">
-                        <img src={hourIcon.icon} alt={hourIcon.alt} className="hourly-forecast-icon-collapsed" />
-                        {/* Temperature */}
-                        <div className="forecast-temperature-collapsed">
-                            <span className="forecast-temperature-text-collapsed">{Math.round(temperature[parseInt(hour)])}</span>
-                            <span className="forecast-temperature-unit-collapsed">°C</span>
+                        <div className="forecast-temperature-details">
+                            <img src={hourIcon.icon} alt={hourIcon.alt} className="hourly-forecast-icon-collapsed" />
+                            <div className="forecast-temperature-collapsed">
+                                <span className="forecast-temperature-text-collapsed">{Math.round(temperature[parseInt(hour)])}</span>
+                                <span className="forecast-temperature-unit-collapsed">°C</span>
+                            </div>
                         </div>
                         <div className="forecast-row-collapsed">
                             <div className="forecast-row-data-collapsed-precipitation">

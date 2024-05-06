@@ -11,7 +11,7 @@ import { MdOutlineInfo } from "react-icons/md";
 import IQAModal from '../../components/Modal/IQAModal';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedCity, fetchTemperatureDataSuccess } from '../../redux/actions';
+import { setSelectedCity, fetchTemperatureDataSuccess, updateDate } from '../../redux/actions';
 
 import './WeatherInfo.css';
 
@@ -20,7 +20,18 @@ import portugal from '../../assets/pt.svg';
 
 const WeatherInfo = () => {
     const { cities } = dummyData;
-    const now = new Date('2021-07-08T15:00:00.000Z');
+
+    const dispatch = useDispatch();
+    // const [now, setNow] = useState(new Date('2021-07-08T15:00:00.000Z'));
+    const now = useSelector((state) => state.currentDate);
+    const nowDate = new Date(now);
+
+    const selectedCity = useSelector((state) => state.selectedCity);
+    const isExpanded = useSelector((state) => state.isExpanded);
+    const temperatureData = useSelector((state) => state.temperatureData);
+    const [boxState, setBoxState] = useState(selectedCity ? 'info' : 'default');
+    const [showModal, setShowModal] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const getFormattedDate = (date) => {
         const options = {
@@ -30,19 +41,20 @@ const WeatherInfo = () => {
             day: 'numeric',
             hour: '2-digit',
             minute: '2-digit',
+            second: '2-digit',
             hour12: false,
             timeZone: 'UTC'
         };
         return date.toLocaleString('pt-PT', options);
     };
 
-    const dispatch = useDispatch();
-    const selectedCity = useSelector((state) => state.selectedCity);
-    const isExpanded = useSelector((state) => state.isExpanded);
-    const temperatureData = useSelector((state) => state.temperatureData);
-    const [boxState, setBoxState] = useState(selectedCity ? 'info' : 'default');
-    const [showModal, setShowModal] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            nowDate.setSeconds(nowDate.getSeconds() + 1);
+            dispatch(updateDate(nowDate));
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [dispatch]);
 
     useEffect(() => {
         const fetchTemperatureData = async () => {
@@ -73,7 +85,7 @@ const WeatherInfo = () => {
             selectedCityData.atmosphericDataCurrent.precipitation,
             selectedCityData.atmosphericDataCurrent.clouds,
             selectedCityData.atmosphericDataCurrent.humidity,
-            now
+            nowDate
         );
         dispatch(
             setSelectedCity({
@@ -133,14 +145,14 @@ const WeatherInfo = () => {
                                     city_name={city.name}
                                     onClick={() => handleCityClick(city.name)}
                                     className={`weather city-icon-${index}`}
-                                    date={now}
+                                    date={nowDate}
                                     temperatureData={cityTemperature.slice(0, 23)}
                                 />
                             );
                         })}
                     </div>
                 </div>
-                <div className="today-date">{getFormattedDate(now)}</div>
+                <div className="today-date">{getFormattedDate(nowDate)}</div>
             </div>
             {showModal && <IQAModal />}
         </div>

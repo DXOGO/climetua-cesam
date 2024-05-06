@@ -94,14 +94,15 @@ export const fetchTemperatureDataSuccess = (data) => (dispatch) => {
   }
 }
 
-// export const updateDate = (date) => (dispatch) => {
-//   try {
-//     dispatch({
-//       type: UPDATE_DATE,
-//       payload: date.getTime(),
-//     });
-//   }
-//   catch (error) {
-//     console.error(error);
-//   }
-// }
+export const updateDate = (date) => (dispatch) => {
+  try {
+    const serializedDate = date.toISOString(); // Convert Date object to string
+    dispatch({
+      type: UPDATE_DATE,
+      payload: serializedDate,
+    });
+  }
+  catch (error) {
+    console.error(error);
+  }
+}

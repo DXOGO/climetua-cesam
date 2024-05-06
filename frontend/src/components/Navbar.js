@@ -5,10 +5,12 @@ import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
 
 // import cesam logo from assets
-import cesamLogo from '../assets/Logo_CESAM_UA.png';
+import cesamLogo from '../assets/CESAM.png';
 
 const Navbar = () => {
   const location = useLocation();
+
+  const screenWidth = window.innerWidth;
 
   return (
     <AppBar
@@ -16,10 +18,16 @@ const Navbar = () => {
       style={{
         backgroundColor: '#303236',
         boxShadow: 'none',
-        height: '40px',
+        height: screenWidth > 500 ? '40px' : '36px',
       }}
     >
-      <Toolbar sx={{ display: 'flex', justifyContent: 'center', width: "100%", maxWidth: '1580px', margin: '0 auto' }}>
+      <Toolbar sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        width: "100%",
+        maxWidth: '1580px',
+        margin: '0 auto',
+      }}>
         <IconButton
           color="inherit"
           component={Link}
@@ -74,12 +82,10 @@ const Navbar = () => {
           Mapa
         </IconButton>
 
-        {/* Spacer to push cesamLogo to the right edge */}
         <div style={{ flexGrow: 1 }}></div>
 
-        {/* cesamLogo aligned to the right */}
         <a href="https://www.cesam-la.pt" target="_blank" rel="noopener noreferrer">
-          <img src={cesamLogo} alt="CESAM Logo" style={{ height: '36px', marginBottom: '22px' }} />
+          <img src={cesamLogo} alt="CESAM Logo" style={{ height: '24px', marginBottom: '20px' }} />
         </a>
       </Toolbar>
     </AppBar>

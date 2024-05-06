@@ -7,18 +7,18 @@ import {
   SET_ACTIVE_BUTTON,
   FETCH_DATA_SUCCESS,
   FETCH_TEMPERATURE_DATA_SUCCESS,
-  // UPDATE_DATE
+  UPDATE_DATE
 } from './types';
 
 const initialState = {
   selectedLayer: "Topo",
   selectedCity: null,
   toggles: ["temperature"],
-  activeButton : "table",
+  activeButton: "table",
   isExpanded: false,
-  variableData : [],
-  temperatureData : [],
-  // currentDate: new Date('2021-07-08T15:0:00.000Z').getTime(),
+  variableData: [],
+  temperatureData: [],
+  currentDate: '2021-07-08T15:00:00.000Z',
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -59,11 +59,11 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         temperatureData: action.payload,
       };
-    // case UPDATE_DATE:
-    //   return {
-    //     ...state,
-    //     currentDate: action.payload,
-    //   };
+    case UPDATE_DATE:
+      return {
+        ...state,
+        currentDate: action.payload,
+      };
     default:
       return state;
   }

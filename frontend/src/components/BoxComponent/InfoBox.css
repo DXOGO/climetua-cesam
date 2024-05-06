@@ -51,15 +51,6 @@
     margin: 0;
 }
 
-.info-row {
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: row;
-    align-items: center;
-    height: 85px;
-    min-height: 85px;
-}
-
 .info-row.graph.collapsed {
     width: 100%;
     padding-right: 20px;
@@ -129,18 +120,84 @@
     }
 }
 
-.collapsed-atmospheric-data {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    margin-left: 30px;
-    width: 60%;
+@media screen and (max-width: 500px) {
+    
+    .info-row {
+        height: 100px;
+        min-height: 100px;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .info-icon img {
+        width: 60px;
+        height: 60px;
+        margin-right: 20px;
+    }
+
+    .temperature-text {
+        font-size: 36px;
+    }
+
+    .temperature-unit {
+        font-size: 16px;
+    }
+
+    .collapsed-atmospheric-data {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        margin-left: 10px;
+    }
+
+    .column {
+        display: flex;
+        flex-direction: column;
+        margin-right: 10px;
+    }
+
+    .info-buttons-graph.collapsed {
+        margin-right: 20px;
+        margin-top: 5px;
+    }
+
+    .info-buttons-table.collapsed {
+        margin-right: 0px;
+        margin-top: 5px;
+    }
 }
 
-.column {
-    display: flex;
-    flex-direction: column;
-    margin-right: 40px;
+@media screen and (min-width: 500px) {
+    .info-row {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .collapsed-atmospheric-data {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        margin-left: 30px;
+        width: 60%;
+    }
+
+    .column {
+        display: flex;
+        flex-direction: column;
+        margin-right: 40px;
+    }
+
+    .info-buttons-graph.collapsed {
+        margin-right: 20px;
+        margin-top: 20px;
+    }
+
+    .info-buttons-table.collapsed {
+        margin-top: 20px;
+    }
 }
 
 .row {
@@ -156,7 +213,6 @@
     justify-content: space-evenly;
     align-self: center;
     width: 600px;
-    margin-top: 20px;
 }
 
 .info-buttons-table.expanded {
@@ -169,9 +225,4 @@
     justify-content: space-evenly;
     align-self: center;
     width: 600px;
-}
-
-.info-buttons-graph.collapsed {
-    margin-right: 20px;
-    margin-top: 20px;
 }

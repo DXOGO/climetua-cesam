@@ -81,10 +81,20 @@
     border-radius: 10px;
 }
 
+.forecast-temperature-details {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    margin-left: 10px;
+}
+
 .hourly-forecast-container-collapsed {
     text-align: center;
     display: flex;
     flex-direction: row;
+    width: 100%;
 }
 
 .hourly-forecast-hour-collapsed {
@@ -105,6 +115,7 @@
     display: flex;
     flex-direction: row;
     width: 100%;
+    align-items: center;
 }
 
 .hourly-forecast-icon-collapsed {
@@ -115,9 +126,8 @@
 
 .forecast-temperature-collapsed {
     display: flex;
-    padding-left: 5%;
+    padding-left: 10%;
     justify-content: center;
-    width: 20%;
 }
 
 .forecast-temperature-text-collapsed {
@@ -136,6 +146,7 @@
 .forecast-row-collapsed {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     width: 100%;
     margin-left: 20px;
 }
@@ -146,7 +157,9 @@
     align-items: center;
     width: 25%;
 
-}.forecast-row-data-collapsed-pressure {
+}
+
+.forecast-row-data-collapsed-pressure {
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -157,19 +170,57 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    width:20%;
+    width: 20%;
 }
 
 .forecast-row-data-collapsed-wind {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    width: 29%;
+    width: 26%;
 }
 
-/* .forecast-row-data-collapsed {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 25%;
-} */
+
+@media screen and (max-width: 500px) {
+    .hourly-forecast-icon-collapsed {
+        margin-left: 3%;
+        height: 36px;
+        width: 36px;
+    }
+
+    .forecast-temperature-details {
+        width: 40%;
+        justify-content: center;
+    }
+
+    .forecast-temperature-collapsed {
+        padding-left: 10%;
+        transform: scale(1.05);
+    }
+
+    .forecast-row-collapsed {
+        margin-left: 4%;
+    }
+
+    .forecast-row-collapsed {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .forecast-row-data-collapsed-precipitation,
+    .forecast-row-data-collapsed-pressure,
+    .forecast-row-data-collapsed-humidity,
+    .forecast-row-data-collapsed-wind {
+        flex-basis: calc(50% - 10px);
+    }
+
+    /* .forecast-temperature-details {
+        width: 100%;
+        margin-left: 0;
+        justify-content: flex-start;
+    } */
+
+    /* .hourly-forecast-details-collapsed {
+        flex-direction: column;
+    } */
+}
