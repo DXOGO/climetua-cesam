@@ -4,7 +4,7 @@ const { parseString } = require('xml2js');
 
 const router = express.Router();
 
-const threddsUrl = 'http://thredds:8080/thredds/wms/testAll/wrfpost.nc';
+const threddsUrl = 'http://thredds:8080/thredds/wms/cesamAll/wrfpost.nc';
 
 let layersData = null;
 

@@ -183,7 +183,7 @@ const initializeMap = async () => {
     }
     );
 
-    const baseUrl = 'http://localhost:80/thredds/wms/testAll/wrfpost.nc';
+    const baseUrl = 'http://localhost:80/thredds/wms/cesamAll/wrfpost.nc';
 
     layers.forEach(layer => {
         const wmsLayer = L.tileLayer.wms(baseUrl, {
@@ -216,7 +216,7 @@ const initializeMap = async () => {
             const styles = legendInfo[1];
             const colorscalerange = legendInfo[2];
 
-            div.innerHTML += `<img src="http://localhost:80/thredds/wms/testAll/wrfpost.nc?REQUEST=GetLegendGraphic&LAYER=${layer.code}&PALETTE=${palette}&STYLES=${styles}&COLORSCALERANGE=${colorscalerange}" alt="legend" style="height: 250px;">`;
+            div.innerHTML += `<img src="http://localhost:80/thredds/wms/cesamAll/wrfpost.nc?REQUEST=GetLegendGraphic&LAYER=${layer.code}&PALETTE=${palette}&STYLES=${styles}&COLORSCALERANGE=${colorscalerange}" alt="legend" style="height: 250px;">`;
             return div;
         }
         legendControls.push(legendControl);

@@ -15,7 +15,6 @@ services:
     networks:
       - thredds_network
 
-
   backend:
     container_name: backend
     build:
@@ -37,8 +36,9 @@ services:
     ports:
       - "80:8080"
     volumes:
-      - /var/thredds_data:/usr/local/tomcat/content/thredds/public  
-      - ./web.xml:/usr/local/tomcat/webapps/thredds/WEB-INF/web.xml
+      - /var/thredds/public:/usr/local/tomcat/content/thredds/public  
+      - /var/thredds/web.xml:/usr/local/tomcat/webapps/thredds/WEB-INF/web.xml
+      - /var/thredds/catalog.xml:/usr/local/tomcat/content/thredds/catalog.xml
     networks:
       - thredds_network
 
