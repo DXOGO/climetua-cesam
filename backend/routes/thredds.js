@@ -7,6 +7,8 @@ const router = express.Router();
 const threddsUrl = 'http://thredds:8080/thredds/wms/cesamAll/wrfpost.nc';
 
 let layersData = null;
+let startTime = null;
+let endTime = null;
 
 const cities = {
     aveiro: { X: 445, Y: 364 },
@@ -33,10 +35,77 @@ const cities = {
     funchal: { X: 418, Y: 309 },
     porto_santo: { X: 270, Y: 580 }
 };
+
+const fetchData = async () => {
+    try {
+        const response = await axios.get(`${threddsUrl}?service=WMS&version=1.3.0&request=GetCapabilities`);
+        layersData = response.data;
+        console.log('/wms Thredds GetCapabilites fetched successfully');
+
+        // await Promise.all(Object.keys(cities).map(city => fetchDataForCity(city)));
+        // console.log('/data Data for all cities fetched successfully');
+        await fetchTimeDimensions();
+    } catch (error) {
+        console.error('Error fetching Thredds data:', error.message);
+        setTimeout(fetchData, 5000);
+    }
+};
+
+// Function to fetch time dimensions from Thredds GetCapabilities
+const fetchTimeDimensions = async () => {
+    try {
+        if (layersData) {
+            // Parse XML to extract time dimensions
+            parseString(layersData, (err, result) => {
+                if (err) {
+                    throw new Error('Error parsing GetCapabilities XML');
+                }
+
+                // Find the first layer
+                const layer = result?.WMS_Capabilities?.Capability[0].Layer[0].Layer[0].Layer[2].Dimension[0];
+
+                if (layer) {
+                    const timeDimension = layer._;
+                    const [start, end] = timeDimension.trim().split('/');
+                    startTime = new Date(start);
+                    endTime = new Date(end);
+                }
+
+            });
+        } else {
+            throw new Error('Failed to fetch Thredds data');
+        }
+
+        if (!startTime || !endTime) {
+            throw new Error('Failed to extract time dimensions from XML response');
+        }
+        console.log('Time dimensions fetched successfully:', startTime, endTime);
+        return { startTime, endTime };
+    } catch (error) {
+        console.error('Error fetching time dimensions:', error.message);
+        throw new Error('Failed to fetch time dimensions');
+    }
+};
+
+fetchData();
+
+// Route to get time dimensions
+router.get('/time-dimensions', async (req, res) => {
+    console.log('Accessing /time-dimensions');
+    try {
+        const { startTime, endTime } = await fetchTimeDimensions();
+        res.json({ startTime, endTime });
+    } catch (error) {
+        console.error('Error fetching time dimensions:', error.message);
+        res.status(500).json({ error: 'Failed to fetch time dimensions' });
+    }
+});
+
 const fetchDataForCity = async (city, variable) => {
     const { X, Y } = cities[city];
-    const startTime = new Date('2021-07-08T00:00:00.000Z');
-    const endTime = new Date('2021-07-15T12:00:00.000Z');
+    // const startTime = new Date('2021-07-08T00:00:00.000Z');
+    // const endTime = new Date('2021-07-15T12:00:00.000Z');
+
     const timeSeriesData = [];
 
     const variables = ['T_2m', 'rh_2m', 'ws_10m', 'wd_10m'];
@@ -45,7 +114,7 @@ const fetchDataForCity = async (city, variable) => {
         ? '-17.19291687011719,32.41416806011186,-16.58248901367188,32.83517369200289'
         : '-28.212890625000004,27.449790329784214,10.854492187500002,51.67255514839676';
 
-    for (let time = startTime; time <= endTime; time.setHours(time.getHours() + 1)) {
+    for (let time = new Date(startTime); time <= new Date(endTime); time.setHours(time.getHours() + 1)) {
         const dataPoint = { time: time.toISOString() };
 
         try {
@@ -90,24 +159,6 @@ const fetchDataForCity = async (city, variable) => {
     }
     return timeSeriesData;
 };
-
-
-const fetchData = async () => {
-    try {
-        const response = await axios.get(`${threddsUrl}?service=WMS&version=1.3.0&request=GetCapabilities`);
-        layersData = response.data;
-        console.log('/wms Thredds GetCapabilites fetched successfully');
-
-        // await Promise.all(Object.keys(cities).map(city => fetchDataForCity(city)));
-        // console.log('/data Data for all cities fetched successfully');
-
-    } catch (error) {
-        console.error('Error fetching Thredds data:', error.message);
-        setTimeout(fetchData, 5000);
-    }
-};
-
-fetchData();
 
 const parseValueFromResponse = (response) => {
     return new Promise((resolve, reject) => {

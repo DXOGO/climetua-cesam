@@ -17,7 +17,7 @@ import dummyData from '../../data/dummyData.json'
 const getInfo = (layer) => { // [0] - PALETTE, [1] - STYLES, [2] - COLORSCALERANGE
     switch (layer) {
         case 'T_2m':
-            return ["default", "default", "-10,40"]
+            return ["default", "default", "0,40"]
         case 'Td_2m':
             return ["default", "default-scalar/default", "0,100"]
         case 'r_v_2m':
@@ -44,7 +44,7 @@ const fetchWMSLayers = async () => {
 
         const layers = Array.from(xml.querySelectorAll('Layer')).reduce((uniqueLayers, layer) => {
             const nameElement = layer.querySelector('Name');
-            const titleElement = layer.querySelector('Title'); // sometimes the wms response doesnt provide a title
+            const titleElement = layer.querySelector('Title'); // sometimes wms response doesnt provide a title
 
             if (titleElement) {
                 if (nameElement && titleElement && titleElement.textContent !== 'Terrain Height' && titleElement.textContent !== 'THREDDS' && titleElement.textContent !== 'wrfpost.nc') {
@@ -80,15 +80,22 @@ const fetchWMSLayers = async () => {
     }
 };
 
+const fetchTimeInterval = async () => {
+    try {
+        const response = await fetch("http://localhost:3001/api/time-dimensions");
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching time dimensions:', error);
+        alert('Failed to fetch time dimensions. Please reload or try again later.');
+    }
+};
+
 const initializeMap = async () => {
+    const { startTime, endTime } = await fetchTimeInterval();
     const layers = await fetchWMSLayers();
     const { cities } = dummyData;
-
-    // let startDate = new Date('2021-07-08T00:00:00.000Z'); // Start date from the netCDF file    
-    // let endDate = new Date('2021-07-15T12:00:00.000Z'); // End date from the netCDF file
-    let startDate = new Date('2021-07-03T00:00:00.000Z'); // Start date from the netCDF file    
-    let endDate = new Date('2021-07-10T12:00:00.000Z'); // End date from the netCDF file
-
+    
     const baseLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'CESAM',
     });
@@ -121,12 +128,12 @@ const initializeMap = async () => {
             }
         },
         timeDimensionOptions: {
-            timeInterval: startDate.toISOString() + "/" + endDate.toISOString(),
+            timeInterval: startTime + "/" + endTime,
             period: 'PT1H',
             autoPlay: true,
             timeSliderDragUpdate: true,
             loopButton: true,
-            currentTime: startDate.getTime(),
+            currentTime: new Date(startTime).getTime(),
         },
         timeDimension: true,
         layers: baseLayer,
