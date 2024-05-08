@@ -38,7 +38,7 @@ services:
       - "80:8080"
     volumes:
       - /var/thredds_data:/usr/local/tomcat/content/thredds/public  
-      - ./web.xml:/usr/local/tomcat/webapps/thredds/WEB-INF/web.xml 
+      - ./web.xml:/usr/local/tomcat/webapps/thredds/WEB-INF/web.xml
     networks:
       - thredds_network
 

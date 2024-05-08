@@ -5,24 +5,10 @@ import './HourlyForecastComponent.css';
 import AtmosphericDataIcon from "../AtmosphericDataIcon/AtmosphericDataIcon";
 import { setWeatherIcon } from "../../helpers/helpers";
 
-const HourlyForecastComponent = ({ hour }) => {
+const HourlyForecastComponent = ({ hour, temperature, humidity, wind }) => {
 
     const city = useSelector(state => state.selectedCity);
     const isExpanded = useSelector(state => state.isExpanded);
-
-    const variableData = useSelector(state => state.variableData);
-
-    const todayData = variableData.slice(0, 24);
-
-    const temperature = todayData.map(item => item.T_2m);
-    const windSpeed = todayData.map(item => item.ws_10m);
-    const windDirection = todayData.map(item => item.wd_10m);
-    const humidity = todayData.map(item => item.rh_2m);
-
-    const wind = {
-        speed: windSpeed,
-        direction: windDirection
-    };
 
     function speedIndex(index) {
         const speed = wind.speed[index];
@@ -37,7 +23,6 @@ const HourlyForecastComponent = ({ hour }) => {
             <div className="hourly-forecast-box-content">
                 <div className="hourly-forecast-container">
                     <div className="hourly-forecast-hour">
-                        {/* {hour !== "24" ? hour + "h" : "00h"} */}
                         {hour + ":00"}
                     </div>
                     <div className="hourly-forecast-details">
@@ -69,7 +54,6 @@ const HourlyForecastComponent = ({ hour }) => {
             <div className="hourly-forecast-box-content-collapsed">
                 <div className="hourly-forecast-container-collapsed">
                     <div className="hourly-forecast-hour-collapsed">
-                        {/* {hour !== "24" ? hour + "h" : "00h"} */}
                         {hour + ":00"}
                     </div>
                     <div className="hourly-forecast-details-collapsed">

@@ -48,13 +48,14 @@ const WeatherInfo = () => {
         return date.toLocaleString('pt-PT', options);
     };
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            nowDate.setSeconds(nowDate.getSeconds() + 1);
-            dispatch(updateDate(nowDate));
-        }, 1000);
-        return () => clearInterval(interval);
-    }, [dispatch]);
+    // ! function is causing some performance and repitition issues
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         nowDate.setSeconds(nowDate.getSeconds() + 1);
+    //         dispatch(updateDate(nowDate));
+    //     }, 1000);
+    //     return () => clearInterval(interval);
+    // }, [dispatch]);
 
     useEffect(() => {
         const fetchTemperatureData = async () => {

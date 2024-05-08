@@ -18,8 +18,9 @@
     background-color: #C8D0D6;
     height: 25px;
     line-height: 25px;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 12px;
+    color: #2B2B2B;
 }
 
 .hourly-forecast-details {
@@ -99,14 +100,25 @@
 
 .hourly-forecast-hour-collapsed {
     background-color: #C8D0D6;
-    width: 40px;
-    line-height: 26px;
-    font-weight: 500;
-    font-size: 10px;
+    width: 50px;
+    line-height: 14px;
+    font-weight: 600; 
+    font-size: 12px;
+    color: #2B2B2B;
     justify-content: center;
     align-items: center;
     display: flex;
+    flex-direction: column;
     border-radius: 10px 0 0 10px;
+}
+
+.hourly-forecast-hour-collapsed b {
+    font-weight: 600; 
+}
+
+.hourly-forecast-hour-collapsed br {
+    display: block; 
+    font-weight: 500; 
 }
 
 .hourly-forecast-details-collapsed {

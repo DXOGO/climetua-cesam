@@ -109,8 +109,15 @@ const WeatherChartHighchart = () => {
 
             if (toggle === 'humidity') {
                 yAxisConfig.max = 100;
+                yAxisConfig.tickInterval = 20;
             } else if (toggle === "temperature") {
-                yAxisConfig.max = 40;
+                yAxisConfig.min = 10;
+                yAxisConfig.max = 35;
+                yAxisConfig.tickInterval = 5;
+            } else if (toggle === "wind_speed") {
+                yAxisConfig.min = 0;
+                yAxisConfig.max = 15;
+                yAxisConfig.tickInterval = 3;
             }
 
             return yAxisConfig;
@@ -131,7 +138,6 @@ const WeatherChartHighchart = () => {
             enabled: false
         },
     }));
-
 
     const options = {
         chart: {
@@ -161,7 +167,7 @@ const WeatherChartHighchart = () => {
         xAxis: [
             {
                 type: 'datetime',
-                tickInterval: 6 * 3600 * 1000, // 6 hours in milliseconds
+                tickInterval: 6 * 3600 * 1000,
                 startOnTick: false,
                 endOnTick: false,
                 crosshairs: true,

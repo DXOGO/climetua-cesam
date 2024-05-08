@@ -1,4 +1,4 @@
-/* WeatherBox.css */
+/* Info.css */
 .info-box {
     display: flex;
     flex-direction: column;
@@ -160,11 +160,25 @@
     .info-buttons-graph.collapsed {
         margin-right: 20px;
         margin-top: 5px;
+        width: 400px;
     }
 
     .info-buttons-table.collapsed {
         margin-right: 0px;
         margin-top: 5px;
+        width: 400px;
+    }
+
+    .info-box.table {
+        padding: 0 10px;
+    }
+
+    .info-box.graph {
+        padding: 0 0px 10px 10px;
+    }
+
+    .info-row.info-row.graph.collapsed {
+        padding-right: 10px;
     }
 }
 
@@ -197,6 +211,7 @@
 
     .info-buttons-table.collapsed {
         margin-top: 20px;
+        width: 600px;
     }
 }
 
@@ -212,11 +227,11 @@
     flex-direction: row;
     justify-content: space-evenly;
     align-self: center;
-    width: 600px;
 }
 
 .info-buttons-table.expanded {
     margin-top: 0px;
+    width: 600px;
 }
 
 .info-buttons-graph {
@@ -225,4 +240,28 @@
     justify-content: space-evenly;
     align-self: center;
     width: 600px;
+}
+
+button {
+    border-radius: 10px;
+    border-width: 2px;
+    border-style: solid;
+    padding: 6px 14px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    border-color: #68727D;
+    color: #68727D;
+}
+
+button.active {
+    background-color: #0A77FF;
+    border-color: transparent;
+    color: #ffffff;
 }

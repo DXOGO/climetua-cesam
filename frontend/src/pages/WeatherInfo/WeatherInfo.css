@@ -94,7 +94,6 @@
 
 .weather-icon-container {
     position: absolute;
-    /* height: calc(100% - 28px); */
     height: 100%;
     width: 100%;
     min-height: 612px;

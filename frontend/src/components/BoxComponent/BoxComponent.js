@@ -9,11 +9,11 @@ import fullscreen_exit from '../../assets/icons/icon_exit_fullscreen.svg';
 import DefaultBox from './DefaultBox';
 import InfoBox from './InfoBox';
 
-const BoxComponent = ({ state, date }) => {
+const BoxComponent = ({ state }) => {
     const dispatch = useDispatch();
-    const isExpanded = useSelector(state => state.isExpanded);
-
     const toggleExpand = () => {dispatch(setExpanded(!isExpanded));}
+    
+    const isExpanded = useSelector(state => state.isExpanded);
 
     let renderState;
 

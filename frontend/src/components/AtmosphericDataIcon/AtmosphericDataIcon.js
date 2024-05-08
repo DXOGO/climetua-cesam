@@ -23,9 +23,6 @@ const AtmosphericDataIcon = ({ type_data, humidity, wind, hour }) => {
     const city = useSelector(state => state.selectedCity);
     const iqa = getIQA(city.iqa);
 
-    // const variableData = useSelector((state) => state.variableData);
-    // const cityData = variableData[city.id];
-
     const prop = hour === undefined ? city.atmosphericDataCurrent : city.atmosphericDataHourly[hour];
 
     // Function that, based on the wind direction, returns the corresponding icon

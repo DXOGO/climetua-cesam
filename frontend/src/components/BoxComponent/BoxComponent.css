@@ -55,4 +55,9 @@
   .box-header {
     height: 20px;
   }
+
+  .box-container.collapsed {
+    max-width: 100%;
+    min-width: 100%;
+  }
 }

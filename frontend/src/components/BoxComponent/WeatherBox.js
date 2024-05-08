@@ -11,8 +11,22 @@ import { processHourlyData } from "../../helpers/helpers";
 const WeatherBox = () => {
 
     const city = useSelector(state => state.selectedCity);
-
     const isExpanded = useSelector(state => state.isExpanded);
+
+    const variableData = useSelector(state => state.variableData);
+
+    const todayData = variableData.slice(0, 24);
+
+    const temperature = todayData.map(item => item.T_2m);
+    const windSpeed = todayData.map(item => item.ws_10m);
+    const windDirection = todayData.map(item => item.wd_10m);
+    const humidity = todayData.map(item => item.rh_2m);
+
+    const wind = {
+        speed: windSpeed,
+        direction: windDirection
+    };
+
     const hourlyArray = processHourlyData(city.atmosphericDataHourly);
     const [viewType, setViewType] = useState('3hourly');
 
@@ -54,7 +68,7 @@ const WeatherBox = () => {
             </div>
             <div className={`forecast-content-${isExpanded ? "expanded" : "collapsed"}`}>
                 {adjustedHourlyArray.map((hour, index) => (
-                    <HourlyForecastComponent key={index} hour={hour.hour} />
+                    <HourlyForecastComponent key={index} hour={hour.hour} temperature={temperature} humidity={humidity} wind={wind} />
                 ))}
             </div>
         </div>

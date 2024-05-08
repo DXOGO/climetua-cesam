@@ -1,6 +1,5 @@
 // Reducers.js
 import {
-  SET_SELECTED_LAYER,
   SET_SELECTED_CITY,
   SET_EXPANDED,
   TOGGLE_TOGGLE,
@@ -11,7 +10,6 @@ import {
 } from './types';
 
 const initialState = {
-  selectedLayer: "Topo",
   selectedCity: null,
   toggles: ["temperature"],
   activeButton: "table",
@@ -23,11 +21,6 @@ const initialState = {
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_SELECTED_LAYER:
-      return {
-        ...state,
-        selectedLayer: action.payload,
-      };
     case SET_SELECTED_CITY:
       return {
         ...state,

@@ -1,6 +1,5 @@
 // Actions.js
 import { 
-  SET_SELECTED_LAYER,
   SET_SELECTED_CITY,
   SET_EXPANDED,
   TOGGLE_TOGGLE,
@@ -9,18 +8,6 @@ import {
   FETCH_TEMPERATURE_DATA_SUCCESS,
   UPDATE_DATE,
 } from './types';
-
-export const setSelectedLayer = (layerName) => (dispatch) => {
-  try {
-    dispatch({
-      type: SET_SELECTED_LAYER,
-      payload: layerName,
-    });
-  }
-  catch (error) {
-    console.error(error);
-  }
-}
 
 export const setSelectedCity = (city) => (dispatch) => {
   try {
@@ -96,7 +83,7 @@ export const fetchTemperatureDataSuccess = (data) => (dispatch) => {
 
 export const updateDate = (date) => (dispatch) => {
   try {
-    const serializedDate = date.toISOString(); // Convert Date object to string
+    const serializedDate = date.toISOString();
     dispatch({
       type: UPDATE_DATE,
       payload: serializedDate,

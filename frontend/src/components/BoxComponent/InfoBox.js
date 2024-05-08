@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setActiveButton } from "../../redux/actions";
 import { fetchDataSuccess } from '../../redux/actions';
 
-import styled, { css } from 'styled-components';
 import WeatherBox from './WeatherBox';
 import GraphBox from './GraphBox';
 
@@ -19,12 +18,8 @@ const InfoBox = () => {
     const activeButton = useSelector(state => state.activeButton);
     const city = useSelector(state => state.selectedCity);
     const isExpanded = useSelector(state => state.isExpanded);
-    
-    const [isLoading, setIsLoading] = useState(true);
 
-    useEffect (() => {
-        console.log(isLoading);
-    }, [isLoading]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleButtonClick = (buttonName) => {
         dispatch(setActiveButton(buttonName)); // Dispatch the action
@@ -48,12 +43,12 @@ const InfoBox = () => {
                 }
                 const data = await response.json();
                 dispatch(fetchDataSuccess(data));
-    
+
                 const currentData = data.find(item => new Date(item.time).getTime() === now.getTime());
                 const currentTemperature = currentData.T_2m;
                 const currentWind = { speed: currentData.ws_10m, direction: currentData.wd_10m };
                 const currentHumidity = currentData.rh_2m;
-                
+
                 setCurrentTemperature(currentTemperature);
                 setCurrentWind(currentWind);
                 setCurrentHumidity(currentHumidity);
@@ -78,7 +73,7 @@ const InfoBox = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 height: "100%"
-            
+
             }}>
                 <div className="loading-icon" />
             </div>
@@ -122,12 +117,12 @@ const InfoBox = () => {
                     )}
                 </div>
                 <div className={`info-buttons-${activeButton} ${isExpanded ? "expanded" : "collapsed"}`}>
-                    <Button active={activeButton === "table"} onClick={() => handleButtonClick("table")}>
+                    <button className={activeButton === "table" ? "active" : ""} onClick={() => handleButtonClick("table")}>
                         Tabela <FaTable style={{ marginLeft: "8px", transform: "scale(1.2)" }} />
-                    </Button>
-                    <Button active={activeButton === "graph"} onClick={() => handleButtonClick("graph")}>
+                    </button>
+                    <button className={activeButton === "graph" ? "active" : ""} onClick={() => handleButtonClick("graph")}>
                         Gráfico <BiStats style={{ marginLeft: "8px", transform: "scale(1.6)" }} />
-                    </Button>
+                    </button>
                 </div>
                 {renderState}
             </div>
@@ -136,30 +131,3 @@ const InfoBox = () => {
 }
 
 export default InfoBox;
-
-const Button = styled.button`
-    border-radius: 10px;
-    border-width: 2px;
-    border-style: solid;
-    padding: 6px 14px;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.3s ease;
-    font-size: 12px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ffffff;
-    border-color: #68727D;
-    color: #68727D;
-    
-    ${props =>
-        props.active &&
-        css`
-            background-color: #0A77FF;
-            border-color: transparent;
-            color: #ffffff;
-        `
-    }
-`;
