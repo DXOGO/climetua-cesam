@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 import './AtmosphericDataIcon.css';
 
 
-const AtmosphericDataIcon = ({ type_data, humidity, wind, hour }) => {
+const AtmosphericDataIcon = ({ type_data, humidity, wind, precipitation, pressure, hour }) => {
 
     let icon;
     let title;
@@ -22,7 +22,7 @@ const AtmosphericDataIcon = ({ type_data, humidity, wind, hour }) => {
 
     const city = useSelector(state => state.selectedCity);
     const iqa = getIQA(city.iqa);
-
+    
     const prop = hour === undefined ? city.atmosphericDataCurrent : city.atmosphericDataHourly[hour];
 
     // Function that, based on the wind direction, returns the corresponding icon
@@ -50,12 +50,12 @@ const AtmosphericDataIcon = ({ type_data, humidity, wind, hour }) => {
         case 'precipitation':
             icon = <LuCloudRainWind />;
             title = 'Precipitação';
-            value = parseFloat(prop.precipitation).toFixed(1) + " mm";
+            value = parseFloat(precipitation).toFixed(1) + " mm";
             break;
         case 'pressure':
             icon = <PiWavesBold />;
             title = 'Pressão atmosférica';
-            value = prop.pressure + " hPa";
+            value = parseFloat(pressure).toFixed(0) + " hPa";
             break;
         case 'wind':
             icon = <LuWind />;

@@ -22,7 +22,6 @@ const WeatherInfo = () => {
     const { cities } = dummyData;
 
     const dispatch = useDispatch();
-    // const [now, setNow] = useState(new Date('2021-07-08T15:00:00.000Z'));
     const now = useSelector((state) => state.currentDate);
     const nowDate = new Date(now);
 
@@ -59,6 +58,7 @@ const WeatherInfo = () => {
 
     useEffect(() => {
         const fetchTemperatureData = async () => {
+            console.log('Fetching temperature data');
             try {
                 const response = await fetch('http://localhost:3001/api/temperature');
                 if (!response.ok) {
@@ -67,6 +67,7 @@ const WeatherInfo = () => {
                 const data = await response.json();
                 dispatch(fetchTemperatureDataSuccess(data));
                 setIsLoading(false);
+                console.log('Temperature data fetched');
             } catch (error) {
                 console.error('Error fetching data:', error.message);
                 setIsLoading(false);

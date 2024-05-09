@@ -108,7 +108,7 @@ const fetchDataForCity = async (city, variable) => {
 
     const timeSeriesData = [];
 
-    const variables = ['T_2m', 'rh_2m', 'ws_10m', 'wd_10m'];
+    const variables = ['T_2m', 'rh_2m', 'ws_10m', 'wd_10m', 'precip_g', 'precip_c', 'slp'];
 
     const bbox = city === 'funchal'
         ? '-17.19291687011719,32.41416806011186,-16.58248901367188,32.83517369200289'

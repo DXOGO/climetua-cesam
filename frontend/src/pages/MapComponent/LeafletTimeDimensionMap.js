@@ -28,6 +28,10 @@ const getInfo = (layer) => { // [0] - PALETTE, [1] - STYLES, [2] - COLORSCALERAN
             return ["default", "default", "0,100"]
         case "ws_10m":
             return ["default", "default-scalar/default", "-10,10"]
+        case "precip_g":
+            return ["default", "default", "0,1"]
+        case "precip_c":
+            return ["default", "default", "0,1"]
         case "slp":
             return ["default", "default-scalar/default", "900,1100"]
         default:

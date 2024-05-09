@@ -6,7 +6,7 @@ import { TbClockHour4 } from "react-icons/tb";
 
 import HourlyForecastComponent from '../HourlyForecastComponent/HourlyForecastComponent';
 
-import { processHourlyData } from "../../helpers/helpers";
+import { processHourlyData, getTotalPrecipitation } from "../../helpers/helpers";
 
 const WeatherBox = () => {
 
@@ -17,10 +17,14 @@ const WeatherBox = () => {
 
     const todayData = variableData.slice(0, 24);
 
-    const temperature = todayData.map(item => item.T_2m);
-    const windSpeed = todayData.map(item => item.ws_10m);
-    const windDirection = todayData.map(item => item.wd_10m);
-    const humidity = todayData.map(item => item.rh_2m);
+    const temperature = todayData.map(item => item.T_2m); // Temperature
+    const windSpeed = todayData.map(item => item.ws_10m); // Wind speed
+    const windDirection = todayData.map(item => item.wd_10m); // Wind direction
+    const humidity = todayData.map(item => item.rh_2m); // Humidity
+    const precip_g = todayData.map(item => item.precip_g); // Grid scale Precipitation (convenctiva)
+    const precip_c = todayData.map(item => item.precip_c); // Cumulative Precipitation (não convectiva)
+    const precip_total = getTotalPrecipitation(precip_g, precip_c); // Total Precipitation
+    const pressure = todayData.map(item => item.slp) // Pressure
 
     const wind = {
         speed: windSpeed,
@@ -68,7 +72,7 @@ const WeatherBox = () => {
             </div>
             <div className={`forecast-content-${isExpanded ? "expanded" : "collapsed"}`}>
                 {adjustedHourlyArray.map((hour, index) => (
-                    <HourlyForecastComponent key={index} hour={hour.hour} temperature={temperature} humidity={humidity} wind={wind} />
+                    <HourlyForecastComponent key={index} hour={hour.hour} temperature={temperature} humidity={humidity} wind={wind} precipitation={precip_total} pressure={pressure}/>
                 ))}
             </div>
         </div>

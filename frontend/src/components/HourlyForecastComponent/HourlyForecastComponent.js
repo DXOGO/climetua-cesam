@@ -5,7 +5,7 @@ import './HourlyForecastComponent.css';
 import AtmosphericDataIcon from "../AtmosphericDataIcon/AtmosphericDataIcon";
 import { setWeatherIcon } from "../../helpers/helpers";
 
-const HourlyForecastComponent = ({ hour, temperature, humidity, wind }) => {
+const HourlyForecastComponent = ({ hour, temperature, humidity, wind, precipitation, pressure}) => {
 
     const city = useSelector(state => state.selectedCity);
     const isExpanded = useSelector(state => state.isExpanded);
@@ -15,8 +15,7 @@ const HourlyForecastComponent = ({ hour, temperature, humidity, wind }) => {
         const direction = wind.direction[index];
         return { speed, direction };
     }
-
-    const hourIcon = setWeatherIcon(city.atmosphericDataHourly[hour].precipitation, city.atmosphericDataHourly[hour].clouds, city.atmosphericDataHourly[hour].humidity, hour)
+    const hourIcon = setWeatherIcon(precipitation[parseInt(hour)], city.atmosphericDataHourly[hour].clouds, humidity[parseInt(hour)], hour)
 
     return (
         isExpanded ? (
@@ -34,16 +33,16 @@ const HourlyForecastComponent = ({ hour, temperature, humidity, wind }) => {
                         <div className="forecast-column">
                             <div className="forecast-column-content">
                                 <div className="forecast-column-data">
-                                    <AtmosphericDataIcon type_data="precipitation" humidity={humidity[parseInt(hour)]} wind={speedIndex(parseInt(hour))} hour={hour} />
+                                    <AtmosphericDataIcon type_data="precipitation" humidity={humidity[parseInt(hour)]} wind={speedIndex(parseInt(hour))} precipitation={precipitation[parseInt(hour)]} pressure={pressure[parseInt(hour)]} hour={hour} />
                                 </div>
                                 <div className="forecast-column-data">
-                                    <AtmosphericDataIcon type_data="wind" humidity={humidity[parseInt(hour)]} wind={speedIndex(parseInt(hour))} hour={hour} />
+                                    <AtmosphericDataIcon type_data="wind" humidity={humidity[parseInt(hour)]} wind={speedIndex(parseInt(hour))} precipitation={precipitation[parseInt(hour)]} pressure={pressure[parseInt(hour)]} hour={hour} />
                                 </div>
                                 <div className="forecast-column-data">
-                                    <AtmosphericDataIcon type_data="humidity" humidity={humidity[parseInt(hour)]} wind={speedIndex(parseInt(hour))} hour={hour} />
+                                    <AtmosphericDataIcon type_data="humidity" humidity={humidity[parseInt(hour)]} wind={speedIndex(parseInt(hour))} precipitation={precipitation[parseInt(hour)]} pressure={pressure[parseInt(hour)]} hour={hour} />
                                 </div>
                                 <div className="forecast-column-data">
-                                    <AtmosphericDataIcon type_data="pressure" humidity={humidity[parseInt(hour)]} wind={speedIndex(parseInt(hour))} hour={hour} />
+                                    <AtmosphericDataIcon type_data="pressure" humidity={humidity[parseInt(hour)]} wind={speedIndex(parseInt(hour))} precipitation={precipitation[parseInt(hour)]} pressure={pressure[parseInt(hour)]} hour={hour} />
                                 </div>
                             </div>
                         </div>
@@ -66,16 +65,16 @@ const HourlyForecastComponent = ({ hour, temperature, humidity, wind }) => {
                         </div>
                         <div className="forecast-row-collapsed">
                             <div className="forecast-row-data-collapsed-precipitation">
-                                <AtmosphericDataIcon type_data="precipitation" humidity={humidity[parseInt(hour)]} wind={speedIndex(parseInt(hour))} hour={hour} />
+                                <AtmosphericDataIcon type_data="precipitation" humidity={humidity[parseInt(hour)]} wind={speedIndex(parseInt(hour))} precipitation={precipitation[parseInt(hour)]} pressure={pressure[parseInt(hour)]} hour={hour} />
                             </div>
                             <div className="forecast-row-data-collapsed-wind">
-                                <AtmosphericDataIcon type_data="wind" humidity={humidity[parseInt(hour)]} wind={speedIndex(parseInt(hour))} hour={hour} />
+                                <AtmosphericDataIcon type_data="wind" humidity={humidity[parseInt(hour)]} wind={speedIndex(parseInt(hour))} precipitation={precipitation[parseInt(hour)]} pressure={pressure[parseInt(hour)]} hour={hour} />
                             </div>
                             <div className="forecast-row-data-collapsed-humidity">
-                                <AtmosphericDataIcon type_data="humidity" humidity={humidity[parseInt(hour)]} wind={speedIndex(parseInt(hour))} hour={hour} />
+                                <AtmosphericDataIcon type_data="humidity" humidity={humidity[parseInt(hour)]} wind={speedIndex(parseInt(hour))} precipitation={precipitation[parseInt(hour)]} pressure={pressure[parseInt(hour)]} hour={hour} />
                             </div>
                             <div className="forecast-row-data-collapsed-pressure">
-                                <AtmosphericDataIcon type_data="pressure" humidity={humidity[parseInt(hour)]} wind={speedIndex(parseInt(hour))} hour={hour} />
+                                <AtmosphericDataIcon type_data="pressure" humidity={humidity[parseInt(hour)]} wind={speedIndex(parseInt(hour))} precipitation={precipitation[parseInt(hour)]} pressure={pressure[parseInt(hour)]} hour={hour} />
                             </div>
                         </div>
                     </div>
