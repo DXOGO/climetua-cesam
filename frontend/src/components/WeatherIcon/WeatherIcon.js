@@ -10,51 +10,22 @@ import {
   getIQA,
   findCityByName,
   setWeatherIcon,
-  getTotalPrecipitation
 } from '../../helpers/helpers';
 
-const WeatherIcon = ({ city_name, className, onClick, date, temperatureData }) => {
+const WeatherIcon = ({ city_name, className, onClick, date, dailyData }) => {
 
+  const data = dailyData.flatMap(hourlyData => hourlyData);
+  
+  //* Using because there is no CESAM data available to get cloud, IQA or wave information
   const selectedCity = findCityByName(city_name)
-  // const [isLoading, setIsLoading] = useState(true);
+  
+  const temperatures = data.map(data => data.T_2m);
+  
+  const currentData = data.find(item => new Date(item.time).getTime() === new Date(date).getTime());  
+  const currentHumidity = Math.round(currentData.rh_2m);
+  const currentPrecipitation = currentData.precip_total;
 
-  // const now = useSelector((state) => state.currentDate);
-  // const nowDate = new Date(now);
-
-  // const [humidity, setHumidity] = useState(0);
-  // const [precipitation, setPrecipitation] = useState(0);
-
-  // useEffect(() => {
-  //   const fetchDataForCity = async () => {
-  //     console.log('Fetching data for city: ', city_name);
-  //     try {
-  //       const response = await fetch(`http://localhost:3001/api/data/${selectedCity.id}`);
-  //       if (!response.ok) {
-  //         throw new Error('Failed to fetch data');
-  //       }
-  //       const data = await response.json();
-
-  //       const todayData = data.slice(0, 24);
-  //       const precip_g = todayData.map(item => item.precip_g); // Grid scale Precipitation (convenctiva)
-  //       const precip_c = todayData.map(item => item.precip_c); // Cumulative Precipitation (não convectiva)
-  //       const precip_total = getTotalPrecipitation(precip_g, precip_c); // Total Precipitation
-  //       console.log('precip_total', precip_total);
-
-  //       const currentData = data.find(item => new Date(item.time).getTime() === nowDate.getTime());
-  //       setHumidity(currentData.rh_2m);
-
-  //       setIsLoading(false);
-  //       console.log('Data for ${city_name} fetched successfully');
-  //     } catch (error) {
-  //       console.error('Error fetching data: ', error);
-  //       setIsLoading(false);
-  //     }
-  //   }
-  //   setIsLoading(true);
-  //   fetchDataForCity();
-  // }, [selectedCity]);
-
-  const selectedIcon = setWeatherIcon(selectedCity.atmosphericDataCurrent.precipitation, selectedCity.atmosphericDataCurrent.clouds, selectedCity.atmosphericDataCurrent.humidity, date);
+  const selectedIcon = setWeatherIcon(currentPrecipitation, selectedCity.atmosphericDataCurrent.clouds, currentHumidity, date);
 
   const iqa = getIQA(selectedCity.iqa);
   const waves = selectedCity.waves;
@@ -63,12 +34,11 @@ const WeatherIcon = ({ city_name, className, onClick, date, temperatureData }) =
   const [minTemperature, setMinTemperature] = useState(null);
 
   useEffect(() => {
-    if (temperatureData.length > 0) {
-      const temperatures = temperatureData.map(data => data);
+    if (dailyData.length > 0) {
       setMaxTemperature(Math.round(Math.max(...temperatures)));
       setMinTemperature(Math.round(Math.min(...temperatures)));
     }
-  }, [temperatureData]);
+  }, [dailyData]);
 
   let showWave = waves !== undefined;
   let waveIcon;

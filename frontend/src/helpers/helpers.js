@@ -39,6 +39,10 @@ export const findCityByName = (cityName) => {
 
 export const setWeatherIcon = (precipitation, clouds, humidity, hours) => {
 
+    // console.log('precipitation: ', precipitation);
+    // console.log('clouds: ', clouds);
+    // console.log('humidity: ', humidity);
+
     let currentTime = "";
 
     if (hours === undefined) { currentTime = new Date().getHours();

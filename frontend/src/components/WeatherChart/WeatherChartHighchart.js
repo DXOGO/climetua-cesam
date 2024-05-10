@@ -3,8 +3,6 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { useSelector } from 'react-redux';
 
-import { getTotalPrecipitation } from '../../helpers/helpers';
-
 import './WeatherChart.css';
 
 const WeatherChartHighchart = () => {
@@ -13,8 +11,7 @@ const WeatherChartHighchart = () => {
     const selectedToggles = useSelector((state) => state.toggles);
 
     const variableData = useSelector((state) => state.variableData);
-    console.log(variableData)
-    
+
     const [clientHeight, setClientHeight] = useState(window.innerHeight);
     const [chartContainerClass, setChartContainerClass] = useState(320);
 

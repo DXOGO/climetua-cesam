@@ -42,8 +42,6 @@ const fetchData = async () => {
         layersData = response.data;
         console.log('/wms Thredds GetCapabilites fetched successfully');
 
-        // await Promise.all(Object.keys(cities).map(city => fetchDataForCity(city)));
-        // console.log('/data Data for all cities fetched successfully');
         await fetchTimeDimensions();
     } catch (error) {
         console.error('Error fetching Thredds data:', error.message);
@@ -51,11 +49,12 @@ const fetchData = async () => {
     }
 };
 
+fetchData();
+
 // Function to fetch time dimensions from Thredds GetCapabilities
 const fetchTimeDimensions = async () => {
     try {
         if (layersData) {
-            // Parse XML to extract time dimensions
             parseString(layersData, (err, result) => {
                 if (err) {
                     throw new Error('Error parsing GetCapabilities XML');
@@ -87,8 +86,6 @@ const fetchTimeDimensions = async () => {
     }
 };
 
-fetchData();
-
 // Route to get time dimensions
 router.get('/time-dimensions', async (req, res) => {
     console.log('Accessing /time-dimensions');
@@ -101,10 +98,15 @@ router.get('/time-dimensions', async (req, res) => {
     }
 });
 
-const fetchDataForCity = async (city, variable) => {
+const fetchDataForCity = async (city, isDaily, variable) => {
     const { X, Y } = cities[city];
-    // const startTime = new Date('2021-07-08T00:00:00.000Z');
-    // const endTime = new Date('2021-07-15T12:00:00.000Z');
+
+    if (isDaily) {
+        new_endTime = new Date(startTime);
+        new_endTime.setHours(new_endTime.getHours() + 23);
+    }
+
+    const checkEndTime = isDaily ? new_endTime : new Date(endTime);
 
     const timeSeriesData = [];
 
@@ -114,12 +116,11 @@ const fetchDataForCity = async (city, variable) => {
         ? '-17.19291687011719,32.41416806011186,-16.58248901367188,32.83517369200289'
         : '-28.212890625000004,27.449790329784214,10.854492187500002,51.67255514839676';
 
-    for (let time = new Date(startTime); time <= new Date(endTime); time.setHours(time.getHours() + 1)) {
+    for (let time = new Date(startTime); time <= checkEndTime; time.setHours(time.getHours() + 1)) {
         const dataPoint = { time: time.toISOString() };
 
         try {
             const requests = variable ? [variable] : variables;
-
             // Concurrently fetch data for all variables
             const promises = requests.map(async (variable) => {
                 const response = await axios.get(threddsUrl, {
@@ -150,6 +151,7 @@ const fetchDataForCity = async (city, variable) => {
 
             // Merge results into dataPoint
             results.forEach((result) => Object.assign(dataPoint, result));
+
         } catch (error) {
             console.error(`Error fetching data for ${city} at time ${time.toISOString()}:`, error.message);
             // Set dataPoint variable to null on error
@@ -173,18 +175,33 @@ const parseValueFromResponse = (response) => {
     });
 };
 
-//! not working when fetching all the cities info, why?
-router.get('/data', async (req, res) => {
-    console.log('Accessing /data');
+//! not working when fetching all the cities info, must be overflow request problem
+// router.get('/data', async (req, res) => {
+//     console.log('Accessing /data');
+//     try {
+//         const allCityData = await Promise.all(Object.keys(cities).map(async (city) => {
+//             const cityData = await fetchDataForCity(city, false);
+//             return { city, cityData };
+//         }));
+//         res.json(allCityData);
+//     } catch (error) {
+//         console.error('Error fetching data for all cities:', error.message);
+//         res.status(500).json({ error: 'Failed to fetch data for all cities' });
+//     }
+// });
+
+router.get('/daily', async (req, res) => {
+    console.log('Accessing /daily');
     try {
         const allCityData = await Promise.all(Object.keys(cities).map(async (city) => {
-            const cityData = await fetchDataForCity(city);
+            const cityData = await fetchDataForCity(city, true);
             return { city, cityData };
         }));
-        res.json(allCityData);
+
+        res.json(setData(allCityData));
     } catch (error) {
-        console.error('Error fetching data for all cities:', error.message);
-        res.status(500).json({ error: 'Failed to fetch data for all cities' });
+        console.error('Error fetching daily data for all cities:', error.message);
+        res.status(500).json({ error: 'Failed to fetch daily data for all cities' });
     }
 });
 
@@ -192,19 +209,20 @@ router.get('/data/:city', async (req, res) => {
     const { city } = req.params;
     console.log(`Accessing /data/${city}`);
     try {
-        const data = await fetchDataForCity(city);
-        res.json(data);
+        const data = await fetchDataForCity(city, false);
+        res.json(setData(data));
     } catch (error) {
         console.error(`Error fetching data for ${city}:`, error.message);
         res.status(500).json({ error: 'Failed to fetch data' });
     }
 });
 
+//* not being used currently
 router.get('/data/:city/:variable', async (req, res) => {
     const { city, variable } = req.params;
     console.log(`Accessing /data/${city}/${variable}`);
     try {
-        const data = await fetchDataForCity(city, variable);
+        const data = await fetchDataForCity(city, false, variable);
         res.json(data);
     } catch (error) {
         console.error(`Error fetching ${variable} data for ${city}:`, error.message);
@@ -212,12 +230,13 @@ router.get('/data/:city/:variable', async (req, res) => {
     }
 });
 
+//* not being used currently
 // route to get temperature for all cities
 router.get('/temperature', async (req, res) => {
     console.log('Accessing /temperature');
     try {
         const allCityData = await Promise.all(Object.keys(cities).map(async (city) => {
-            const cityData = await fetchDataForCity(city, 'T_2m');
+            const cityData = await fetchDataForCity(city, false, 'T_2m');
             return { city, cityData };
         }));
         res.json(allCityData);
@@ -237,3 +256,58 @@ router.get('/wms', (req, res) => {
 });
 
 module.exports = router;
+
+const setData = (allCityData) => {
+
+    console.log('allCityData:', allCityData.length);
+
+    if (allCityData.length <= 23) {
+        const precip_g = allCityData.flatMap(city => city.cityData.map(data => data.precip_g));
+        const precip_c = allCityData.flatMap(city => city.cityData.map(data => data.precip_c));
+        const precip_total = getTotalPrecipitation(precip_g, precip_c);
+
+        allCityData.forEach(city => {
+            city.cityData.forEach(data => {
+                data.T_2m = parseFloat(data.T_2m);
+                data.rh_2m = parseFloat(data.rh_2m);
+                data.ws_10m = parseFloat(data.ws_10m);
+                data.wd_10m = parseFloat(data.wd_10m);
+                data.slp = parseFloat(data.slp);
+                data.precip_g = parseFloat(precip_g.shift());
+                data.precip_c = parseFloat(precip_c.shift());
+                data.precip_total = precip_total.shift();
+            });
+        });
+    } else {
+        const precip_g = allCityData.map(data => data.precip_g);
+        const precip_c = allCityData.map(data => data.precip_c);
+        const precip_total = getTotalPrecipitation(precip_g, precip_c);
+
+        allCityData.forEach(city => {
+            city.T_2m = parseFloat(city.T_2m);
+            city.rh_2m = parseFloat(city.rh_2m);
+            city.ws_10m = parseFloat(city.ws_10m);
+            city.wd_10m = parseFloat(city.wd_10m);
+            city.slp = parseFloat(city.slp);
+            city.precip_g = parseFloat(precip_g.shift());
+            city.precip_c = parseFloat(precip_c.shift());
+            city.precip_total = precip_total.shift();
+        });
+    }
+
+    return allCityData;
+}
+
+const getTotalPrecipitation = (precip_g, precip_c) => {
+
+    const precip_total_accumulated = precip_g.map((item, index) => parseFloat(item) + parseFloat(precip_c[index]));
+
+    const precip_total = precip_total_accumulated.map((item, index) => {
+        if (index === 0) {
+            return item;
+        }
+        return item - precip_total_accumulated[index - 1];
+    });
+
+    return precip_total;
+};

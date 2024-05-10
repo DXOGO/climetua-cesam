@@ -5,13 +5,14 @@ import Searchbar from '../../components/Searchbar/Searchbar';
 import {
     setWeatherIcon,
     findCityByName,
+    getTotalPrecipitation
 } from '../../helpers/helpers';
 
 import { MdOutlineInfo } from "react-icons/md";
 import IQAModal from '../../components/Modal/IQAModal';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedCity, fetchTemperatureDataSuccess, updateDate } from '../../redux/actions';
+import { setSelectedCity, fetchDailyDataSuccess, updateDate } from '../../redux/actions';
 
 import './WeatherInfo.css';
 
@@ -27,7 +28,7 @@ const WeatherInfo = () => {
 
     const selectedCity = useSelector((state) => state.selectedCity);
     const isExpanded = useSelector((state) => state.isExpanded);
-    const temperatureData = useSelector((state) => state.temperatureData);
+    const dailyData = useSelector((state) => state.dailyData);
     const [boxState, setBoxState] = useState(selectedCity ? 'info' : 'default');
     const [showModal, setShowModal] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -47,38 +48,41 @@ const WeatherInfo = () => {
         return date.toLocaleString('pt-PT', options);
     };
 
-    // ! function is causing some performance and repitition issues
+    // ! function is causing some performance and repitition issues when saving in redux
+    // const [nowDate, setNowDate] = useState(new Date(now));
     // useEffect(() => {
     //     const interval = setInterval(() => {
-    //         nowDate.setSeconds(nowDate.getSeconds() + 1);
-    //         dispatch(updateDate(nowDate));
+    //         const newDate = nowDate.setSeconds(nowDate.getSeconds() + 1);
+    //         setNowDate(new Date(newDate))
+    //         // dispatch(updateDate(nowDate));
     //     }, 1000);
     //     return () => clearInterval(interval);
-    // }, [dispatch]);
+    // }, [nowDate]);
 
     useEffect(() => {
-        const fetchTemperatureData = async () => {
-            console.log('Fetching temperature data');
+        const fetchDailyData = async () => {
+            console.log('Fetching daily data');
             try {
-                const response = await fetch('http://localhost:3001/api/temperature');
+                const response = await fetch('http://localhost:3001/api/daily');
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
                 }
                 const data = await response.json();
-                dispatch(fetchTemperatureDataSuccess(data));
+                dispatch(fetchDailyDataSuccess(data));
                 setIsLoading(false);
-                console.log('Temperature data fetched');
+                console.log('Daily data fetched');
             } catch (error) {
                 console.error('Error fetching data:', error.message);
                 setIsLoading(false);
             }
         };
 
-        if (temperatureData.length === 0) {
-            fetchTemperatureData();
+        if (dailyData.length === 0) {
+            fetchDailyData();
+        } else {
+            setIsLoading(false);
         }
-        setIsLoading(false);
-    }, [dispatch, cities]);
+    }, [dispatch, cities, dailyData]);
 
     const handleCityClick = (cityName) => {
         setBoxState('info');
@@ -122,38 +126,45 @@ const WeatherInfo = () => {
             </div>
             <div className='weather-info-column-map'>
                 {!isExpanded ? (
-                    <div className='weather-info-text'>
-                        <div
-                            className='weather-info-text-content'
-                            onMouseEnter={handleMouseEnter}
-                            onMouseLeave={handleMouseLeave}
-                        >
-                            Índice de Qualidade do Ar
-                            <MdOutlineInfo className='iqa-info-icon' />
+                    <>
+                        <div className='weather-info-text'>
+                            <div
+                                className='weather-info-text-content'
+                                onMouseEnter={handleMouseEnter}
+                                onMouseLeave={handleMouseLeave}
+                            >
+                                Índice de Qualidade do Ar
+                                <MdOutlineInfo className='iqa-info-icon' />
+                            </div>
                         </div>
-                    </div>
+                        <div className='weather-info-map'>
+                            <img src={portugal} alt='portugal' className='map-image' />
+                            <div className='weather-icon-container'>
+                                {cities.map((city, index) => {
+                                    const cityDailyData = dailyData
+                                        .filter((data) => data.city === city.id)
+                                        .flatMap((item) => item.cityData);
+                                    return (
+                                        <WeatherIcon
+                                            key={index}
+                                            city_name={city.name}
+                                            onClick={() => handleCityClick(city.name)}
+                                            className={`weather city-icon-${index}`}
+                                            date={nowDate}
+                                            dailyData={cityDailyData} />
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </>
                 ) : (
-                    <div className='weather-info-text' />
+                    <div
+                        style={{
+                            height: '100%',
+                            marginTop: '677px',
+                        }}
+                    />
                 )}
-                <div className='weather-info-map'>
-                    <img src={portugal} alt='portugal' className='map-image' />
-                    <div className='weather-icon-container'>
-                        {cities.map((city, index) => {
-                            const ncity = temperatureData.find((temperatureData) => temperatureData.city === city.id) || { cityData: [] };
-                            const cityTemperature = ncity.cityData.map(({ T_2m }) => T_2m);
-                            return (
-                                <WeatherIcon
-                                    key={index}
-                                    city_name={city.name}
-                                    onClick={() => handleCityClick(city.name)}
-                                    className={`weather city-icon-${index}`}
-                                    date={nowDate}
-                                    temperatureData={cityTemperature.slice(0, 23)}
-                                />
-                            );
-                        })}
-                    </div>
-                </div>
                 <div className="today-date">{getFormattedDate(nowDate)}</div>
             </div>
             {showModal && <IQAModal />}

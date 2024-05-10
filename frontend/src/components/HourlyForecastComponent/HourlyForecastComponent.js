@@ -5,7 +5,7 @@ import './HourlyForecastComponent.css';
 import AtmosphericDataIcon from "../AtmosphericDataIcon/AtmosphericDataIcon";
 import { setWeatherIcon } from "../../helpers/helpers";
 
-const HourlyForecastComponent = ({ hour, temperature, humidity, wind, precipitation, pressure}) => {
+const HourlyForecastComponent = ({ hour, temperature, humidity, wind, precipitation, pressure }) => {
 
     const city = useSelector(state => state.selectedCity);
     const isExpanded = useSelector(state => state.isExpanded);
@@ -15,6 +15,7 @@ const HourlyForecastComponent = ({ hour, temperature, humidity, wind, precipitat
         const direction = wind.direction[index];
         return { speed, direction };
     }
+
     const hourIcon = setWeatherIcon(precipitation[parseInt(hour)], city.atmosphericDataHourly[hour].clouds, humidity[parseInt(hour)], hour)
 
     return (

@@ -3,7 +3,6 @@
     display: flex;
     flex-direction: column;
     margin-top: -25px;
-    overflow-y: scroll;
     overflow-x: hidden;
     height: 100%;
 }
@@ -32,8 +31,8 @@
 .info-content {
     display: flex;
     flex-direction: column;
-    overflow-y: scroll;
     overflow-x: hidden;
+    overflow-y: scroll;
     scrollbar-color: #C8D0D6 #EFEFEF;
     scrollbar-width: thin;
     scroll-behavior: smooth;
@@ -205,13 +204,14 @@
     }
 
     .info-buttons-graph.collapsed {
-        margin-right: 20px;
-        margin-top: 20px;
+        padding-right: 20px;
+        padding-top: 20px;
+        width: 100%;
     }
 
     .info-buttons-table.collapsed {
         margin-top: 20px;
-        width: 600px;
+        width: 100%;
     }
 }
 

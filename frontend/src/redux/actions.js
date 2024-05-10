@@ -5,7 +5,7 @@ import {
   TOGGLE_TOGGLE,
   SET_ACTIVE_BUTTON,
   FETCH_DATA_SUCCESS,
-  FETCH_TEMPERATURE_DATA_SUCCESS,
+  FETCH_DAILY_DATA_SUCCESS,
   UPDATE_DATE,
 } from './types';
 
@@ -69,10 +69,10 @@ export const fetchDataSuccess = (data) => (dispatch) => {
   }
 }
 
-export const fetchTemperatureDataSuccess = (data) => (dispatch) => {
+export const fetchDailyDataSuccess = (data) => (dispatch) => {
   try {
     dispatch({
-      type: FETCH_TEMPERATURE_DATA_SUCCESS,
+      type: FETCH_DAILY_DATA_SUCCESS,
       payload: data,
     });
   }

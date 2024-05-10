@@ -4,7 +4,7 @@
   flex-direction: column;
   margin-top: 20px;
   height: calc(100% - 50px);
-  max-height: 710px;
+  max-height: 90%;
   background-color: #EFEFEF;
   border: 1px solid #A1AAB5;
   border-radius: 10px;
@@ -15,6 +15,7 @@
 .box-container.collapsed {
   max-width: 550px;
   min-width: 440px;
+  max-height: 710px;
 }
 
 .box-container.expanded {
@@ -22,6 +23,18 @@
   height: calc(100% - 50px);
   max-width: 1520px;
   min-width: 1306px;
+}
+
+@media screen and (min-height: 768px) {
+  .box-container.expanded {
+    max-height: 90%;
+  }
+}
+
+@media screen and (max-height: 768px) {
+  .box-container.expanded {
+    max-height: 100%;
+  }
 }
 
 .box-header {

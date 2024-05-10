@@ -12,13 +12,20 @@ import { BiStats } from "react-icons/bi";
 
 import AtmosphericDataIcon from "../AtmosphericDataIcon/AtmosphericDataIcon";
 
-import { getTotalPrecipitation } from "../../helpers/helpers";
-
 const InfoBox = () => {
 
     const dispatch = useDispatch();
+
     const activeButton = useSelector(state => state.activeButton);
+
     const city = useSelector(state => state.selectedCity);
+
+    const dailyData = useSelector(state => state.dailyData);
+
+    const cityDailyData = dailyData
+        .filter((data) => data.city === city.id)
+        .flatMap((item) => item.cityData);
+
     const isExpanded = useSelector(state => state.isExpanded);
 
     const [isLoading, setIsLoading] = useState(true);
@@ -31,57 +38,31 @@ const InfoBox = () => {
     const now = new Date(nowString);
     now.setMinutes(0)
     now.setSeconds(0)
+
     const [currentTemperature, setCurrentTemperature] = useState(0);
     const [currentWind, setCurrentWind] = useState({ speed: 0, direction: 0 });
     const [currentHumidity, setCurrentHumidity] = useState(0);
     const [currentPrecipitation, setCurrentPrecipitation] = useState(0);
 
+    const currentData = cityDailyData.find(item => new Date(item.time).getTime() === new Date(now).getTime());
+
+    useEffect(() => {
+        setCurrentTemperature(currentData.T_2m);
+        setCurrentWind({ speed: currentData.ws_10m, direction: currentData.wd_10m });
+        setCurrentHumidity(currentData.rh_2m);
+        setCurrentPrecipitation(currentData.precip_total);
+    }, []);
+    
     useEffect(() => {
         const fetchDataForCity = async () => {
-            console.log('Fetching data for city: ', city.name);
+            console.log('Fetching data for city:', city.name);
             try {
                 const response = await fetch(`http://localhost:3001/api/data/${city.id}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
                 }
                 const data = await response.json();
-                const precip_c = data.map(item => item.precip_c);
-
-                // get data individually instead of accumulated
-                const precip_c_total = precip_c.map((item, index) => {
-                    if (index === 0) {
-                        return item;
-                    }
-                    return item - precip_c[index - 1];
-                });
-                
-                // get data individually instead of accumulated
-                const precip_g = data.map(item => item.precip_g);
-                const precip_g_total = precip_g.map((item, index) => {
-                    if (index === 0) {
-                        return item;
-                    }
-                    return item - precip_c[index - 1];
-                });
-
-                const total_precip = getTotalPrecipitation(precip_g_total, precip_c_total);
-
-                data.forEach((item, index) => {
-                    item.precip_g = precip_g_total[index];
-                    item.precip_c = precip_c_total[index];
-                    item.precip_total = total_precip[index];
-                });
                 dispatch(fetchDataSuccess(data));
-
-                const currentData = data.find(item => new Date(item.time).getTime() === now.getTime());
-                const currentTemperature = currentData.T_2m;
-                const currentWind = { speed: currentData.ws_10m, direction: currentData.wd_10m };
-                const currentHumidity = currentData.rh_2m;
-
-                setCurrentTemperature(currentTemperature);
-                setCurrentWind(currentWind);
-                setCurrentHumidity(currentHumidity);
-                setCurrentPrecipitation(currentPrecipitation);
                 setIsLoading(false);
             } catch (error) {
                 console.error('Error fetching data: ', error);
@@ -94,7 +75,7 @@ const InfoBox = () => {
 
     const renderState = activeButton === "graph" ? <GraphBox /> : <WeatherBox />;
 
-    const currentData = ["precipitation", "humidity", "wind", "iqa"];
+    const variables = ["precipitation", "humidity", "wind", "iqa"];
 
     if (isLoading) {
         return (
@@ -127,21 +108,21 @@ const InfoBox = () => {
                     {isExpanded ? (
                         <div className="expanded-atmospheric-data">
                             <div className="row">
-                                <AtmosphericDataIcon type_data={currentData[0]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation}/>
-                                <AtmosphericDataIcon type_data={currentData[1]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation}/>
-                                <AtmosphericDataIcon type_data={currentData[2]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation}/>
-                                <AtmosphericDataIcon type_data={currentData[3]} />
+                                <AtmosphericDataIcon type_data={variables[0]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
+                                <AtmosphericDataIcon type_data={variables[1]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
+                                <AtmosphericDataIcon type_data={variables[2]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
+                                <AtmosphericDataIcon type_data={variables[3]} />
                             </div>
                         </div>
                     ) : (
                         <div className="collapsed-atmospheric-data">
                             <div className="column">
-                                <AtmosphericDataIcon type_data={currentData[0]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation}/>
-                                <AtmosphericDataIcon type_data={currentData[1]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation}/>
+                                <AtmosphericDataIcon type_data={variables[0]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
+                                <AtmosphericDataIcon type_data={variables[1]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
                             </div>
                             <div className="column">
-                                <AtmosphericDataIcon type_data={currentData[2]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation}/>
-                                <AtmosphericDataIcon type_data={currentData[3]} />
+                                <AtmosphericDataIcon type_data={variables[2]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
+                                <AtmosphericDataIcon type_data={variables[3]} />
                             </div>
                         </div>
                     )}

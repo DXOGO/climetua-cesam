@@ -11,10 +11,10 @@ import InfoBox from './InfoBox';
 
 const BoxComponent = ({ state }) => {
     const dispatch = useDispatch();
-    const toggleExpand = () => {dispatch(setExpanded(!isExpanded));}
     
     const isExpanded = useSelector(state => state.isExpanded);
-
+    const toggleExpand = () => {dispatch(setExpanded(!isExpanded));}
+    
     let renderState;
 
     switch (state) {
