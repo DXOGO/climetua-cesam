@@ -259,12 +259,40 @@ module.exports = router;
 
 const setData = (allCityData) => {
 
-    console.log('allCityData:', allCityData.length);
-
     if (allCityData.length <= 23) {
-        const precip_g = allCityData.flatMap(city => city.cityData.map(data => data.precip_g));
-        const precip_c = allCityData.flatMap(city => city.cityData.map(data => data.precip_c));
-        const precip_total = getTotalPrecipitation(precip_g, precip_c);
+        const precip_g_accumulated = allCityData.flatMap(city => city.cityData.map(data => data.precip_g));
+        const precip_c_accumulated = allCityData.flatMap(city => city.cityData.map(data => data.precip_c));
+
+        // Grid scale precipitation for each timestamp
+        const precip_g = precip_g_accumulated.map((value, index, array) => {
+            if (index === 0) {
+                return parseFloat(value);
+            } else {
+                const prevValue = parseFloat(array[index - 1]);
+                const currentValue = parseFloat(value);
+                return currentValue - prevValue;
+            }
+        });
+
+        // Cummulus precipitation for each timestamp
+        const precip_c = precip_c_accumulated.map((value, index, array) => {
+            if (index === 0) {
+                return parseFloat(value);
+            } else {
+                const prevValue = parseFloat(array[index - 1]);
+                const currentValue = parseFloat(value);
+                return currentValue - prevValue;
+            }
+        });
+
+        const precip_total_accumulated = precip_g_accumulated.map((item, index) => parseFloat(item) + parseFloat(precip_c_accumulated[index]));
+
+        const precip_total = precip_total_accumulated.map((item, index) => {
+            if (index === 0) {
+                return item;
+            }
+            return item - precip_total_accumulated[index - 1];
+        });
 
         allCityData.forEach(city => {
             city.cityData.forEach(data => {
@@ -279,9 +307,39 @@ const setData = (allCityData) => {
             });
         });
     } else {
-        const precip_g = allCityData.map(data => data.precip_g);
-        const precip_c = allCityData.map(data => data.precip_c);
-        const precip_total = getTotalPrecipitation(precip_g, precip_c);
+        const precip_g_accumulated = allCityData.map(data => data.precip_g);
+        const precip_c_accumulated = allCityData.map(data => data.precip_c);
+
+        // Grid scale precipitation for each timestamp
+        const precip_g = precip_g_accumulated.map((value, index, array) => {
+            if (index === 0) {
+                return parseFloat(value);
+            } else {
+                const prevValue = parseFloat(array[index - 1]);
+                const currentValue = parseFloat(value);
+                return currentValue - prevValue;
+            }
+        });
+
+        // Cummulus precipitation for each timestamp
+        const precip_c = precip_c_accumulated.map((value, index, array) => {
+            if (index === 0) {
+                return parseFloat(value);
+            } else {
+                const prevValue = parseFloat(array[index - 1]);
+                const currentValue = parseFloat(value);
+                return currentValue - prevValue;
+            }
+        });
+
+        const precip_total_accumulated = precip_g_accumulated.map((item, index) => parseFloat(item) + parseFloat(precip_c_accumulated[index]));
+
+        const precip_total = precip_total_accumulated.map((item, index) => {
+            if (index === 0) {
+                return item;
+            }
+            return item - precip_total_accumulated[index - 1];
+        });
 
         allCityData.forEach(city => {
             city.T_2m = parseFloat(city.T_2m);
@@ -297,17 +355,3 @@ const setData = (allCityData) => {
 
     return allCityData;
 }
-
-const getTotalPrecipitation = (precip_g, precip_c) => {
-
-    const precip_total_accumulated = precip_g.map((item, index) => parseFloat(item) + parseFloat(precip_c[index]));
-
-    const precip_total = precip_total_accumulated.map((item, index) => {
-        if (index === 0) {
-            return item;
-        }
-        return item - precip_total_accumulated[index - 1];
-    });
-
-    return precip_total;
-};

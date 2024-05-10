@@ -66,7 +66,6 @@ const WeatherChartHighchart = () => {
             }
 
             if (selectedToggles.includes('pressure')) {
-                console.log(slp)
                 newDataPoint.pressure = Math.round(parseFloat(slp));
             }
 
@@ -85,7 +84,7 @@ const WeatherChartHighchart = () => {
             case 'humidity':
                 return ['Humidade rel.', '%', '#82ca9d'];
             case 'wind_speed':
-                return ['Velocidade do vento', 'm/s', '#f4d03f '];
+                return ['Velocidade do vento', 'm/s', '#ffab0f '];
             case 'pressure':
                 return ['Pressão', 'hPa', '#e67e22'];
             case 'precipitation':
@@ -100,8 +99,10 @@ const WeatherChartHighchart = () => {
     };
 
     const getYAxisConfigurations = () => {
+        const precipitationRelatedToggles = ['precipitation', 'convectivePrecipitation', 'nonConvectivePrecipitation'];
+        const showPrecipitationYAxisLabel = selectedToggles.some(toggle => precipitationRelatedToggles.includes(toggle));
 
-        const precipitationYAxisConfig = {
+        const precipitationYAxisConfig = showPrecipitationYAxisLabel ? {
             title: {
                 text: 'mm',
                 style: {
@@ -128,12 +129,13 @@ const WeatherChartHighchart = () => {
             min: 0,
             max: 0.02,
             tickInterval: 0.005,
-        };
+        } : null;
 
         return selectedToggles.map((toggle, index) => {
-            if (toggle === 'precipitation' || toggle === 'convectivePrecipitation' || toggle === 'nonConvectivePrecipitation') {
+            if (precipitationRelatedToggles.includes(toggle)) {
                 return precipitationYAxisConfig;
             }
+
             const yAxisConfig = {
                 title: {
                     text: getInfo(toggle)[1],

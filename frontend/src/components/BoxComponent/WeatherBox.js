@@ -6,7 +6,7 @@ import { TbClockHour4 } from "react-icons/tb";
 
 import HourlyForecastComponent from '../HourlyForecastComponent/HourlyForecastComponent';
 
-import { processHourlyData, getTotalPrecipitation } from "../../helpers/helpers";
+import { processHourlyData } from "../../helpers/helpers";
 
 const WeatherBox = () => {
 
@@ -23,9 +23,7 @@ const WeatherBox = () => {
     const windSpeed = cityDailyData.map(item => item.ws_10m); // Wind speed
     const windDirection = cityDailyData.map(item => item.wd_10m); // Wind direction
     const humidity = cityDailyData.map(item => item.rh_2m); // Humidity
-    const precip_g = cityDailyData.map(item => item.precip_g); // Grid scale Precipitation (convenctiva)
-    const precip_c = cityDailyData.map(item => item.precip_c); // Cumulative Precipitation (não convectiva)
-    const precip_total = getTotalPrecipitation(precip_g, precip_c); // Total Precipitation
+    const precip_total = cityDailyData.map(item => item.precip_total); // Total Precipitation
     const pressure = cityDailyData.map(item => item.slp) // Pressure
 
     const wind = {

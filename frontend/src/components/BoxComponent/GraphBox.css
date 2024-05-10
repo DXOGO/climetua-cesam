@@ -96,10 +96,10 @@
 }
 
 @media screen and (min-width: 500px) {
-    .large-height .toggle-content-0 {
+    /* .large-height .toggle-content-0 {
         flex-wrap: wrap;
         justify-content: center;
-    }
+    } */
     
     .large-width .toggle-content-0 {
         flex-wrap: wrap;

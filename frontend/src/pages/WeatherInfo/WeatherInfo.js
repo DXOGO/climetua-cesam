@@ -5,7 +5,6 @@ import Searchbar from '../../components/Searchbar/Searchbar';
 import {
     setWeatherIcon,
     findCityByName,
-    getTotalPrecipitation
 } from '../../helpers/helpers';
 
 import { MdOutlineInfo } from "react-icons/md";
