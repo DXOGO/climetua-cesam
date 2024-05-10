@@ -1,33 +1,26 @@
 // Reducers.js
 import {
-  SET_SELECTED_LAYER,
   SET_SELECTED_CITY,
   SET_EXPANDED,
   TOGGLE_TOGGLE,
   SET_ACTIVE_BUTTON,
   FETCH_DATA_SUCCESS,
-  FETCH_TEMPERATURE_DATA_SUCCESS,
+  FETCH_DAILY_DATA_SUCCESS,
   UPDATE_DATE
 } from './types';
 
 const initialState = {
-  selectedLayer: "Topo",
   selectedCity: null,
   toggles: ["temperature"],
   activeButton: "table",
   isExpanded: false,
   variableData: [],
-  temperatureData: [],
+  dailyData: [],
   currentDate: '2021-07-08T15:00:00.000Z',
 };
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_SELECTED_LAYER:
-      return {
-        ...state,
-        selectedLayer: action.payload,
-      };
     case SET_SELECTED_CITY:
       return {
         ...state,
@@ -54,10 +47,10 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         variableData: action.payload,
       };
-    case FETCH_TEMPERATURE_DATA_SUCCESS:
+    case FETCH_DAILY_DATA_SUCCESS:
       return {
         ...state,
-        temperatureData: action.payload,
+        dailyData: action.payload,
       };
     case UPDATE_DATE:
       return {

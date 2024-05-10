@@ -3,7 +3,7 @@ import initializeMap from './LeafletTimeDimensionMap'; // Import the map initial
 
 const MapComponent = () => {
   useEffect(() => {
-    initializeMap(); // Call the function to initialize the map when the component mounts
+    initializeMap();
   }, []);
 
   return (

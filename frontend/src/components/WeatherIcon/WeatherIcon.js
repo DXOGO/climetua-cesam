@@ -1,5 +1,6 @@
 // WeatherIcon.js
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import './WeatherIcon.css';
 import wave_low from '../../assets/icons/wave_low.svg';
 import wave_mid from '../../assets/icons/wave_mid.svg';
@@ -11,10 +12,20 @@ import {
   setWeatherIcon,
 } from '../../helpers/helpers';
 
-const WeatherIcon = ({ city_name, className, onClick, date, temperatureData }) => {
+const WeatherIcon = ({ city_name, className, onClick, date, dailyData }) => {
 
+  const data = dailyData.flatMap(hourlyData => hourlyData);
+  
+  //* Using because there is no CESAM data available to get cloud, IQA or wave information
   const selectedCity = findCityByName(city_name)
-  const selectedIcon = setWeatherIcon(selectedCity.atmosphericDataCurrent.precipitation, selectedCity.atmosphericDataCurrent.clouds, selectedCity.atmosphericDataCurrent.humidity, date);
+  
+  const temperatures = data.map(data => data.T_2m);
+  
+  const currentData = data.find(item => new Date(item.time).getTime() === new Date(date).getTime());  
+  const currentHumidity = Math.round(currentData.rh_2m);
+  const currentPrecipitation = currentData.precip_total;
+
+  const selectedIcon = setWeatherIcon(currentPrecipitation, selectedCity.atmosphericDataCurrent.clouds, currentHumidity, date);
 
   const iqa = getIQA(selectedCity.iqa);
   const waves = selectedCity.waves;
@@ -23,12 +34,11 @@ const WeatherIcon = ({ city_name, className, onClick, date, temperatureData }) =
   const [minTemperature, setMinTemperature] = useState(null);
 
   useEffect(() => {
-    if (temperatureData.length > 0) {
-      const temperatures = temperatureData.map(data => data);
+    if (dailyData.length > 0) {
       setMaxTemperature(Math.round(Math.max(...temperatures)));
       setMinTemperature(Math.round(Math.min(...temperatures)));
     }
-  }, [temperatureData]);
+  }, [dailyData]);
 
   let showWave = waves !== undefined;
   let waveIcon;
@@ -62,6 +72,12 @@ const WeatherIcon = ({ city_name, className, onClick, date, temperatureData }) =
   }
 
   const handleClick = () => { onClick(city_name); }
+
+  // if (isLoading) {
+  //   return (
+  //     <div></div>
+  //   );
+  // }
 
   return (
     <div className={className}>

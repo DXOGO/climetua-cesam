@@ -15,7 +15,6 @@ const WeatherChartHighchart = () => {
     const [clientHeight, setClientHeight] = useState(window.innerHeight);
     const [chartContainerClass, setChartContainerClass] = useState(320);
 
-
     const handleResize = () => {
         setClientHeight(window.innerHeight);
     };
@@ -38,7 +37,7 @@ const WeatherChartHighchart = () => {
     const generateContinuousLineData = () => {
         const continuousLineData = [];
 
-        variableData.forEach(({ time, T_2m, rh_2m, ws_10m }) => {
+        variableData.forEach(({ time, T_2m, rh_2m, ws_10m, precip_g, precip_c, precip_total, slp }) => {
             const timestamp = new Date(time).getTime();
             const newDataPoint = { time: timestamp };
 
@@ -54,6 +53,23 @@ const WeatherChartHighchart = () => {
                 newDataPoint.wind_speed = Math.round(parseFloat(ws_10m));
             }
 
+            if (selectedToggles.includes('convectivePrecipitation')) {
+                newDataPoint.convectivePrecipitation = parseFloat(precip_g);
+            }
+
+            if (selectedToggles.includes('nonConvectivePrecipitation')) {
+                newDataPoint.nonConvectivePrecipitation = parseFloat(precip_c);
+            }
+
+            if (selectedToggles.includes('precipitation')) {
+                newDataPoint.precipitation = parseFloat(precip_total);
+            }
+
+            if (selectedToggles.includes('pressure')) {
+                console.log(slp)
+                newDataPoint.pressure = Math.round(parseFloat(slp));
+            }
+
             continuousLineData.push(newDataPoint);
         });
 
@@ -67,20 +83,57 @@ const WeatherChartHighchart = () => {
             case 'temperature':
                 return ['Temperatura', '°C', '#ff3860'];
             case 'humidity':
-                return ['Humidade rel.', '%', '#0088fe'];
-            case 'precipitation':
-                return ['Precipitação', 'mm', '#f8b700'];
-            case 'pressure':
-                return ['Pressão', 'hPa', '#82ca9d'];
+                return ['Humidade rel.', '%', '#82ca9d'];
             case 'wind_speed':
-                return ['Velocidade do vento', 'm/s', '#8300C4'];
+                return ['Velocidade do vento', 'm/s', '#f4d03f '];
+            case 'pressure':
+                return ['Pressão', 'hPa', '#e67e22'];
+            case 'precipitation':
+                return ['Precipitação', 'mm', '#0088fe'];
+            case 'convectivePrecipitation':
+                return ['Prec. convectiva', 'mm', '#5dade2'];
+            case 'nonConvectivePrecipitation':
+                return ['Prec. não convectiva', 'mm', '#48c9b0'];
             default:
                 return ['?', '?', '#000000'];
         }
     };
 
     const getYAxisConfigurations = () => {
+
+        const precipitationYAxisConfig = {
+            title: {
+                text: 'mm',
+                style: {
+                    color: '#0088fe',
+                },
+                rotation: 0,
+                align: 'high',
+                offset: 0,
+                y: -10,
+            },
+            opposite: true,
+            labels: {
+                style: {
+                    color: '#0088fe',
+                },
+                x: 5,
+                y: 5
+            },
+            gridLineWidth: 0.5,
+            gridLineColor: '#d3d3d3',
+            lineWidth: 1,
+            lineColor: '#0088fe',
+            tickColor: '#0088fe',
+            min: 0,
+            max: 0.02,
+            tickInterval: 0.005,
+        };
+
         return selectedToggles.map((toggle, index) => {
+            if (toggle === 'precipitation' || toggle === 'convectivePrecipitation' || toggle === 'nonConvectivePrecipitation') {
+                return precipitationYAxisConfig;
+            }
             const yAxisConfig = {
                 title: {
                     text: getInfo(toggle)[1],
@@ -109,10 +162,20 @@ const WeatherChartHighchart = () => {
 
             if (toggle === 'humidity') {
                 yAxisConfig.max = 100;
+                yAxisConfig.tickInterval = 20;
             } else if (toggle === "temperature") {
-                yAxisConfig.max = 40;
+                yAxisConfig.min = 8;
+                yAxisConfig.max = 48;
+                yAxisConfig.tickInterval = 8;
+            } else if (toggle === "wind_speed") {
+                yAxisConfig.min = 0;
+                yAxisConfig.max = 15;
+                yAxisConfig.tickInterval = 3;
+            } else if (toggle === "pressure") {
+                yAxisConfig.min = 950;
+                yAxisConfig.max = 1050;
+                yAxisConfig.tickInterval = 25;
             }
-
             return yAxisConfig;
         });
     };
@@ -131,7 +194,6 @@ const WeatherChartHighchart = () => {
             enabled: false
         },
     }));
-
 
     const options = {
         chart: {
@@ -161,7 +223,7 @@ const WeatherChartHighchart = () => {
         xAxis: [
             {
                 type: 'datetime',
-                tickInterval: 6 * 3600 * 1000, // 6 hours in milliseconds
+                tickInterval: 6 * 3600 * 1000,
                 startOnTick: false,
                 endOnTick: false,
                 crosshairs: true,
@@ -219,6 +281,12 @@ const WeatherChartHighchart = () => {
                             break;
                         case 'Velocidade do vento':
                             unit = 'm/s';
+                            break;
+                        case 'Prec. convectiva':
+                            unit = 'mm';
+                            break;
+                        case 'Prec. não convectiva':
+                            unit = 'mm';
                             break;
                         default:
                             unit = '';

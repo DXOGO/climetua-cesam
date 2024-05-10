@@ -7,9 +7,7 @@
     width: 100%;
     height: calc(100vh - 40px);
     max-width: 1580px;
-    max-height: 940px;
-    /* min-width: 1280px; */
-}
+    max-height: 940px;}
 
 .weather-info-text {
     display: flex;
@@ -20,6 +18,7 @@
     font-weight: 500;
     color: #303236;
     min-height: 21px;
+    z-index: 9999; 
 }
 
 
@@ -95,7 +94,6 @@
 
 .weather-icon-container {
     position: absolute;
-    /* height: calc(100% - 28px); */
     height: 100%;
     width: 100%;
     min-height: 612px;
@@ -114,12 +112,13 @@
     justify-content: flex-end;
     margin-top: 4px;
     flex-direction: row;
+    height: 100%;
+    align-items: flex-end;
 }
 
 
 .weather-info-container {
     position: relative;
-    /* Other styles... */
 }
 
 .loading-container {
@@ -132,8 +131,6 @@
 }
 
 .loading-icon {
-    /* Add styles for your loading icon */
-    /* Example styles for a spinning loader */
     border: 4px solid #f3f3f3;
     border-top: 4px solid #303236;
     border-radius: 50%;

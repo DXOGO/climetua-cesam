@@ -39,6 +39,10 @@ export const findCityByName = (cityName) => {
 
 export const setWeatherIcon = (precipitation, clouds, humidity, hours) => {
 
+    // console.log('precipitation: ', precipitation);
+    // console.log('clouds: ', clouds);
+    // console.log('humidity: ', humidity);
+
     let currentTime = "";
 
     if (hours === undefined) { currentTime = new Date().getHours();
@@ -82,3 +86,16 @@ export const processHourlyData = (hourlyData) => {
 
     return dataArray;
 };
+
+export const getTotalPrecipitation = (precip_g, precip_c) => {  
+    const precip_total_accumulated = precip_g.map((item, index) => parseFloat(item) + parseFloat(precip_c[index]));
+
+    const precip_total = precip_total_accumulated.map((item, index) => {
+        if (index === 0) {
+            return item;
+        }
+        return item - precip_total_accumulated[index - 1];
+    });
+
+    return precip_total;
+}

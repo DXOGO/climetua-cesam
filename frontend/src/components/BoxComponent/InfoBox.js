@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setActiveButton } from "../../redux/actions";
 import { fetchDataSuccess } from '../../redux/actions';
 
-import styled, { css } from 'styled-components';
 import WeatherBox from './WeatherBox';
 import GraphBox from './GraphBox';
 
@@ -16,24 +15,47 @@ import AtmosphericDataIcon from "../AtmosphericDataIcon/AtmosphericDataIcon";
 const InfoBox = () => {
 
     const dispatch = useDispatch();
+
     const activeButton = useSelector(state => state.activeButton);
+
     const city = useSelector(state => state.selectedCity);
+
+    const dailyData = useSelector(state => state.dailyData);
+
+    const cityDailyData = dailyData
+        .filter((data) => data.city === city.id)
+        .flatMap((item) => item.cityData);
+
     const isExpanded = useSelector(state => state.isExpanded);
-    
+
     const [isLoading, setIsLoading] = useState(true);
 
     const handleButtonClick = (buttonName) => {
         dispatch(setActiveButton(buttonName)); // Dispatch the action
     };
 
-    const now = new Date('2021-07-08T15:00:00.000Z');
+    const nowString = useSelector((state) => state.currentDate);
+    const now = new Date(nowString);
+    now.setMinutes(0)
+    now.setSeconds(0)
+
     const [currentTemperature, setCurrentTemperature] = useState(0);
     const [currentWind, setCurrentWind] = useState({ speed: 0, direction: 0 });
     const [currentHumidity, setCurrentHumidity] = useState(0);
+    const [currentPrecipitation, setCurrentPrecipitation] = useState(0);
 
+    const currentData = cityDailyData.find(item => new Date(item.time).getTime() === new Date(now).getTime());
 
     useEffect(() => {
+        setCurrentTemperature(currentData.T_2m);
+        setCurrentWind({ speed: currentData.ws_10m, direction: currentData.wd_10m });
+        setCurrentHumidity(currentData.rh_2m);
+        setCurrentPrecipitation(currentData.precip_total);
+    }, []);
+    
+    useEffect(() => {
         const fetchDataForCity = async () => {
+            console.log('Fetching data for city:', city.name);
             try {
                 const response = await fetch(`http://localhost:3001/api/data/${city.id}`);
                 if (!response.ok) {
@@ -41,32 +63,31 @@ const InfoBox = () => {
                 }
                 const data = await response.json();
                 dispatch(fetchDataSuccess(data));
-                
-                const currentData = data.find(item => new Date(item.time).getTime() === now.getTime());
-                const currentTemperature = currentData.T_2m;
-                const currentWind = { speed: currentData.ws_10m, direction: currentData.wd_10m };
-                const currentHumidity = currentData.rh_2m;
-                
-                setCurrentTemperature(currentTemperature);
-                setCurrentWind(currentWind);
-                setCurrentHumidity(currentHumidity);
-                
                 setIsLoading(false);
             } catch (error) {
                 console.error('Error fetching data: ', error);
                 setIsLoading(false);
             }
         }
+        setIsLoading(true);
         fetchDataForCity();
-    }, [city]);
+    }, [dispatch, city]);
 
     const renderState = activeButton === "graph" ? <GraphBox /> : <WeatherBox />;
 
-    const currentData = ["precipitation", "humidity", "wind", "iqa"];
+    const variables = ["precipitation", "humidity", "wind", "iqa"];
 
     if (isLoading) {
         return (
-            <div></div>
+            <div style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%"
+
+            }}>
+                <div className="loading-icon" />
+            </div>
         );
     }
 
@@ -87,32 +108,32 @@ const InfoBox = () => {
                     {isExpanded ? (
                         <div className="expanded-atmospheric-data">
                             <div className="row">
-                                <AtmosphericDataIcon type_data={currentData[0]} />
-                                <AtmosphericDataIcon type_data={currentData[1]} humidity={currentHumidity} wind={currentWind} />
-                                <AtmosphericDataIcon type_data={currentData[2]} humidity={currentHumidity} wind={currentWind} />
-                                <AtmosphericDataIcon type_data={currentData[3]} />
+                                <AtmosphericDataIcon type_data={variables[0]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
+                                <AtmosphericDataIcon type_data={variables[1]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
+                                <AtmosphericDataIcon type_data={variables[2]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
+                                <AtmosphericDataIcon type_data={variables[3]} />
                             </div>
                         </div>
                     ) : (
                         <div className="collapsed-atmospheric-data">
                             <div className="column">
-                                <AtmosphericDataIcon type_data={currentData[0]} />
-                                <AtmosphericDataIcon type_data={currentData[1]} humidity={currentHumidity} wind={currentWind} />
+                                <AtmosphericDataIcon type_data={variables[0]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
+                                <AtmosphericDataIcon type_data={variables[1]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
                             </div>
                             <div className="column">
-                                <AtmosphericDataIcon type_data={currentData[2]} wind={currentWind} />
-                                <AtmosphericDataIcon type_data={currentData[3]} />
+                                <AtmosphericDataIcon type_data={variables[2]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
+                                <AtmosphericDataIcon type_data={variables[3]} />
                             </div>
                         </div>
                     )}
                 </div>
                 <div className={`info-buttons-${activeButton} ${isExpanded ? "expanded" : "collapsed"}`}>
-                    <Button active={activeButton === "table"} onClick={() => handleButtonClick("table")}>
+                    <button className={activeButton === "table" ? "active" : ""} onClick={() => handleButtonClick("table")}>
                         Tabela <FaTable style={{ marginLeft: "8px", transform: "scale(1.2)" }} />
-                    </Button>
-                    <Button active={activeButton === "graph"} onClick={() => handleButtonClick("graph")}>
+                    </button>
+                    <button className={activeButton === "graph" ? "active" : ""} onClick={() => handleButtonClick("graph")}>
                         Gráfico <BiStats style={{ marginLeft: "8px", transform: "scale(1.6)" }} />
-                    </Button>
+                    </button>
                 </div>
                 {renderState}
             </div>
@@ -121,30 +142,3 @@ const InfoBox = () => {
 }
 
 export default InfoBox;
-
-const Button = styled.button`
-    border-radius: 10px;
-    border-width: 2px;
-    border-style: solid;
-    padding: 6px 14px;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.3s ease;
-    font-size: 12px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ffffff;
-    border-color: #68727D;
-    color: #68727D;
-    
-    ${props =>
-        props.active &&
-        css`
-            background-color: #0A77FF;
-            border-color: transparent;
-            color: #ffffff;
-        `
-    }
-`;

@@ -91,7 +91,7 @@ const GraphBox = () => {
             return newState;
         });
     };
-
+    
     return (
         <div className="graph-box-container" ref={containerRef}>
             {/* Warning message */}

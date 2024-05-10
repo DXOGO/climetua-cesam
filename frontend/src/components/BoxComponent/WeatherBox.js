@@ -6,13 +6,33 @@ import { TbClockHour4 } from "react-icons/tb";
 
 import HourlyForecastComponent from '../HourlyForecastComponent/HourlyForecastComponent';
 
-import { processHourlyData } from "../../helpers/helpers";
+import { processHourlyData, getTotalPrecipitation } from "../../helpers/helpers";
 
 const WeatherBox = () => {
 
-    const city = useSelector(state => state.selectedCity);
-
     const isExpanded = useSelector(state => state.isExpanded);
+
+    const city = useSelector(state => state.selectedCity);
+    const dailyData = useSelector(state => state.dailyData);
+
+    const cityDailyData = dailyData
+        .filter((data) => data.city === city.id)
+        .flatMap((item) => item.cityData);
+
+    const temperature = cityDailyData.map(item => item.T_2m); // Temperature
+    const windSpeed = cityDailyData.map(item => item.ws_10m); // Wind speed
+    const windDirection = cityDailyData.map(item => item.wd_10m); // Wind direction
+    const humidity = cityDailyData.map(item => item.rh_2m); // Humidity
+    const precip_g = cityDailyData.map(item => item.precip_g); // Grid scale Precipitation (convenctiva)
+    const precip_c = cityDailyData.map(item => item.precip_c); // Cumulative Precipitation (não convectiva)
+    const precip_total = getTotalPrecipitation(precip_g, precip_c); // Total Precipitation
+    const pressure = cityDailyData.map(item => item.slp) // Pressure
+
+    const wind = {
+        speed: windSpeed,
+        direction: windDirection
+    };
+
     const hourlyArray = processHourlyData(city.atmosphericDataHourly);
     const [viewType, setViewType] = useState('3hourly');
 
@@ -52,10 +72,12 @@ const WeatherBox = () => {
                     </label>
                 </div>
             </div>
-            <div className={`forecast-content-${isExpanded ? "expanded" : "collapsed"}`}>
-                {adjustedHourlyArray.map((hour, index) => (
-                    <HourlyForecastComponent key={index} hour={hour.hour} />
-                ))}
+            <div className="forecast-content">
+                <div className={`forecast-content-${isExpanded ? "expanded" : "collapsed"}`}>
+                    {adjustedHourlyArray.map((hour, index) => (
+                        <HourlyForecastComponent key={index} hour={hour.hour} temperature={temperature} humidity={humidity} wind={wind} precipitation={precip_total} pressure={pressure} />
+                    ))}
+                </div>
             </div>
         </div>
     );

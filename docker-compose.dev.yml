@@ -1,20 +1,18 @@
 version: '3.8'
 
 services:
-  frontend:
-    container_name: frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev
+  thredds:
+    container_name: thredds
+    image: unidata/thredds-docker:5.5-SNAPSHOT
     ports:
-      - "3000:3000"
-    depends_on: 
-      - backend
+      - "80:8080"
     volumes:
-      - ./frontend/src:/app/src
+    # These bind mounts have to be changed inside the CESAM host
+      - /var/thredds/public:/usr/local/tomcat/content/thredds/public  # The /public directory contains the .nc files
+      - /var/thredds/web.xml:/usr/local/tomcat/webapps/thredds/WEB-INF/web.xml # The web.xml contains CORS configuration for the React server
+      - /var/thredds/catalog.xml:/usr/local/tomcat/content/thredds/catalog.xml # The catalog.xml contains new catalog configuration for cesam data 
     networks:
       - thredds_network
-
 
   backend:
     container_name: backend
@@ -31,14 +29,17 @@ services:
     networks:
       - thredds_network
 
-  thredds:
-    container_name: thredds
-    image: unidata/thredds-docker:5.5-SNAPSHOT
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
     ports:
-      - "80:8080"
+      - "3000:3000"
+    depends_on: 
+      - backend
     volumes:
-      - /var/thredds_data:/usr/local/tomcat/content/thredds/public  
-      - ./web.xml:/usr/local/tomcat/webapps/thredds/WEB-INF/web.xml 
+      - ./frontend/src:/app/src
     networks:
       - thredds_network
 
