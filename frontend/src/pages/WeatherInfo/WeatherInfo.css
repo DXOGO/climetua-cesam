@@ -122,7 +122,7 @@
 }
 
 .loading-container {
-    z-index: 9999;
+    z-index: 9997;
     position: absolute;
     top: 50%;
     left: 50%;

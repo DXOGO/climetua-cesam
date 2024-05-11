@@ -27,7 +27,7 @@ const WeatherInfo = () => {
     const isExpanded = useSelector((state) => state.isExpanded);
     const dailyData = useSelector((state) => state.dailyData);
     const [boxState, setBoxState] = useState(selectedCity ? 'info' : 'default');
-    const [showModal, setShowModal] = useState(false);
+    const [showIqaModal, setShowIqaModal] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
     const getFormattedDate = (date) => {
@@ -45,6 +45,7 @@ const WeatherInfo = () => {
         return date.toLocaleString('pt-PT', options);
     };
 
+    // * Ask user for location permissions
     // const getLocation = () => {
     //     if (navigator.geolocation) {
     //         navigator.geolocation.getCurrentPosition(
@@ -100,13 +101,8 @@ const WeatherInfo = () => {
         setBoxState('info');
     };
 
-    const handleMouseEnter = () => {
-        setShowModal(true);
-    };
-
-    const handleMouseLeave = () => {
-        setShowModal(false);
-    };
+    const handleMouseEnter = () => { setShowIqaModal(true); };
+    const handleMouseLeave = () => { setShowIqaModal(false); };
 
     if (isLoading) {
         return (
@@ -165,7 +161,7 @@ const WeatherInfo = () => {
                 )}
                 <div className="today-date">{getFormattedDate(nowDate)}</div>
             </div>
-            {showModal && <IQAModal />}
+            {showIqaModal && <IQAModal />}
         </div>
     );
 };

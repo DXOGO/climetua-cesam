@@ -1,5 +1,5 @@
 import React from 'react';
-import './IQAModal.css';
+import './Modal.css';
 
 import { IoWarningOutline } from "react-icons/io5";
 
@@ -17,8 +17,8 @@ const IQAModal = () => {
     );
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
+        <div className="iqa-modal-overlay">
+            <div className="iqa-modal-content">
                 {/* Modal content goes here */}
                 <div className='iqa-modal-title'>Índice de Qualidade do Ar</div>
                 <div className="iqa-values">
