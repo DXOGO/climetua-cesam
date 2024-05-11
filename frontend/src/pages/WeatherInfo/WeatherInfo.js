@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import WeatherIcon from '../../components/WeatherIcon/WeatherIcon';
 import BoxComponent from '../../components/BoxComponent/BoxComponent';
 import Searchbar from '../../components/Searchbar/Searchbar';
-import {
-    setWeatherIcon,
-    findCityByName,
-} from '../../helpers/helpers';
+
+import { findCityByName } from '../../helpers/helpers';
 
 import { MdOutlineInfo } from "react-icons/md";
 import IQAModal from '../../components/Modal/IQAModal';
@@ -47,16 +45,29 @@ const WeatherInfo = () => {
         return date.toLocaleString('pt-PT', options);
     };
 
-    // ! function is causing some performance and repitition issues when saving in redux
-    // const [nowDate, setNowDate] = useState(new Date(now));
+    // const getLocation = () => {
+    //     if (navigator.geolocation) {
+    //         navigator.geolocation.getCurrentPosition(
+    //             (position) => {
+    //                 console.log('User location:', position.coords.latitude, position.coords.longitude);
+    //                 const closestCity = cities.reduce((prev, curr) =>
+    //                     Math.abs(curr.lat - position.coords.latitude) < Math.abs(prev.lat - position.coords.latitude) &&
+    //                         Math.abs(curr.lon - position.coords.longitude) < Math.abs(prev.lon - position.coords.longitude) ? curr : prev
+    //                 );
+    //                 dispatch(setSelectedCity(closestCity));
+    //             },
+    //             (error) => {
+    //                 console.error('Error getting user location:', error);
+    //             }
+    //         );
+    //     } else {
+    //         console.error('Geolocation is not supported by this browser');
+    //     }
+    // };
+
     // useEffect(() => {
-    //     const interval = setInterval(() => {
-    //         const newDate = nowDate.setSeconds(nowDate.getSeconds() + 1);
-    //         setNowDate(new Date(newDate))
-    //         // dispatch(updateDate(nowDate));
-    //     }, 1000);
-    //     return () => clearInterval(interval);
-    // }, [nowDate]);
+    //     getLocation();
+    // }, []); // Empty dependency array to trigger only on mount
 
     useEffect(() => {
         const fetchDailyData = async () => {
@@ -84,21 +95,9 @@ const WeatherInfo = () => {
     }, [dispatch, cities, dailyData]);
 
     const handleCityClick = (cityName) => {
-        setBoxState('info');
         const selectedCityData = findCityByName(cityName);
-        const selectedIcon = setWeatherIcon(
-            selectedCityData.atmosphericDataCurrent.precipitation,
-            selectedCityData.atmosphericDataCurrent.clouds,
-            selectedCityData.atmosphericDataCurrent.humidity,
-            nowDate
-        );
-        dispatch(
-            setSelectedCity({
-                ...selectedCityData,
-                icon: selectedIcon.icon,
-                alt: selectedIcon.alt,
-            })
-        );
+        dispatch(setSelectedCity(selectedCityData));
+        setBoxState('info');
     };
 
     const handleMouseEnter = () => {

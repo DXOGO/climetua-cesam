@@ -4,6 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setActiveButton } from "../../redux/actions";
 import { fetchDataSuccess } from '../../redux/actions';
 
+import {
+    setWeatherIcon,
+} from '../../helpers/helpers';
+
 import WeatherBox from './WeatherBox';
 import GraphBox from './GraphBox';
 
@@ -44,7 +48,7 @@ const InfoBox = () => {
     const [currentHumidity, setCurrentHumidity] = useState(0);
     const [currentPrecipitation, setCurrentPrecipitation] = useState(0);
 
-    const currentData = cityDailyData.find(item => new Date(item.time).getTime() === new Date(now).getTime());
+    const currentData = cityDailyData.find(item => new Date(item.time).getTime() === new Date(now).getTime()) ? cityDailyData.find(item => new Date(item.time).getTime() === new Date(now).getTime()) : cityDailyData[0];
 
     useEffect(() => {
         setCurrentTemperature(currentData.T_2m);
@@ -52,6 +56,9 @@ const InfoBox = () => {
         setCurrentHumidity(currentData.rh_2m);
         setCurrentPrecipitation(currentData.precip_total);
     }, [currentData]);
+
+    // Fetch city weather icon
+    const weatherIcon = setWeatherIcon(currentPrecipitation, city.atmosphericDataCurrent.clouds, currentHumidity, now);
 
     useEffect(() => {
         const fetchDataForCity = async () => {
@@ -78,20 +85,6 @@ const InfoBox = () => {
 
     const variables = ["precipitation", "humidity", "wind", "iqa"];
 
-    // if (isLoading) {
-    //     return (
-    //         <div style={{
-    //             display: "flex",
-    //             justifyContent: "center",
-    //             alignItems: "center",
-    //             height: "100%"
-
-    //         }}>
-    //             <div className="loading-icon" />
-    //         </div>
-    //     );
-    // }
-
     return (
         <div className={`info-box ${activeButton} ${isExpanded ? "expanded" : "collapsed"}`}>
             <div className="info-header">
@@ -100,7 +93,7 @@ const InfoBox = () => {
             <div className={`info-content ${activeButton}`}>
                 <div className={`info-row ${activeButton} ${isExpanded ? "expanded" : "collapsed"}`}>
                     <div className={`info-icon ${isExpanded ? "expanded" : "collapsed"}`}>
-                        <img src={city.icon} alt={city.alt} className="info-weather-icon" />
+                        <img src={weatherIcon.icon} alt={weatherIcon.alt} className="info-weather-icon" />
                     </div>
                     <div className={`temperature ${isExpanded ? "expanded" : "collapsed"}`}>
                         <span className="temperature-text">{parseFloat(currentTemperature).toFixed(0)}</span>

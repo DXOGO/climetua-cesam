@@ -12,16 +12,16 @@ import {
   setWeatherIcon,
 } from '../../helpers/helpers';
 
-const WeatherIcon = ({ city_name, className, onClick, date, dailyData }) => {
+const WeatherIcon = ({ city_name, className, date, onClick, dailyData }) => {
 
   const data = dailyData.flatMap(hourlyData => hourlyData);
-  
+
   //* Using because there is no CESAM data available to get cloud, IQA or wave information
   const selectedCity = findCityByName(city_name)
-  
+
   const temperatures = data.map(data => data.T_2m);
-  
-  const currentData = data.find(item => new Date(item.time).getTime() === new Date(date).getTime());  
+
+  const currentData = data.find(item => new Date(item.time).getTime() === new Date(date).getTime());
   const currentHumidity = Math.round(currentData.rh_2m);
   const currentPrecipitation = currentData.precip_total;
 
