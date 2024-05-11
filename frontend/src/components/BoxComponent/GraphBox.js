@@ -11,7 +11,7 @@ import WeatherChartHighchart from '../WeatherChart/WeatherChartHighchart';
 // import WeatherChartMeteogram from '../WeatherChart/WeatherChartMeteogram'
 
 
-const GraphBox = () => {
+const GraphBox = ({ loading }) => {
 
     const isExpanded = useSelector(state => state.isExpanded);
     const [levelExpanded, setLevelExpanded] = useState([true, true]);
@@ -91,7 +91,7 @@ const GraphBox = () => {
             return newState;
         });
     };
-    
+
     return (
         <div className="graph-box-container" ref={containerRef}>
             {/* Warning message */}
@@ -129,6 +129,17 @@ const GraphBox = () => {
                     <LuCalendar />
                     <p style={{ paddingLeft: 5 }}>Previsão semanal</p>
                 </div>
+                {loading && (
+                    <div style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100%"
+                    }}>
+                        <div className="loading-icon" />
+                    </div>
+                )
+                }
                 <WeatherChartHighchart />
             </div>
         </div>

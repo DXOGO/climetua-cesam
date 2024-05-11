@@ -28,10 +28,10 @@ const InfoBox = () => {
 
     const isExpanded = useSelector(state => state.isExpanded);
 
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleButtonClick = (buttonName) => {
-        dispatch(setActiveButton(buttonName)); // Dispatch the action
+        dispatch(setActiveButton(buttonName));
     };
 
     const nowString = useSelector((state) => state.currentDate);
@@ -51,8 +51,8 @@ const InfoBox = () => {
         setCurrentWind({ speed: currentData.ws_10m, direction: currentData.wd_10m });
         setCurrentHumidity(currentData.rh_2m);
         setCurrentPrecipitation(currentData.precip_total);
-    }, []);
-    
+    }, [currentData]);
+
     useEffect(() => {
         const fetchDataForCity = async () => {
             console.log('Fetching data for city:', city.name);
@@ -64,6 +64,7 @@ const InfoBox = () => {
                 const data = await response.json();
                 dispatch(fetchDataSuccess(data));
                 setIsLoading(false);
+                console.log('Data fetched successfully',);
             } catch (error) {
                 console.error('Error fetching data: ', error);
                 setIsLoading(false);
@@ -73,23 +74,23 @@ const InfoBox = () => {
         fetchDataForCity();
     }, [dispatch, city]);
 
-    const renderState = activeButton === "graph" ? <GraphBox /> : <WeatherBox />;
+    const renderState = activeButton === "graph" ? <GraphBox loading={isLoading} /> : <WeatherBox />;
 
     const variables = ["precipitation", "humidity", "wind", "iqa"];
 
-    if (isLoading) {
-        return (
-            <div style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "100%"
+    // if (isLoading) {
+    //     return (
+    //         <div style={{
+    //             display: "flex",
+    //             justifyContent: "center",
+    //             alignItems: "center",
+    //             height: "100%"
 
-            }}>
-                <div className="loading-icon" />
-            </div>
-        );
-    }
+    //         }}>
+    //             <div className="loading-icon" />
+    //         </div>
+    //     );
+    // }
 
     return (
         <div className={`info-box ${activeButton} ${isExpanded ? "expanded" : "collapsed"}`}>

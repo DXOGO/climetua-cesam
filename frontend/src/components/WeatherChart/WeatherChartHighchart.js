@@ -100,47 +100,16 @@ const WeatherChartHighchart = () => {
 
     const getYAxisConfigurations = () => {
         const precipitationRelatedToggles = ['precipitation', 'convectivePrecipitation', 'nonConvectivePrecipitation'];
-        const showPrecipitationYAxisLabel = selectedToggles.some(toggle => precipitationRelatedToggles.includes(toggle));
-
-        const precipitationYAxisConfig = showPrecipitationYAxisLabel ? {
-            title: {
-                text: 'mm',
-                style: {
-                    color: '#0088fe',
-                },
-                rotation: 0,
-                align: 'high',
-                offset: 0,
-                y: -10,
-            },
-            opposite: true,
-            labels: {
-                style: {
-                    color: '#0088fe',
-                },
-                x: 5,
-                y: 5
-            },
-            gridLineWidth: 0.5,
-            gridLineColor: '#d3d3d3',
-            lineWidth: 1,
-            lineColor: '#0088fe',
-            tickColor: '#0088fe',
-            min: 0,
-            max: 0.02,
-            tickInterval: 0.005,
-        } : null;
+        const anyPrecipitationSelected = selectedToggles.some(toggle => precipitationRelatedToggles.includes(toggle));
+        let showPrecipitationYAxisLabel = false;
 
         return selectedToggles.map((toggle, index) => {
-            if (precipitationRelatedToggles.includes(toggle)) {
-                return precipitationYAxisConfig;
-            }
-
             const yAxisConfig = {
                 title: {
                     text: getInfo(toggle)[1],
                     style: {
-                        color: getInfo(toggle)[2],
+                        color: toggle === 'precipitation' || toggle === 'convectivePrecipitation' || toggle === 'nonConvectivePrecipitation' 
+                        ?  getInfo('precipitation')[2] : getInfo(toggle)[2],
                     },
                     rotation: 0,
                     align: 'high',
@@ -150,18 +119,19 @@ const WeatherChartHighchart = () => {
                 opposite: toggle === 'temperature' ? false : true,
                 labels: {
                     style: {
-                        color: getInfo(toggle)[2],
+                        color: toggle === 'precipitation' || toggle === 'convectivePrecipitation' || toggle === 'nonConvectivePrecipitation' 
+                        ?  getInfo('precipitation')[2] : getInfo(toggle)[2],
                     },
                     x: toggle === 'temperature' ? -5 : 5,
                     y: 5
                 },
                 gridLineWidth: 0.5,
                 gridLineColor: '#d3d3d3',
-                lineWidth: 1,
-                lineColor: getInfo(toggle)[2],
+                // lineWidth: 1,
+                // lineColor: getInfo(toggle)[2],
                 tickColor: getInfo(toggle)[2],
             };
-
+    
             if (toggle === 'humidity') {
                 yAxisConfig.max = 100;
                 yAxisConfig.tickInterval = 20;
@@ -177,10 +147,28 @@ const WeatherChartHighchart = () => {
                 yAxisConfig.min = 950;
                 yAxisConfig.max = 1050;
                 yAxisConfig.tickInterval = 25;
+            } else if (toggle === "precipitation" || toggle === "convectivePrecipitation" || toggle === "nonConvectivePrecipitation") {
+                yAxisConfig.min = 0;
+                yAxisConfig.max = 0.00025;
+                yAxisConfig.tickInterval = 0.00005;
             }
+    
+            // Set visibility of y-axis label based on precipitation toggles
+            if (precipitationRelatedToggles.includes(toggle)) {
+                if (!showPrecipitationYAxisLabel && anyPrecipitationSelected) {
+                    yAxisConfig.visible = true;
+                    showPrecipitationYAxisLabel = true;
+                } else {
+                    yAxisConfig.visible = false;
+                }
+            } else {
+                yAxisConfig.visible = true; // Non-precipitation toggles are always visible
+            }
+        
             return yAxisConfig;
         });
     };
+
 
     const seriesData = selectedToggles.map((toggle, index) => ({
         name: getInfo(toggle)[0],
