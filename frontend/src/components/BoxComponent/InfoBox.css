@@ -117,12 +117,11 @@
 @media screen and (max-width: 500px) {
     
     .info-row {
-        height: 100px;
-        min-height: 100px;
         display: flex;
         flex-direction: row;
         align-items: flex-start;
         height: 96px;
+        min-height: 96px;
     }
 
     .info-icon img {
@@ -184,6 +183,7 @@
         flex-direction: row;
         align-items: center;
         height: 96px;
+        min-height: 96px;
     }
 
     .collapsed-atmospheric-data {
