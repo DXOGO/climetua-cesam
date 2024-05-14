@@ -7,7 +7,7 @@
   background-color: #EFEFEF;
   border: 1px solid #A1AAB5;
   border-radius: 10px;
-  transition: width 0.5s;
+  transition: all 0.5s;
   z-index: 100;
 }
 

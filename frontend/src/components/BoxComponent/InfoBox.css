@@ -50,11 +50,6 @@
     margin: 0;
 }
 
-.info-row.graph.collapsed {
-    width: 100%;
-    padding-right: 20px;
-}
-
 .info-icon {
     display: flex;
     align-items: center;
@@ -127,6 +122,7 @@
         display: flex;
         flex-direction: row;
         align-items: flex-start;
+        height: 96px;
     }
 
     .info-icon img {
@@ -176,7 +172,7 @@
         padding: 0 0px 10px 10px;
     }
 
-    .info-row.info-row.graph.collapsed {
+    .info-row.graph.collapsed {
         padding-right: 10px;
     }
 }
@@ -187,6 +183,7 @@
         justify-content: flex-start;
         flex-direction: row;
         align-items: center;
+        height: 96px;
     }
 
     .collapsed-atmospheric-data {
@@ -212,6 +209,11 @@
     .info-buttons-table.collapsed {
         margin-top: 20px;
         width: 100%;
+    }
+
+    .info-row.graph.collapsed {
+        width: 100%;
+        padding-right: 20px;
     }
 }
 

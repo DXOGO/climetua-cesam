@@ -108,19 +108,20 @@ const WeatherChartHighchart = () => {
                 title: {
                     text: getInfo(toggle)[1],
                     style: {
-                        color: toggle === 'precipitation' || toggle === 'convectivePrecipitation' || toggle === 'nonConvectivePrecipitation' 
-                        ?  getInfo('precipitation')[2] : getInfo(toggle)[2],
+                        color: toggle === 'precipitation' || toggle === 'convectivePrecipitation' || toggle === 'nonConvectivePrecipitation'
+                            ? getInfo('precipitation')[2] : getInfo(toggle)[2],
                     },
                     rotation: 0,
                     align: 'high',
-                    offset: 0,
+                    offset: 20,
+                    x: toggle === 'temperature' ? 15 : -15,
                     y: -10,
                 },
                 opposite: toggle === 'temperature' ? false : true,
                 labels: {
                     style: {
-                        color: toggle === 'precipitation' || toggle === 'convectivePrecipitation' || toggle === 'nonConvectivePrecipitation' 
-                        ?  getInfo('precipitation')[2] : getInfo(toggle)[2],
+                        color: toggle === 'precipitation' || toggle === 'convectivePrecipitation' || toggle === 'nonConvectivePrecipitation'
+                            ? getInfo('precipitation')[2] : getInfo(toggle)[2],
                     },
                     x: toggle === 'temperature' ? -5 : 5,
                     y: 5
@@ -131,29 +132,22 @@ const WeatherChartHighchart = () => {
                 // lineColor: getInfo(toggle)[2],
                 tickColor: getInfo(toggle)[2],
             };
-    
-            if (toggle === 'humidity') {
-                yAxisConfig.max = 100;
-                yAxisConfig.tickInterval = 20;
-            } else if (toggle === "temperature") {
-                yAxisConfig.min = 8;
-                yAxisConfig.max = 48;
-                yAxisConfig.tickInterval = 8;
-            } else if (toggle === "wind_speed") {
-                yAxisConfig.min = 0;
-                yAxisConfig.max = 15;
-                yAxisConfig.tickInterval = 3;
-            } else if (toggle === "pressure") {
-                yAxisConfig.min = 950;
-                yAxisConfig.max = 1050;
-                yAxisConfig.tickInterval = 25;
-            } else if (toggle === "precipitation" || toggle === "convectivePrecipitation" || toggle === "nonConvectivePrecipitation") {
-                yAxisConfig.min = 0;
-                yAxisConfig.max = 0.00025;
-                yAxisConfig.tickInterval = 0.00005;
-            }
-    
-            // Set visibility of y-axis label based on precipitation toggles
+
+            const toggleData = chartData.map(data => data[toggle]);
+
+            // Calculate min and max values
+            const minValue = Math.min(...toggleData);
+            const maxValue = Math.max(...toggleData);
+
+            const range = maxValue - minValue === 0 ? 1 : maxValue - minValue;
+            const orderOfMagnitude = Math.pow(10, Math.floor(Math.log10(range)));
+            console.log('orderOfMagnitude:', orderOfMagnitude);
+            const tickInterval = Math.ceil(range / (orderOfMagnitude * 5)) * orderOfMagnitude;
+
+            yAxisConfig.min = Math.floor(minValue / tickInterval) * tickInterval === 0 ? 0 : Math.floor(minValue / tickInterval) * tickInterval - tickInterval;
+            yAxisConfig.max = Math.ceil(maxValue / tickInterval) * tickInterval === 0 ? 1 : Math.ceil(maxValue / tickInterval) * tickInterval + tickInterval;
+            yAxisConfig.tickInterval = tickInterval;
+
             if (precipitationRelatedToggles.includes(toggle)) {
                 if (!showPrecipitationYAxisLabel && anyPrecipitationSelected) {
                     yAxisConfig.visible = true;
@@ -162,9 +156,9 @@ const WeatherChartHighchart = () => {
                     yAxisConfig.visible = false;
                 }
             } else {
-                yAxisConfig.visible = true; // Non-precipitation toggles are always visible
+                yAxisConfig.visible = true;
             }
-        
+
             return yAxisConfig;
         });
     };
