@@ -24,15 +24,3 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
-// const http = require('http');
-// const server = http.createServer(app); // Create an HTTP server instance
-
-// server.setTimeout(600000); // Set timeout to 10 minutes
-
-// app.use((req, res, next) => {
-//   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-//   res.header('Access-Control-Allow-Headers', 'Content-Type');
-//   res.header('Access-Control-Max-Age', '86400');
-//   next();
-// });

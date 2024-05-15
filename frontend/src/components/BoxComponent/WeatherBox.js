@@ -45,7 +45,7 @@ const WeatherBox = () => {
         <div className="weather-box-container">
             <div className='forecast-box'>
                 <div className='forecast-box-text'>
-                    <TbClockHour4 />
+                    <TbClockHour4 style={{ fontSize: 16 }} />
                     <p style={{ paddingLeft: 5 }}>Previsão diária</p>
                 </div>
                 {/* Radio option buttons */}

@@ -1,36 +1,53 @@
 .leaflet-control-layers-expanded {
-    padding: 0px !important;
-    width: 250px !important;
-    border-radius: 0px !important;
+    padding: 5px !important;
+    background-color: #FCFCFC !important;
     border: 1px solid #C8D0D6 !important;
+    border-radius: 5px !important;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1) !important;
+    padding-top: 10px !important;
+    padding-left: 10px !important;
 }
 
 .leaflet-control-layers {
     border-radius: 0px !important;
     border: 1px solid #C8D0D6 !important;
+    border-radius: 5px !important;
 }
 
-.leaflet-control-layers-toggle {
-    border-radius: 5px solid #C8D0D6 !important;
+.leaflet-control-layers-list {
+    padding: 0px !important;
+    margin-left: -4px !important;
+    margin-top: -4px !important;
+    width: 280px !important;
+    overflow-y: scroll !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: #C8D0D6 #FCFCFC !important;
+    overflow-x: hidden !important;
+    max-height: calc(100vh - 120px) !important;
 }
 
 .leaflet-control-zoom {
-    border-radius: 0px !important;
-    border: 1px solid #C8D0D6 !important;
+    border: 0px !important;
 }
 
 .leaflet-control-zoom-in {
     color: #303236 !important;
+    border: 1px solid #C8D0D6 !important;
+    border-radius: 5px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-bottom: 5px !important;
 }
 
 .leaflet-control-zoom-out {
     color: #303236 !important;
+    border: 1px solid #C8D0D6 !important;
+    border-radius: 5px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
 }
-
-.leaflet-control-layers-list {
-    width: 250px !important;
-}
-
 
 .leaflet-control-layers-base {
     display: flex;
@@ -43,7 +60,6 @@
     font-family: 'Inter';
     font-weight: 400;
     border-bottom: 1px solid #E5E5E5;
-    /* padding: 0 10px 0 5px; */
     height: 28px;
     width: 100%;
     padding-top: 4px;
@@ -55,4 +71,105 @@
 
 .leaflet-control-layers label:hover {
     background-color: #EFEFEF;
+}
+
+.leaflet-control-timecontrol {
+    border: 0px !important;
+    border-radius: 5px !important;
+}
+
+.leaflet-bar-timecontrol {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between;
+    border: 1px solid #C8D0D6 !important;
+    background-color: #fff !important;
+    border-radius: 5px !important;
+    padding: 0px !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-backward {
+    color: #303236 !important;
+    width: 25px !important;
+    margin-left: 5px !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-backward:hover {
+    color: #0A77FF !important;
+    transform: scale(1.05) !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-play {
+    color: #303236 !important;
+    width: 25px !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-play:hover {
+    color: #0A77FF !important;
+    transform: scale(1.05) !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-forward {
+    color: #303236 !important;
+    width: 25px !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-forward:hover {
+    color: #0A77FF !important;
+    transform: scale(1.05) !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-date {
+    font-family: 'Inter' !important;
+    font-weight: 400 !important;
+    color: #303236 !important;
+    padding: 0px 10px !important;
+    width: 150px !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-dateslider {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.leaflet-bar-timecontrol .timecontrol-dateslider .slider {
+    background-color: #EFEFEF !important;
+    height: 10px !important;
+    margin: 0px 10px !important;
+    border: 1px solid #C8D0D6 !important;
+}
+
+/* Style the date slider knob */
+.leaflet-bar-timecontrol .timecontrol-dateslider .knob {
+    background-color: #303236 !important;
+    height: 20px !important;
+    width: 6px !important;
+    border: 0px !important;
+}
+
+/* Style the speed display */
+.leaflet-bar-timecontrol .timecontrol-speed {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0px !important;
+}
+
+/* Style the speed slider container */
+.leaflet-bar-timecontrol .timecontrol-speed .slider {
+    background-color: #EFEFEF !important;
+    height: 10px !important;
+    margin: 0px 10px !important;
+    border: 1px solid #C8D0D6 !important;
+}
+
+/* Style the speed slider knob */
+.leaflet-bar-timecontrol .timecontrol-speed .knob {
+    background-color: #303236 !important;
+    height: 20px !important;
+    width: 6px !important;
+    border: 0px !important;
 }

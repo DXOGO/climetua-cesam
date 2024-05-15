@@ -77,8 +77,8 @@ const GraphBox = ({ loading }) => {
             { name: "stormIndex", label: "Índ. de tempestade" }
         ],
         [
-            { name: "O3", label: "O3" },
-            { name: "NO2", label: "NO2" },
+            { name: "O3", label: <span dangerouslySetInnerHTML={{ __html: "O<sub>3</sub>" }} /> },
+            { name: "NO2", label: <span dangerouslySetInnerHTML={{ __html: "NO<sub>2</sub>" }} /> },
             { name: "PM2.5", label: "PM2,5" },
             { name: "PM10", label: "PM10" }
         ]
@@ -126,7 +126,7 @@ const GraphBox = ({ loading }) => {
             </div>
             <div className="chart-container">
                 <div className="chart-box-text">
-                    <LuCalendar />
+                    <LuCalendar style={{ fontSize: 14 }} />
                     <p style={{ paddingLeft: 5 }}>Previsão semanal</p>
                 </div>
                 {loading && (

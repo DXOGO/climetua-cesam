@@ -134,7 +134,8 @@ const WeatherInfo = () => {
                         <div className='weather-info-map'>
                             <img src={portugal} alt='portugal' className='map-image' />
                             <div className='weather-icon-container'>
-                                {cities.map((city, index) => {
+                                {dailyData &&
+                                    cities.map((city, index) => {
                                     const cityDailyData = dailyData
                                         .filter((data) => data.city === city.id)
                                         .flatMap((item) => item.cityData);
@@ -159,7 +160,7 @@ const WeatherInfo = () => {
                         }}
                     />
                 )}
-                <div className="today-date">{getFormattedDate(nowDate)}</div>
+                <div className="today-date">Última atualização: {getFormattedDate(nowDate)}</div>
             </div>
             {showIqaModal && <IQAModal />}
         </div>

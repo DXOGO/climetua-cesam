@@ -85,10 +85,10 @@
 .forecast-temperature-details {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     width: 30%;
-    margin-left: 10px;
+    padding-left: 10px;
 }
 
 .hourly-forecast-container-collapsed {
