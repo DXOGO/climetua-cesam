@@ -28,7 +28,7 @@ const WeatherChartHighchart = () => {
 
     useEffect(() => {
         if (clientHeight > 900) {
-            setChartContainerClass(420);
+            setChartContainerClass(400);
         } else {
             setChartContainerClass(320);
         }
@@ -138,14 +138,19 @@ const WeatherChartHighchart = () => {
             // Calculate min and max values
             const minValue = Math.min(...toggleData);
             const maxValue = Math.max(...toggleData);
-
+            // console.log('minValue:', minValue);
+            // console.log('maxValue:', maxValue);
             const range = maxValue - minValue === 0 ? 1 : maxValue - minValue;
+            // console.log('range:', range);
             const orderOfMagnitude = Math.pow(10, Math.floor(Math.log10(range)));
-            console.log('orderOfMagnitude:', orderOfMagnitude);
+            // console.log('orderOfMagnitude:', orderOfMagnitude);
             const tickInterval = Math.ceil(range / (orderOfMagnitude * 5)) * orderOfMagnitude;
+            // console.log('tickInterval:', tickInterval);
 
-            yAxisConfig.min = Math.floor(minValue / tickInterval) * tickInterval === 0 ? 0 : Math.floor(minValue / tickInterval) * tickInterval - tickInterval;
-            yAxisConfig.max = Math.ceil(maxValue / tickInterval) * tickInterval === 0 ? 1 : Math.ceil(maxValue / tickInterval) * tickInterval + tickInterval;
+            yAxisConfig.min = Math.floor(minValue / tickInterval) * tickInterval === 0 ? 0 : Math.floor(minValue / tickInterval) * tickInterval;
+            // console.log('yAxisConfig.min:', yAxisConfig.min);
+            yAxisConfig.max = Math.ceil(maxValue / tickInterval) * tickInterval === 0 ? 1 : Math.ceil(maxValue / tickInterval) * tickInterval;
+            // console.log('yAxisConfig.max:', yAxisConfig.max);
             yAxisConfig.tickInterval = tickInterval;
 
             if (precipitationRelatedToggles.includes(toggle)) {
