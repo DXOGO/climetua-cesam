@@ -6,11 +6,13 @@ services:
     image: dxogo/mctw-cesam-thredds:latest
     ports:
       - "80:8080"
-    volumes:
-    # These bind mounts have to be changed inside the CESAM host
-      - /var/thredds/public:/usr/local/tomcat/content/thredds/public  # The /public directory contains the .nc files
-      - /var/thredds/web.xml:/usr/local/tomcat/webapps/thredds/WEB-INF/web.xml # The web.xml contains CORS configuration for the React server
-      - /var/thredds/catalog.xml:/usr/local/tomcat/content/thredds/catalog.xml # The catalog.xml contains new catalog configuration for cesam data 
+    volumes: # These bind mounts have to be changed inside the CESAM host
+      # The /public directory contains the .nc files
+      - /var/thredds/public:/usr/local/tomcat/content/thredds/public  
+      # The web.xml contains CORS configuration for the React server
+      - /var/thredds/web.xml:/usr/local/tomcat/webapps/thredds/WEB-INF/web.xml 
+      # The catalog.xml contains new catalog configuration for CESAM data 
+      - /var/thredds/catalog.xml:/usr/local/tomcat/content/thredds/catalog.xml 
     networks:
       - thredds_network
 
@@ -22,8 +24,6 @@ services:
     #   dockerfile: Dockerfile.dev
     ports:
       - "3001:3001"
-    depends_on: 
-      - thredds
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -38,8 +38,6 @@ services:
     #   dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
-    depends_on: 
-      - backend
     volumes:
       - ./frontend/src:/app/src
     networks:

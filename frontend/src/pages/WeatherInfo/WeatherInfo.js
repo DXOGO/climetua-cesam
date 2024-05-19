@@ -68,7 +68,7 @@ const WeatherInfo = () => {
 
     // useEffect(() => {
     //     getLocation();
-    // }, []); // Empty dependency array to trigger only on mount
+    // }, []);
 
     useEffect(() => {
         const fetchDailyData = async () => {

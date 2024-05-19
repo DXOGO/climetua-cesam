@@ -34,15 +34,10 @@ export const findCityByName = (cityName) => {
 }
 
 
-//! Possible function to be developed
-//! Still not implmemented correctly because there isn't available data in the static json file
+//* Possible function to be developed
+//! Still not fully implmemented correctly because there isn't available data for clouds
 
 export const setWeatherIcon = (precipitation, clouds, humidity, hours) => {
-
-    // console.log('precipitation: ', precipitation);
-    // console.log('clouds: ', clouds);
-    // console.log('humidity: ', humidity);
-
     let currentTime = "";
 
     if (hours === undefined) { currentTime = new Date().getHours();
@@ -50,7 +45,6 @@ export const setWeatherIcon = (precipitation, clouds, humidity, hours) => {
     
     // Check if it's night or day
     const isNight = currentTime < 6 || currentTime > 20;
-
 
     // Logic to determine the most appropriate weather icon based on the provided data
     if (!isNight) {
@@ -62,7 +56,7 @@ export const setWeatherIcon = (precipitation, clouds, humidity, hours) => {
             return { icon: rain_thunder, alt: "rain_thunder" }; // Rain with thunderstorms
         } else if (precipitation >= 0.2) {
             return { icon: rain_icon, alt: "rain" }; // Rainy weather
-        } else if (precipitation === 'snow') { //* This condition is not implemented yet
+        } else if (precipitation === 'snow') { // Snowy weather
             return { icon: snow_icon, alt: "snow" }; // Snowy weather
         } else if (clouds > 0.5) {
             return { icon: clouds_icon, alt: "clouds" }; // Cloudy weather
@@ -71,7 +65,7 @@ export const setWeatherIcon = (precipitation, clouds, humidity, hours) => {
         }
     } else {
         if (clouds < 0.2) {
-        return { icon: night_icon, alt: "night" }; // Nighttime
+        return { icon: night_icon, alt: "night" }; // Night time
         } else {
             return { icon: night_clouds, alt: "night_clouds" }; // Cloudy night
         }

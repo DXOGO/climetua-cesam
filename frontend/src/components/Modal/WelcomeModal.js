@@ -8,7 +8,7 @@ const WelcomeModal = ({ onClose }) => {
             <div className="welcome-modal-content">
                 {/* Modal content goes here */}
                 <div className="welcome-modal-title">
-                    Sistema Integrado de Visualização de Previsões Ambientais Unificado do CESAM
+                    Sistema Integrado de Visualização de Previsões Ambientais e Meteorológicas Unificado do CESAM
                 </div>
                 {/* <div className="welcome-modal-subtitle">
                 </div> */}
@@ -19,7 +19,7 @@ const WelcomeModal = ({ onClose }) => {
                 <div className="welcome-modal-info">
                     <MdOutlineInfo style={{ fontSize: '16px', color: '#0A77FF', marginTop: '14px', marginRight: '4px' }} />
                     <p className="welcome-modal-small">
-                    Devido a limitações por parte do CESAM, os dados reais presentes nesta plataforma pertencem ao intervalo de tempo de 7 julho 2021 às 00:00:00 até 15 julho 2021 às 12:00:00 e, no que toca aos dados disponíveis para cada distrito, inclui os seguintes: temperatura, humidade relativa, precipitação total, precipitação convenctiva, precipitação não convenctiva, pressão e vento (direção e velocidade).
+                    Os dados de teste usados pertencem ao intervalo de tempo de 7 julho 2021 às 00:00:00 até 15 julho 2021 às 12:00:00 e, no que toca aos dados disponíveis para cada distrito, inclui os seguintes: temperatura, humidade relativa, precipitação total, precipitação convenctiva, precipitação não convenctiva, pressão e vento (direção e velocidade).
                     </p>
                 </div>
             <button className="modal-button" onClick={onClose}>Continuar</button>

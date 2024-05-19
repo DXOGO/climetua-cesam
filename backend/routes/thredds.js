@@ -110,6 +110,7 @@ const fetchDataForCity = async (city, isDaily, variable) => {
 
     const timeSeriesData = [];
 
+    //* Available variables to fetch from CESAM test file
     const variables = ['T_2m', 'rh_2m', 'ws_10m', 'wd_10m', 'precip_g', 'precip_c', 'slp'];
 
     const bbox = city === 'funchal'

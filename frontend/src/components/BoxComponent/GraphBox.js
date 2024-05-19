@@ -5,11 +5,9 @@ import { useSelector } from 'react-redux';
 import Toggle from '../ToggleComponent/Toggle';
 
 import { LuCalendar } from "react-icons/lu";
+import { IoWarningOutline } from "react-icons/io5";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import WeatherChartHighchart from '../WeatherChart/WeatherChartHighchart';
-// import WeatherChartRechart from '../WeatherChart/WeatherChartRechart';
-// import WeatherChartMeteogram from '../WeatherChart/WeatherChartMeteogram'
-
 
 const GraphBox = ({ loading }) => {
 
@@ -142,6 +140,10 @@ const GraphBox = ({ loading }) => {
                 }
                 <WeatherChartHighchart />
             </div>
+                <div className='chart-warning'>
+                    <IoWarningOutline size={16} />
+                    Previsões superiores a 3 dias poderão apresentar erros consideráveis
+                </div>
         </div>
     );
 };
