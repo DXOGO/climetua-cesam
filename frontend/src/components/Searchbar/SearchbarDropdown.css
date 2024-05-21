@@ -12,7 +12,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
 
+@media screen and (max-width: 500px) {
+    .dropdown {
+        position: absolute;
+        top: 55px;
+        left: 20px;
+        width: calc(70% - 10px);
+    }
 }
 
 .dropdown-item {

@@ -151,6 +151,10 @@
         margin-right: 10px;
     }
 
+    .value {
+        font-size: 8px;
+    }
+
     .info-buttons-graph.collapsed {
         margin-right: 20px;
         margin-top: 5px;

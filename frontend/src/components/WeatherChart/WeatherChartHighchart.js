@@ -13,6 +13,7 @@ const WeatherChartHighchart = () => {
     const variableData = useSelector((state) => state.variableData);
 
     const [clientHeight, setClientHeight] = useState(window.innerHeight);
+    const [clientWidth, setClientWidth] = useState(window.innerWidth);
     const [chartContainerClass, setChartContainerClass] = useState(320);
 
     const handleResize = () => {
@@ -32,7 +33,11 @@ const WeatherChartHighchart = () => {
         } else {
             setChartContainerClass(320);
         }
-    }, [clientHeight]);
+
+        if (clientWidth <= 500) {
+            setChartContainerClass(260);
+        }
+    }, [clientHeight, clientWidth]);
 
     const generateContinuousLineData = () => {
         const continuousLineData = [];

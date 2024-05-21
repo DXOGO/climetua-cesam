@@ -15,6 +15,17 @@
     z-index: 1000;
 }
 
+@media screen and (max-width: 500px) {
+    .searchbar-container {
+        width: 70%;
+        margin-left: 10px;
+    }
+
+    .searchbar-input {
+        width: 70%;
+    }
+}
+
 .searchbar-input {
     width: 100%;
     border: none;

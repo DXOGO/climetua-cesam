@@ -122,11 +122,11 @@ const GraphBox = ({ loading }) => {
                     </div>
                 ))}
             </div>
+            <div className="chart-box-text">
+                <LuCalendar style={{ fontSize: 14 }} />
+                <p style={{ paddingLeft: 5 }}>Previsão semanal</p>
+            </div>
             <div className="chart-container">
-                <div className="chart-box-text">
-                    <LuCalendar style={{ fontSize: 14 }} />
-                    <p style={{ paddingLeft: 5 }}>Previsão semanal</p>
-                </div>
                 {loading && (
                     <div style={{
                         display: "flex",
@@ -140,10 +140,10 @@ const GraphBox = ({ loading }) => {
                 }
                 <WeatherChartHighchart />
             </div>
-                <div className='chart-warning'>
-                    <IoWarningOutline size={16} />
-                    Previsões superiores a 3 dias poderão apresentar erros consideráveis
-                </div>
+            <div className='chart-warning'>
+                <IoWarningOutline size={16} />
+                Previsões superiores a 3 dias poderão apresentar erros consideráveis
+            </div>
         </div>
     );
 };

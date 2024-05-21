@@ -87,9 +87,21 @@
     border-radius: 5px !important;
 }
 
+@media screen and (max-width: 500px){
+    .leaflet-bar-timecontrol {
+        width: 60% !important;
+        flex-wrap: wrap !important;
+        bottom: 0px !important;
+        left: 0px !important;
+    }
+
+    .leaflet-bar {
+        margin-bottom: 20px !important;
+    }
+}
+
 .leaflet-bar-timecontrol {
     display: flex !important;
-    flex-wrap: nowrap !important;
     flex-direction: row !important;
     align-items: center !important;
     justify-content: space-between;
