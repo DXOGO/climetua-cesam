@@ -1,17 +1,17 @@
 import './WeatherBox.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 
 import { TbClockHour4 } from "react-icons/tb";
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { MdOutlineArrowBackIos, MdOutlineArrowForwardIos } from "react-icons/md";
 
 import HourlyForecastComponent from '../HourlyForecastComponent/HourlyForecastComponent';
 
 import { processHourlyData } from "../../helpers/helpers";
 
 const WeatherBox = () => {
-
     const isExpanded = useSelector(state => state.isExpanded);
-
     const city = useSelector(state => state.selectedCity);
     const dailyData = useSelector(state => state.dailyData);
 
@@ -24,7 +24,7 @@ const WeatherBox = () => {
     const windDirection = cityDailyData.map(item => item.wd_10m); // Wind direction
     const humidity = cityDailyData.map(item => item.rh_2m); // Humidity
     const precip_total = cityDailyData.map(item => item.precip_total); // Total Precipitation
-    const pressure = cityDailyData.map(item => item.slp) // Pressure
+    const pressure = cityDailyData.map(item => item.slp); // Pressure
 
     const wind = {
         speed: windSpeed,
@@ -33,13 +33,27 @@ const WeatherBox = () => {
 
     const hourlyArray = processHourlyData(city.atmosphericDataHourly);
     const [viewType, setViewType] = useState('3hourly');
+    const forecastContentRef = useRef(null);
 
     const handleViewTypeChange = (type) => {
         setViewType(type);
     };
+
     const adjustedHourlyArray = viewType === '3hourly'
         ? hourlyArray.filter((hour, index) => index % 3 === 0)
         : hourlyArray;
+
+    const scrollLeft = () => {
+        if (forecastContentRef.current) {
+            forecastContentRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+        }
+    };
+
+    const scrollRight = () => {
+        if (forecastContentRef.current) {
+            forecastContentRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+        }
+    };
 
     return (
         <div className="weather-box-container">
@@ -71,15 +85,24 @@ const WeatherBox = () => {
                 </div>
             </div>
             <div className="forecast-content">
-                <div className={`forecast-content-${isExpanded ? "expanded" : "collapsed"}`}>
+                <div className={`forecast-content-${isExpanded ? "expanded" : "collapsed"}`} ref={forecastContentRef}>
                     {adjustedHourlyArray.map((hour, index) => (
                         <HourlyForecastComponent key={index} hour={hour.hour} temperature={temperature} humidity={humidity} wind={wind} precipitation={precip_total} pressure={pressure} />
                     ))}
                 </div>
+                {isExpanded && viewType === 'hourly' && (
+                    <div className="scroll-arrows">
+                        <button className="scroll-arrow-left" onClick={scrollLeft}>
+                            <MdOutlineArrowBackIos />
+                        </button>
+                        <button className="scroll-arrow-right" onClick={scrollRight}>
+                            <MdOutlineArrowForwardIos />
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
 }
-
 
 export default WeatherBox;
