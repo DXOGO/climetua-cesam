@@ -127,7 +127,7 @@ const GraphBox = ({ loading }) => {
                 <p style={{ paddingLeft: 5 }}>Previsão semanal</p>
             </div>
             <div className="chart-container">
-                {loading && (
+                {loading ? (
                     <div style={{
                         display: "flex",
                         justifyContent: "center",
@@ -136,9 +136,9 @@ const GraphBox = ({ loading }) => {
                     }}>
                         <div className="loading-icon" />
                     </div>
-                )
-                }
-                <WeatherChartHighchart />
+                ) : (
+                    <WeatherChartHighchart />
+                )}
             </div>
             <div className='chart-warning'>
                 <IoWarningOutline size={16} />

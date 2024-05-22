@@ -21,27 +21,26 @@ const InfoBox = () => {
     const dispatch = useDispatch();
 
     const activeButton = useSelector(state => state.activeButton);
-
     const city = useSelector(state => state.selectedCity);
-
     const dailyData = useSelector(state => state.dailyData);
-
+    const variableData = useSelector(state => state.variableData);
+    
     const cityDailyData = dailyData
-        .filter((data) => data.city === city.id)
-        .flatMap((item) => item.cityData);
-
+    .filter((data) => data.city === city.id)
+    .flatMap((item) => item.cityData);
+    
     const isExpanded = useSelector(state => state.isExpanded);
-
-    const [isLoading, setIsLoading] = useState(false);
-
-    const handleButtonClick = (buttonName) => {
-        dispatch(setActiveButton(buttonName));
-    };
 
     const nowString = useSelector((state) => state.currentDate);
     const now = new Date(nowString);
     now.setMinutes(0)
     now.setSeconds(0)
+        
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleButtonClick = (buttonName) => {
+        dispatch(setActiveButton(buttonName));
+    };
 
     const [currentTemperature, setCurrentTemperature] = useState(0);
     const [currentWind, setCurrentWind] = useState({ speed: 0, direction: 0 });
@@ -62,7 +61,7 @@ const InfoBox = () => {
 
     useEffect(() => {
         const fetchDataForCity = async () => {
-            console.log('Fetching data for city:', city.name);
+            console.log('Fetching weekly data for city:', city.name);
             try {
                 const response = await fetch(`http://localhost:3001/api/data/${city.id}`);
                 if (!response.ok) {
@@ -71,7 +70,7 @@ const InfoBox = () => {
                 const data = await response.json();
                 dispatch(fetchDataSuccess(data));
                 setIsLoading(false);
-                console.log('Data fetched successfully',);
+                console.log(`Weekly data for ${city.name} fetched successfully`);
             } catch (error) {
                 console.error('Error fetching data: ', error);
                 setIsLoading(false);

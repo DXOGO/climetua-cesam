@@ -14,7 +14,7 @@ const WelcomeModal = ({ onClose }) => {
                 </div> */}
                 <div className="welcome-modal-text">
                     <p>Bem vindo! Esta plataforma foi desenvolvida pelo investigador Diogo Cruz no âmbito do projeto de dissertação no Mestrado de Comunicação e Tecnologias Web na Universidade de Aveiro.
-                    Esta tem como objetivo principal disponibilizar previsões estatísticas e evoluções temporais para dados atmosféricos, meteorológicos, oceanográficos, qualidade do ar e outros para os distritos de Portugal Continental e os arquipélagos dos Açores e da Madeira.</p>
+                    Esta tem como objetivo principal disponibilizar previsões ambientais e evoluções temporais para dados atmosféricos, meteorológicos, oceanográficos, qualidade do ar e outros para os distritos de Portugal Continental e os arquipélagos dos Açores e da Madeira.</p>
                 </div>
                 <div className="welcome-modal-info">
                     <MdOutlineInfo style={{ fontSize: '16px', color: '#0A77FF', marginTop: '14px', marginRight: '4px' }} />

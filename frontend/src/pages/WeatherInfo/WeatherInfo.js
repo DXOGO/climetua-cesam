@@ -46,29 +46,30 @@ const WeatherInfo = () => {
     };
 
     // * Ask user for location permissions
-    // const getLocation = () => {
-    //     if (navigator.geolocation) {
-    //         navigator.geolocation.getCurrentPosition(
-    //             (position) => {
-    //                 console.log('User location:', position.coords.latitude, position.coords.longitude);
-    //                 const closestCity = cities.reduce((prev, curr) =>
-    //                     Math.abs(curr.lat - position.coords.latitude) < Math.abs(prev.lat - position.coords.latitude) &&
-    //                         Math.abs(curr.lon - position.coords.longitude) < Math.abs(prev.lon - position.coords.longitude) ? curr : prev
-    //                 );
-    //                 dispatch(setSelectedCity(closestCity));
-    //             },
-    //             (error) => {
-    //                 console.error('Error getting user location:', error);
-    //             }
-    //         );
-    //     } else {
-    //         console.error('Geolocation is not supported by this browser');
-    //     }
-    // };
+    const getLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    console.log('User location:', position.coords.latitude, position.coords.longitude);
+                    const closestCity = cities.reduce((prev, curr) =>
+                        Math.abs(curr.lat - position.coords.latitude) < Math.abs(prev.lat - position.coords.latitude) &&
+                            Math.abs(curr.lon - position.coords.longitude) < Math.abs(prev.lon - position.coords.longitude) ? curr : prev
+                    );
+                    dispatch(setSelectedCity(closestCity));
+                    setBoxState('info');
+                },
+                (error) => {
+                    console.error('Error getting user location:', error);
+                }
+            );
+        } else {
+            console.error('Geolocation is not supported by this browser');
+        }
+    };
 
-    // useEffect(() => {
-    //     getLocation();
-    // }, []);
+    useEffect(() => {
+        getLocation();
+    }, []);
 
     useEffect(() => {
         const fetchDailyData = async () => {
@@ -81,7 +82,7 @@ const WeatherInfo = () => {
                 const data = await response.json();
                 dispatch(fetchDailyDataSuccess(data));
                 setIsLoading(false);
-                console.log('Daily data fetched');
+                console.log('Daily data fetched successfully');
             } catch (error) {
                 console.error('Error fetching data:', error.message);
                 setIsLoading(false);
@@ -136,19 +137,19 @@ const WeatherInfo = () => {
                             <div className='weather-icon-container'>
                                 {dailyData &&
                                     cities.map((city, index) => {
-                                    const cityDailyData = dailyData
-                                        .filter((data) => data.city === city.id)
-                                        .flatMap((item) => item.cityData);
-                                    return (
-                                        <WeatherIcon
-                                            key={index}
-                                            city_name={city.name}
-                                            onClick={() => handleCityClick(city.name)}
-                                            className={`weather city-icon-${index}`}
-                                            date={nowDate}
-                                            dailyData={cityDailyData} />
-                                    );
-                                })}
+                                        const cityDailyData = dailyData
+                                            .filter((data) => data.city === city.id)
+                                            .flatMap((item) => item.cityData);
+                                        return (
+                                            <WeatherIcon
+                                                key={index}
+                                                city_name={city.name}
+                                                onClick={() => handleCityClick(city.name)}
+                                                className={`weather city-icon-${index}`}
+                                                date={nowDate}
+                                                dailyData={cityDailyData} />
+                                        );
+                                    })}
                             </div>
                         </div>
                     </>

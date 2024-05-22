@@ -49,9 +49,11 @@
 }
 
 .weather-info-column-map {
+    flex: 0 0 auto;
     display: flex;
     flex-direction: column;
-    width: 60%;
+    width: 57%;
+    min-height: 678px;
 }
 
 .weather-info-map {
@@ -60,7 +62,6 @@
     max-height: 710px;
     margin-top: 30px;
     display: flex;
-    /* justify-content: flex-end; */
 }
 
 @media screen and (max-width: 500px) {
