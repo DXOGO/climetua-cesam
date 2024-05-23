@@ -103,15 +103,15 @@ const initializeMap = async () => {
     const { cities } = dummyData;
     
     const baseLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'CESAM',
+        attribution: 'Centro de Estudos do Ambiente e do Mar - CESAM, Universidade de Aveiro',
     });
 
     const topoLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'CESAM',
+        attribution: 'Centro de Estudos do Ambiente e do Mar - CESAM, Universidade de Aveiro',
     });
 
     const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: 'CESAM',
+        attribution: 'Centro de Estudos do Ambiente e do Mar - CESAM, Universidade de Aveiro',
     });
 
     const map = L.map('map', {
@@ -203,7 +203,7 @@ const initializeMap = async () => {
             layers: layer.code,
             format: 'image/png',
             transparent: true,
-            attribution: 'CESAM',
+            attribution: 'Centro de Estudos do Ambiente e do Mar - CESAM, Universidade de Aveiro',
             styles: getInfo(layer.code)[1],
             colorscalerange: getInfo(layer.code)[2],
             belowmincolor: 'extend',

@@ -61,7 +61,6 @@ const WeatherBox = () => {
             const isScrollable = scrollWidth > clientWidth;
 
             if (isScrollable) {
-                console.log("here")
                 setCanScrollLeft(scrollLeft > 0);
                 setCanScrollRight(scrollLeft + clientWidth < scrollWidth);
             }

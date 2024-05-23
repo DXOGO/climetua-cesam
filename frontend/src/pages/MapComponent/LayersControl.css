@@ -168,7 +168,6 @@
     border: 1px solid #C8D0D6 !important;
 }
 
-/* Style the date slider knob */
 .leaflet-bar-timecontrol .timecontrol-dateslider .knob {
     background-color: #303236 !important;
     height: 20px !important;
@@ -176,7 +175,6 @@
     border: 0px !important;
 }
 
-/* Style the speed display */
 .leaflet-bar-timecontrol .timecontrol-speed {
     display: flex !important;
     align-items: center !important;
@@ -184,7 +182,6 @@
     padding: 0px !important;
 }
 
-/* Style the speed slider container */
 .leaflet-bar-timecontrol .timecontrol-speed .slider {
     background-color: #EFEFEF !important;
     height: 10px !important;
@@ -192,10 +189,26 @@
     border: 1px solid #C8D0D6 !important;
 }
 
-/* Style the speed slider knob */
 .leaflet-bar-timecontrol .timecontrol-speed .knob {
     background-color: #303236 !important;
     height: 20px !important;
     width: 6px !important;
     border: 0px !important;
+}
+
+.leaflet-control-layers-toggle:after{ 
+    content:"Variáveis" !important; 
+    font-size: 12px !important;
+    font-weight: 400 !important;
+    font-family: 'Inter' !important;
+    color:#68727D  !important;
+}
+.leaflet-control-layers-toggle{ 
+    width:auto !important;
+    background-position:3px 50%  !important;
+    padding:3px !important;
+    padding-left:38px !important;
+    padding-right:5px !important;
+    text-decoration:none !important;
+    line-height:36px !important;
 }
