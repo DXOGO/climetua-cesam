@@ -39,10 +39,13 @@ const WeatherChartHighchart = () => {
         }
     }, [clientHeight, clientWidth]);
 
+    const precipitationRelatedToggles = ['precipitation', 'convectivePrecipitation', 'nonConvectivePrecipitation'];
+    const percentageRelatedToggles = ['humidity', 'cloudiness'];
+
     const generateContinuousLineData = () => {
         const continuousLineData = [];
 
-        variableData.forEach(({ time, T_2m, rh_2m, ws_10m, precip_g, precip_c, precip_total, slp }) => {
+        variableData.forEach(({ time, T_2m, rh_2m, ws_10m, precip_g, precip_c, precip_total, slp, cldfrac }) => {
             const timestamp = new Date(time).getTime();
             const newDataPoint = { time: timestamp };
 
@@ -74,9 +77,12 @@ const WeatherChartHighchart = () => {
                 newDataPoint.pressure = Math.round(parseFloat(slp));
             }
 
+            if (selectedToggles.includes('cloudiness')) {
+                newDataPoint.cloudiness = Math.round(parseFloat(cldfrac));
+            }
+
             continuousLineData.push(newDataPoint);
         });
-
         return continuousLineData;
     };
 
@@ -98,23 +104,35 @@ const WeatherChartHighchart = () => {
                 return ['Prec. convectiva', 'mm', '#5dade2'];
             case 'nonConvectivePrecipitation':
                 return ['Prec. não convectiva', 'mm', '#48c9b0'];
+            case 'cloudiness':
+                return ['Nebulosidade', '%', '#7f8c8d'];
             default:
                 return ['?', '?', '#000000'];
         }
     };
 
+    const getColor = (toggle) => {
+        if (precipitationRelatedToggles.includes(toggle)) {
+            return getInfo('precipitation')[2];
+        } else if (percentageRelatedToggles.includes(toggle)) {
+            return getInfo('cloudiness')[2];
+        } else {
+            return getInfo(toggle)[2];
+        }
+    }
     const getYAxisConfigurations = () => {
-        const precipitationRelatedToggles = ['precipitation', 'convectivePrecipitation', 'nonConvectivePrecipitation'];
         const anyPrecipitationSelected = selectedToggles.some(toggle => precipitationRelatedToggles.includes(toggle));
         let showPrecipitationYAxisLabel = false;
+
+        const anyPercentageSelected = selectedToggles.some(toggle => percentageRelatedToggles.includes(toggle));
+        let showPercentageYAxisLabel = false;
 
         return selectedToggles.map((toggle, index) => {
             const yAxisConfig = {
                 title: {
                     text: getInfo(toggle)[1],
                     style: {
-                        color: toggle === 'precipitation' || toggle === 'convectivePrecipitation' || toggle === 'nonConvectivePrecipitation'
-                            ? getInfo('precipitation')[2] : getInfo(toggle)[2],
+                        color: getColor(toggle)
                     },
                     rotation: 0,
                     align: 'high',
@@ -125,8 +143,7 @@ const WeatherChartHighchart = () => {
                 opposite: toggle === 'temperature' ? false : true,
                 labels: {
                     style: {
-                        color: toggle === 'precipitation' || toggle === 'convectivePrecipitation' || toggle === 'nonConvectivePrecipitation'
-                            ? getInfo('precipitation')[2] : getInfo(toggle)[2],
+                        color: getColor(toggle)
                     },
                     x: toggle === 'temperature' ? -5 : 5,
                     y: 5
@@ -140,28 +157,38 @@ const WeatherChartHighchart = () => {
 
             const toggleData = chartData.map(data => data[toggle]);
 
-            // Calculate min and max values
-            const minValue = Math.min(...toggleData);
-            const maxValue = Math.max(...toggleData);
-            // console.log('minValue:', minValue);
-            // console.log('maxValue:', maxValue);
-            const range = maxValue - minValue === 0 ? 1 : maxValue - minValue;
-            // console.log('range:', range);
-            const orderOfMagnitude = Math.pow(10, Math.floor(Math.log10(range)));
-            // console.log('orderOfMagnitude:', orderOfMagnitude);
-            const tickInterval = Math.ceil(range / (orderOfMagnitude * 5)) * orderOfMagnitude;
-            // console.log('tickInterval:', tickInterval);
+            if (percentageRelatedToggles.includes(toggle)) {
+                yAxisConfig.min = 0;
+                yAxisConfig.max = 100;
+                yAxisConfig.tickInterval = 20;
+            } else {
+                const minValue = Math.min(...toggleData);
+                const maxValue = Math.max(...toggleData);
 
-            yAxisConfig.min = Math.floor(minValue / tickInterval) * tickInterval === 0 ? 0 : Math.floor(minValue / tickInterval) * tickInterval;
-            // console.log('yAxisConfig.min:', yAxisConfig.min);
-            yAxisConfig.max = Math.ceil(maxValue / tickInterval) * tickInterval === 0 ? 1 : Math.ceil(maxValue / tickInterval) * tickInterval;
-            // console.log('yAxisConfig.max:', yAxisConfig.max);
-            yAxisConfig.tickInterval = tickInterval;
+                const range = maxValue - minValue === 0 ? 1 : maxValue - minValue;
+                const orderOfMagnitude = Math.pow(10, Math.floor(Math.log10(range)));
+                const tickInterval = Math.ceil(range / (orderOfMagnitude * 5)) * orderOfMagnitude;
+
+                const min = Math.floor(minValue / tickInterval) * tickInterval
+                yAxisConfig.min = (min === minValue && min - tickInterval > 0) ? min - tickInterval : min;
+
+                const max = Math.ceil(maxValue / tickInterval) * tickInterval
+                yAxisConfig.max = max === maxValue ? max + tickInterval : max;
+
+                yAxisConfig.tickInterval = tickInterval;
+            }
 
             if (precipitationRelatedToggles.includes(toggle)) {
                 if (!showPrecipitationYAxisLabel && anyPrecipitationSelected) {
                     yAxisConfig.visible = true;
                     showPrecipitationYAxisLabel = true;
+                } else {
+                    yAxisConfig.visible = false;
+                }
+            } else if (percentageRelatedToggles.includes(toggle)) {
+                if (!showPercentageYAxisLabel && anyPercentageSelected) {
+                    yAxisConfig.visible = true;
+                    showPercentageYAxisLabel = true;
                 } else {
                     yAxisConfig.visible = false;
                 }
@@ -281,6 +308,9 @@ const WeatherChartHighchart = () => {
                             break;
                         case 'Prec. não convectiva':
                             unit = 'mm';
+                            break;
+                        case 'Nebulosidade':
+                            unit = '%';
                             break;
                         default:
                             unit = '';

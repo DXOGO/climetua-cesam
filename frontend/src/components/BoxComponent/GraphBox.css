@@ -71,9 +71,10 @@
     padding-bottom: 10px;
     padding-right: 20px;
     overflow-x: auto;
-    scrollbar-color: #C8D0D6 #EFEFEF;
     scrollbar-width: thin;
+    scrollbar-color: #C8D0D6 #EFEFEF;
     scroll-behavior: smooth;
+    transition: all 0.5s;
 }
 
 

@@ -34,6 +34,8 @@ const getInfo = (layer) => { // [0] - PALETTE, [1] - STYLES, [2] - COLORSCALERAN
             return ["default", "default", "0,1"]
         case "slp":
             return ["default", "default-scalar/default", "900,1100"]
+        case "cldfrac":
+            return ["default", "default", "0,100"]
         default:
             return ["default", "default", "-50,50"]
     }

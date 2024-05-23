@@ -23,41 +23,50 @@ const InfoBox = () => {
     const activeButton = useSelector(state => state.activeButton);
     const city = useSelector(state => state.selectedCity);
     const dailyData = useSelector(state => state.dailyData);
-    const variableData = useSelector(state => state.variableData);
-    
+
     const cityDailyData = dailyData
-    .filter((data) => data.city === city.id)
-    .flatMap((item) => item.cityData);
-    
+        .filter((data) => data.city === city.id)
+        .flatMap((item) => item.cityData);
+
     const isExpanded = useSelector(state => state.isExpanded);
 
     const nowString = useSelector((state) => state.currentDate);
     const now = new Date(nowString);
     now.setMinutes(0)
     now.setSeconds(0)
-        
+
     const [isLoading, setIsLoading] = useState(false);
 
     const handleButtonClick = (buttonName) => {
         dispatch(setActiveButton(buttonName));
     };
 
-    const [currentTemperature, setCurrentTemperature] = useState(0);
-    const [currentWind, setCurrentWind] = useState({ speed: 0, direction: 0 });
-    const [currentHumidity, setCurrentHumidity] = useState(0);
-    const [currentPrecipitation, setCurrentPrecipitation] = useState(0);
+    const [weatherData, setWeatherData] = useState({
+        temperature: 0,
+        wind: { speed: 0, direction: 0 },
+        humidity: 0,
+        precipitation: 0,
+        clouds: 0,
+    });
 
     const currentData = cityDailyData.find(item => new Date(item.time).getTime() === new Date(now).getTime()) ? cityDailyData.find(item => new Date(item.time).getTime() === new Date(now).getTime()) : cityDailyData[0];
 
     useEffect(() => {
-        setCurrentTemperature(currentData.T_2m);
-        setCurrentWind({ speed: currentData.ws_10m, direction: currentData.wd_10m });
-        setCurrentHumidity(currentData.rh_2m);
-        setCurrentPrecipitation(currentData.precip_total);
+        setWeatherData({
+            temperature: currentData.T_2m,
+            wind: { speed: currentData.ws_10m, direction: currentData.wd_10m },
+            humidity: currentData.rh_2m,
+            precipitation: currentData.precip_total,
+            clouds: currentData.cldfrac,
+        });
     }, [currentData]);
 
-    // Fetch city weather icon
-    const weatherIcon = setWeatherIcon(currentPrecipitation, city.atmosphericDataCurrent.clouds, currentHumidity, now);
+    const weatherIcon = setWeatherIcon(
+        weatherData.precipitation,
+        weatherData.clouds,
+        weatherData.humidity,
+        now
+    );
 
     useEffect(() => {
         const fetchDataForCity = async () => {
@@ -83,6 +92,7 @@ const InfoBox = () => {
     const renderState = activeButton === "graph" ? <GraphBox loading={isLoading} /> : <WeatherBox />;
 
     const variables = ["precipitation", "humidity", "wind", "iqa"];
+    const commonProps = { humidity: weatherData.humidity, wind: weatherData.wind, precipitation: weatherData.precipitation };
 
     return (
         <div className={`info-box ${activeButton} ${isExpanded ? "expanded" : "collapsed"}`}>
@@ -95,27 +105,28 @@ const InfoBox = () => {
                         <img src={weatherIcon.icon} alt={weatherIcon.alt} className="info-weather-icon" />
                     </div>
                     <div className={`temperature ${isExpanded ? "expanded" : "collapsed"}`}>
-                        <span className="temperature-text">{parseFloat(currentTemperature).toFixed(0)}</span>
+                        <span className="temperature-text">{parseFloat(weatherData.temperature).toFixed(0)}</span>
                         <span className="temperature-unit">°C</span>
                     </div>
                     {isExpanded ? (
                         <div className="expanded-atmospheric-data">
                             <div className="row">
-                                <AtmosphericDataIcon type_data={variables[0]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
-                                <AtmosphericDataIcon type_data={variables[1]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
-                                <AtmosphericDataIcon type_data={variables[2]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
-                                <AtmosphericDataIcon type_data={variables[3]} />
+                                {variables.map((variable, index) => (
+                                    <AtmosphericDataIcon key={index} type_data={variable} {...commonProps} />
+                                ))}
                             </div>
                         </div>
                     ) : (
                         <div className="collapsed-atmospheric-data">
                             <div className="column">
-                                <AtmosphericDataIcon type_data={variables[0]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
-                                <AtmosphericDataIcon type_data={variables[1]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
+                                {variables.slice(0, 2).map((variable, index) => (
+                                    <AtmosphericDataIcon key={index} type_data={variable} {...commonProps} />
+                                ))}
                             </div>
                             <div className="column">
-                                <AtmosphericDataIcon type_data={variables[2]} humidity={currentHumidity} wind={currentWind} precipitation={currentPrecipitation} />
-                                <AtmosphericDataIcon type_data={variables[3]} />
+                                {variables.slice(2).map((variable, index) => (
+                                    <AtmosphericDataIcon key={index + 2} type_data={variable} {...commonProps} />
+                                ))}
                             </div>
                         </div>
                     )}

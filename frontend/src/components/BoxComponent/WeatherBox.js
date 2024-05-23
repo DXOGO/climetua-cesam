@@ -3,12 +3,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 
 import { TbClockHour4 } from "react-icons/tb";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { MdOutlineArrowBackIos, MdOutlineArrowForwardIos } from "react-icons/md";
 
 import HourlyForecastComponent from '../HourlyForecastComponent/HourlyForecastComponent';
-
-import { processHourlyData } from "../../helpers/helpers";
 
 const WeatherBox = () => {
     const isExpanded = useSelector(state => state.isExpanded);
@@ -25,14 +22,17 @@ const WeatherBox = () => {
     const humidity = cityDailyData.map(item => item.rh_2m); // Humidity
     const precip_total = cityDailyData.map(item => item.precip_total); // Total Precipitation
     const pressure = cityDailyData.map(item => item.slp); // Pressure
+    const clouds = cityDailyData.map(item => item.cldfrac); // Clouds
 
     const wind = {
         speed: windSpeed,
         direction: windDirection
     };
 
-    const hourlyArray = processHourlyData(city.atmosphericDataHourly);
+    const hourlyArray = Array.from({ length: 24 }, (_, i) => i);
     const [viewType, setViewType] = useState('3hourly');
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(true); // Initially set to false
     const forecastContentRef = useRef(null);
 
     const handleViewTypeChange = (type) => {
@@ -45,15 +45,40 @@ const WeatherBox = () => {
 
     const scrollLeft = () => {
         if (forecastContentRef.current) {
-            forecastContentRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+            forecastContentRef.current.scrollBy({ left: -400, behavior: 'smooth' });
         }
     };
 
     const scrollRight = () => {
         if (forecastContentRef.current) {
-            forecastContentRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+            forecastContentRef.current.scrollBy({ left: 400, behavior: 'smooth' });
         }
     };
+
+    const handleScroll = () => {
+        if (forecastContentRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = forecastContentRef.current;
+            const isScrollable = scrollWidth > clientWidth;
+
+            if (isScrollable) {
+                console.log("here")
+                setCanScrollLeft(scrollLeft > 0);
+                setCanScrollRight(scrollLeft + clientWidth < scrollWidth);
+            }
+        }
+    };
+
+    useEffect(() => {
+        const forecastContentElement = forecastContentRef.current;
+        if (forecastContentElement) {
+            forecastContentElement.addEventListener('scroll', handleScroll);
+            handleScroll(); // Initial check
+
+            return () => {
+                forecastContentElement.removeEventListener('scroll', handleScroll);
+            };
+        }
+    }, []);
 
     return (
         <div className="weather-box-container">
@@ -62,7 +87,6 @@ const WeatherBox = () => {
                     <TbClockHour4 style={{ fontSize: 16 }} />
                     <p style={{ paddingLeft: 5 }}>Previsão diária</p>
                 </div>
-                {/* Radio option buttons */}
                 <div className="radio-options">
                     <label>
                         <input
@@ -87,17 +111,29 @@ const WeatherBox = () => {
             <div className="forecast-content">
                 <div className={`forecast-content-${isExpanded ? "expanded" : "collapsed"}`} ref={forecastContentRef}>
                     {adjustedHourlyArray.map((hour, index) => (
-                        <HourlyForecastComponent key={index} hour={hour.hour} temperature={temperature} humidity={humidity} wind={wind} precipitation={precip_total} pressure={pressure} />
+                        <HourlyForecastComponent
+                            key={index}
+                            hour={hour}
+                            data={{ temperature, humidity, wind, precip_total, pressure, clouds }}
+                        />
                     ))}
                 </div>
                 {isExpanded && viewType === 'hourly' && (
                     <div className="scroll-arrows">
-                        <button className="scroll-arrow-left" onClick={scrollLeft}>
-                            <MdOutlineArrowBackIos />
-                        </button>
-                        <button className="scroll-arrow-right" onClick={scrollRight}>
-                            <MdOutlineArrowForwardIos />
-                        </button>
+                        {canScrollLeft ? (
+                            <button className="scroll-arrow-left" onClick={scrollLeft}>
+                                <MdOutlineArrowBackIos />
+                            </button>
+                        ) : (
+                            <div className="scroll-arrow-placeholder" />
+                        )}
+                        {canScrollRight ? (
+                            <button className="scroll-arrow-right" onClick={scrollRight}>
+                                <MdOutlineArrowForwardIos />
+                            </button>
+                        ) : (
+                            <div className="scroll-arrow-placeholder" />
+                        )}
                     </div>
                 )}
             </div>

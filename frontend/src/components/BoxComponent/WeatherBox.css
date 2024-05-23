@@ -92,7 +92,7 @@
     font-size: 30px;
     transition: background 0.3s, box-shadow 0.3s;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-    height: 240px;
+    height: 220px;
     width: 40px;
     position: relative;
     overflow: hidden;
@@ -124,4 +124,9 @@
 
 .scroll-arrow-right::before {
     background: linear-gradient(270deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 100%);
+}
+
+.scroll-arrow-placeholder {
+    width: 40px;
+    height: 220px;
 }

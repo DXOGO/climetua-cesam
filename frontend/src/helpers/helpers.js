@@ -33,50 +33,36 @@ export const findCityByName = (cityName) => {
     return cities.find(city => city.name === cityName)
 }
 
-
-//* Possible function to be developed
-//! Still not fully implmemented correctly because there isn't available data for clouds
-
 export const setWeatherIcon = (precipitation, clouds, humidity, hours) => {
-    let currentTime = "";
+    const currentTime = typeof hours === 'number' ? hours : new Date(hours).getHours();
 
-    if (hours === undefined) { currentTime = new Date().getHours();
-    } else { currentTime = hours.getHours; }
-    
-    // Check if it's night or day
     const isNight = currentTime < 6 || currentTime > 20;
 
-    // Logic to determine the most appropriate weather icon based on the provided data
-    if (!isNight) {
-        if (clouds < 0.2 && precipitation < 0.5 ) {
-            return { icon: sun_icon, alt: "sun" }; // Sunny weather during the day
-        } else if (clouds > 0.2 && clouds <= 0.5 && precipitation < 0.5) {
-            return { icon: clouds_sun, alt: "clouds_sun" }; // Partly cloudy weather with sun during the day
-        } else if (precipitation >= 0.5 && humidity > 80) {
-            return { icon: rain_thunder, alt: "rain_thunder" }; // Rain with thunderstorms
-        } else if (precipitation >= 0.2) {
-            return { icon: rain_icon, alt: "rain" }; // Rainy weather
-        } else if (precipitation === 'snow') { // Snowy weather
-            return { icon: snow_icon, alt: "snow" }; // Snowy weather
-        } else if (clouds > 0.5) {
-            return { icon: clouds_icon, alt: "clouds" }; // Cloudy weather
-        } else if (precipitation < 0.5 && precipitation >= 0.1 && humidity > 80) {
-            return { icon: thunder, alt: "thunder" }; // Thunderstorms during the day
-        }
-    } else {
-        if (clouds < 0.2) {
-        return { icon: night_icon, alt: "night" }; // Night time
-        } else {
-            return { icon: night_clouds, alt: "night_clouds" }; // Cloudy night
+    const dayIcons = [
+        { condition: clouds <= 0.15 && precipitation < 0.5, icon: sun_icon, alt: "sun" },
+        { condition: clouds > 0.15 && clouds < 0.85 && precipitation < 0.5, icon: clouds_sun, alt: "clouds_sun" },
+        { condition: precipitation >= 0.5 && humidity > 80, icon: rain_thunder, alt: "rain_thunder" },
+        { condition: precipitation >= 0.2, icon: rain_icon, alt: "rain" },
+        { condition: clouds >= 0.85, icon: clouds_icon, alt: "clouds" },
+        { condition: precipitation < 0.5 && precipitation >= 0.2 && humidity > 80, icon: thunder, alt: "thunder" },
+    ];
+
+    const nightIcons = [
+        { condition: clouds <= 0.15 && precipitation < 0.5, icon: night_icon, alt: "night" },
+        { condition: clouds > 0.15 && clouds < 0.85 && precipitation < 0.5, icon: night_clouds, alt: "night_clouds" },
+        { condition: precipitation >= 0.5 && humidity > 80, icon: rain_thunder, alt: "rain_thunder" },
+        { condition: precipitation >= 0.2, icon: rain_icon, alt: "rain" },
+        { condition: true, icon: clouds_icon, alt: "clouds" },  // Default for night
+    ];
+
+    const icons = isNight ? nightIcons : dayIcons;
+
+    for (const { condition, icon, alt } of icons) {
+        if (condition) {
+            return { icon, alt };
         }
     }
-}
 
-export const processHourlyData = (hourlyData) => {
-    const dataArray = [];
-
-    const sortedHours = Object.keys(hourlyData).sort((a, b) => parseInt(a) - parseInt(b));
-    sortedHours.forEach((hourKey) => { dataArray.push({ hour: hourKey }); });
-
-    return dataArray;
+    // Default case, though logically all cases should be covered.
+    return { icon: clouds_icon, alt: "clouds" };
 };
