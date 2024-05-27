@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 import './WeatherChart.css';
 
-const WeatherChartHighchart = () => {
+const WeatherChart = () => {
     // const city = useSelector((state) => state.selectedCity);
     const isExpanded = useSelector((state) => state.isExpanded);
     const selectedToggles = useSelector((state) => state.toggles);
@@ -31,7 +31,7 @@ const WeatherChartHighchart = () => {
         if (clientHeight > 900) {
             setChartContainerClass(400);
         } else {
-            setChartContainerClass(320);
+            setChartContainerClass(300);
         }
 
         if (clientWidth <= 500) {
@@ -332,4 +332,4 @@ const WeatherChartHighchart = () => {
     );
 };
 
-export default WeatherChartHighchart;
+export default WeatherChart;

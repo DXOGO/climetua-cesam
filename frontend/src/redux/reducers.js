@@ -4,7 +4,7 @@ import {
   SET_EXPANDED,
   TOGGLE_TOGGLE,
   SET_ACTIVE_BUTTON,
-  FETCH_DATA_SUCCESS,
+  FETCH_WEEKLY_DATA_SUCCESS,
   FETCH_DAILY_DATA_SUCCESS,
   UPDATE_DATE
 } from './types';
@@ -42,7 +42,7 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         activeButton: action.payload,
       };
-    case FETCH_DATA_SUCCESS:
+    case FETCH_WEEKLY_DATA_SUCCESS:
       return {
         ...state,
         variableData: action.payload,

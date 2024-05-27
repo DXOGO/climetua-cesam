@@ -4,7 +4,7 @@ import {
   SET_EXPANDED,
   TOGGLE_TOGGLE,
   SET_ACTIVE_BUTTON,
-  FETCH_DATA_SUCCESS,
+  FETCH_WEEKLY_DATA_SUCCESS,
   FETCH_DAILY_DATA_SUCCESS,
   UPDATE_DATE,
 } from './types';
@@ -57,10 +57,10 @@ export const setActiveButton = (buttonName) => (dispatch) => {
   }
 }
 
-export const fetchDataSuccess = (data) => (dispatch) => {
+export const fetchWeeklyDataSuccess = (data) => (dispatch) => {
   try {
     dispatch({
-      type: FETCH_DATA_SUCCESS,
+      type: FETCH_WEEKLY_DATA_SUCCESS,
       payload: data,
     });
   }

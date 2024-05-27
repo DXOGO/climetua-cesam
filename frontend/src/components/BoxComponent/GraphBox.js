@@ -7,7 +7,7 @@ import Toggle from '../ToggleComponent/Toggle';
 import { LuCalendar } from "react-icons/lu";
 import { IoWarningOutline } from "react-icons/io5";
 import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
-import WeatherChartHighchart from '../WeatherChart/WeatherChartHighchart';
+import WeatherChart from '../WeatherChart/WeatherChart';
 
 const GraphBox = ({ loading }) => {
 
@@ -137,7 +137,7 @@ const GraphBox = ({ loading }) => {
                         <div className="loading-icon" />
                     </div>
                 ) : (
-                    <WeatherChartHighchart />
+                    <WeatherChart />
                 )}
             </div>
             <div className='chart-warning'>

@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 3001;
 // Enable CORS for all routes
 app.use(cors());
 
-// Import your Thredds route
+// Import Thredds route
 const threddsRoute = require('./routes/thredds');
 
 // Middleware to parse JSON bodies

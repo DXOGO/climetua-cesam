@@ -50,7 +50,7 @@ const fetchWMSLayers = async () => {
 
         const layers = Array.from(xml.querySelectorAll('Layer')).reduce((uniqueLayers, layer) => {
             const nameElement = layer.querySelector('Name');
-            const titleElement = layer.querySelector('Title'); // sometimes wms response doesnt provide a title
+            const titleElement = layer.querySelector('Title'); // Sometimes WMS response doesnt provide a title
 
             if (titleElement) {
                 if (nameElement && titleElement && titleElement.textContent !== 'Terrain Height' && titleElement.textContent !== 'THREDDS' && titleElement.textContent !== 'wrfpost.nc') {

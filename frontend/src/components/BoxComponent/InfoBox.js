@@ -2,7 +2,7 @@ import "./InfoBox.css"
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveButton } from "../../redux/actions";
-import { fetchDataSuccess } from '../../redux/actions';
+import { fetchWeeklyDataSuccess } from '../../redux/actions';
 
 import {
     setWeatherIcon,
@@ -77,7 +77,7 @@ const InfoBox = () => {
                     throw new Error('Failed to fetch data');
                 }
                 const data = await response.json();
-                dispatch(fetchDataSuccess(data));
+                dispatch(fetchWeeklyDataSuccess(data));
                 setIsLoading(false);
                 console.log(`Weekly data for ${city.name} fetched successfully`);
             } catch (error) {

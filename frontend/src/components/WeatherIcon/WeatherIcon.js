@@ -15,26 +15,25 @@ import {
 const WeatherIcon = ({ city_name, className, date, onClick, dailyData }) => {
 
   const data = dailyData.flatMap(hourlyData => hourlyData);
-
-  //* Using because there is no CESAM data available to get cloud, IQA or wave information
-  const selectedCity = findCityByName(city_name)
-
-  const temperatures = data.map(data => data.T_2m);
-
+  
   const currentData = data.find(item => new Date(item.time).getTime() === new Date(date).getTime());
   const currentHumidity = Math.round(currentData.rh_2m);
   const currentPrecipitation = currentData.precip_total;
-
-  const selectedIcon = setWeatherIcon(currentPrecipitation, selectedCity.atmosphericDataCurrent.clouds, currentHumidity, date);
-
+  const currentCloudiness = currentData.cldfrac;
+  
+  const selectedIcon = setWeatherIcon(currentPrecipitation, currentCloudiness, currentHumidity, date);
+  
+  //* Using because there is no CESAM data available to get IQA or wave information
+  const selectedCity = findCityByName(city_name)
   const iqa = getIQA(selectedCity.iqa);
   const waves = selectedCity.waves;
-
-  const [maxTemperature, setMaxTemperature] = useState(null);
-  const [minTemperature, setMinTemperature] = useState(null);
-
+  
+  const [maxTemperature, setMaxTemperature] = useState(0);
+  const [minTemperature, setMinTemperature] = useState(0);
+  
+  const temperatures = data.map(data => data.T_2m);
   useEffect(() => {
-    if (dailyData.length > 0) {
+    if (data) {
       setMaxTemperature(Math.round(Math.max(...temperatures)));
       setMinTemperature(Math.round(Math.min(...temperatures)));
     }
@@ -72,12 +71,6 @@ const WeatherIcon = ({ city_name, className, date, onClick, dailyData }) => {
   }
 
   const handleClick = () => { onClick(city_name); }
-
-  // if (isLoading) {
-  //   return (
-  //     <div></div>
-  //   );
-  // }
 
   return (
     <div className={className}>
