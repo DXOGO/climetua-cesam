@@ -22,11 +22,7 @@ const InfoBox = () => {
 
     const activeButton = useSelector(state => state.activeButton);
     const city = useSelector(state => state.selectedCity);
-    const dailyData = useSelector(state => state.dailyData);
-
-    const cityDailyData = dailyData
-        .filter((data) => data.city === city.id)
-        .flatMap((item) => item.cityData);
+    const cityDailyData = city.cityDailyData;
 
     const isExpanded = useSelector(state => state.isExpanded);
 

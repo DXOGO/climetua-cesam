@@ -10,11 +10,7 @@ import HourlyForecastComponent from '../HourlyForecastComponent/HourlyForecastCo
 const WeatherBox = () => {
     const isExpanded = useSelector(state => state.isExpanded);
     const city = useSelector(state => state.selectedCity);
-    const dailyData = useSelector(state => state.dailyData);
-
-    const cityDailyData = dailyData
-        .filter((data) => data.city === city.id)
-        .flatMap((item) => item.cityData);
+    const cityDailyData = city.cityDailyData;
 
     const temperature = cityDailyData.map(item => item.T_2m); // Temperature
     const windSpeed = cityDailyData.map(item => item.ws_10m); // Wind speed

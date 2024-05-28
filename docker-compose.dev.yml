@@ -3,6 +3,7 @@ version: '3.8'
 services:
   thredds:
     container_name: thredds
+    # image: unidata/thredds-docker:latest
     image: dxogo/mctw-cesam-thredds:latest
     ports:
       - "80:8080"

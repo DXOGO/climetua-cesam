@@ -24,6 +24,7 @@ const WeatherInfo = () => {
     const nowDate = new Date(now);
 
     const selectedCity = useSelector((state) => state.selectedCity);
+
     const isExpanded = useSelector((state) => state.isExpanded);
     const dailyData = useSelector((state) => state.dailyData);
     const [boxState, setBoxState] = useState(selectedCity ? 'info' : 'default');
@@ -94,11 +95,17 @@ const WeatherInfo = () => {
         } else {
             setIsLoading(false);
         }
-    }, [dispatch, cities, dailyData]);
+    }, []);
 
     const handleCityClick = (cityName) => {
-        const selectedCityData = findCityByName(cityName);
-        dispatch(setSelectedCity(selectedCityData));
+        const city = findCityByName(cityName);
+        const cityDailyData = dailyData
+            .filter((data) => data.city === city.id)
+            .flatMap((item) => item.cityData);
+
+        city.cityDailyData = cityDailyData;
+        console.log(city)
+        dispatch(setSelectedCity(city));
         setBoxState('info');
     };
 

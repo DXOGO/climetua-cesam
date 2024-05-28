@@ -1,6 +1,5 @@
 // WeatherIcon.js
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import './WeatherIcon.css';
 import wave_low from '../../assets/icons/wave_low.svg';
 import wave_mid from '../../assets/icons/wave_mid.svg';
