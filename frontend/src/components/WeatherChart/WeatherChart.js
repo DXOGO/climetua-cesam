@@ -281,7 +281,7 @@ const WeatherChart = () => {
             crosshairs: true,
             shared: true,
             formatter: function () {
-                let tooltipText = `<span style="font-size: 9px">${new Date(this.x).toLocaleString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', hour: 'numeric', minute: 'numeric' })}</span><br/>`;
+                let tooltipText = `<span style="font-size: 10px">${new Date(this.x).toLocaleString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', hour: 'numeric', minute: 'numeric' })}</span><br/>`;
                 this.points.forEach(point => {
                     let toggle = point.series.userOptions.name;
                     let unit = '';

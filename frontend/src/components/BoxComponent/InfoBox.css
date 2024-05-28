@@ -25,6 +25,7 @@
 
 .info-header {
     display: flex;
+    flex-direction: row;
     align-items: center;
 }
 
@@ -48,6 +49,24 @@
     font-weight: bold;
     color: #68727D;
     margin: 0;
+}
+
+.separator {
+    height: 12px;
+    width: 2px;
+    margin-left: 10px;
+    margin-right: 5px;
+    background-color: #68727D;
+    margin-top: 4px;
+    margin-bottom: 0;
+}
+
+.date-text {
+    font-size: 12px;
+    font-weight: 500;
+    color: #68727D;
+    margin-top: 4px;
+    margin-bottom: 0;
 }
 
 .info-icon {
@@ -119,7 +138,7 @@
     .info-row {
         display: flex;
         flex-direction: row;
-        align-items: flex-start;
+        align-items: center;
         height: 96px;
         min-height: 96px;
     }

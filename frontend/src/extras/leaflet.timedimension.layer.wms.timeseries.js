@@ -130,8 +130,6 @@ L.TimeDimension.Layer.WMS.TimeSeries = L.TimeDimension.Layer.WMS.extend({
         var url_without_time = url;
         url = url + '&TIME=' + min.toISOString() + '/' + max.toISOString();
 
-        console.log(url);
-
         if (this._proxy) url = this._proxy + '?url=' + encodeURIComponent(url);
         
         var oReq = new XMLHttpRequest();

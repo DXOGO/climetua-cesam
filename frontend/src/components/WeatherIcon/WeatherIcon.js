@@ -13,14 +13,18 @@ import {
 
 const WeatherIcon = ({ city_name, className, date, onClick, dailyData }) => {
 
+  const useDate = new Date(date);
+  useDate.setMinutes(0);
+  useDate.setSeconds(0);
+
   const data = dailyData.flatMap(hourlyData => hourlyData);
   
-  const currentData = data.find(item => new Date(item.time).getTime() === new Date(date).getTime());
+  const currentData = data.find(item => new Date(item.time).getTime() === new Date(useDate).getTime());
   const currentHumidity = Math.round(currentData.rh_2m);
   const currentPrecipitation = currentData.precip_total;
   const currentCloudiness = currentData.cldfrac;
   
-  const selectedIcon = setWeatherIcon(currentPrecipitation, currentCloudiness, currentHumidity, date);
+  const selectedIcon = setWeatherIcon(currentPrecipitation, currentCloudiness, currentHumidity, useDate);
   
   //* Using because there is no CESAM data available to get IQA or wave information
   const selectedCity = findCityByName(city_name)

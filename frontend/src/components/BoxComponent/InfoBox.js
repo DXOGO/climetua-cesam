@@ -18,6 +18,21 @@ import AtmosphericDataIcon from "../AtmosphericDataIcon/AtmosphericDataIcon";
 
 const InfoBox = () => {
 
+    const getFormattedDate = (date) => {
+        const daysOfWeek = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+        const monthsOfYear = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+
+        const dayOfWeek = daysOfWeek[date.getUTCDay()];
+        const day = date.getUTCDate().toString().padStart(2, '0');
+        const month = monthsOfYear[date.getUTCMonth()];
+        const year = date.getUTCFullYear();
+        const hours = date.getUTCHours().toString().padStart(2, '0');
+        const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+        const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+
+        return `${dayOfWeek}, ${day} ${month} ${year} ${hours}:${minutes}:${seconds}`;
+    };
+
     const dispatch = useDispatch();
 
     const activeButton = useSelector(state => state.activeButton);
@@ -27,9 +42,9 @@ const InfoBox = () => {
     const isExpanded = useSelector(state => state.isExpanded);
 
     const nowString = useSelector((state) => state.currentDate);
-    const now = new Date(nowString);
-    now.setMinutes(0)
-    now.setSeconds(0)
+    const dateOnlyHour = new Date(nowString);
+    dateOnlyHour.setMinutes(0)
+    dateOnlyHour.setSeconds(0)
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -45,7 +60,17 @@ const InfoBox = () => {
         clouds: 0,
     });
 
-    const currentData = cityDailyData.find(item => new Date(item.time).getTime() === new Date(now).getTime()) ? cityDailyData.find(item => new Date(item.time).getTime() === new Date(now).getTime()) : cityDailyData[0];
+    const [currentDate, setCurrentDate] = useState(new Date(nowString));
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setCurrentDate(prevDate => new Date(prevDate.getTime() + 1000));
+        }, 1000);
+
+        return () => clearInterval(intervalId);
+    }, []);
+
+    const currentData = cityDailyData.find(item => new Date(item.time).getTime() === new Date(dateOnlyHour).getTime()) ? cityDailyData.find(item => new Date(item.time).getTime() === new Date(dateOnlyHour).getTime()) : cityDailyData[0];
 
     useEffect(() => {
         setWeatherData({
@@ -61,7 +86,7 @@ const InfoBox = () => {
         weatherData.precipitation,
         weatherData.clouds,
         weatherData.humidity,
-        now
+        dateOnlyHour
     );
 
     useEffect(() => {
@@ -94,6 +119,8 @@ const InfoBox = () => {
         <div className={`info-box ${activeButton} ${isExpanded ? "expanded" : "collapsed"}`}>
             <div className="info-header">
                 <p className="box-text">{city.name}</p>
+                <div className="separator" />
+                <p className="date-text">{getFormattedDate(currentDate)}</p>
             </div>
             <div className={`info-content ${activeButton}`}>
                 <div className={`info-row ${activeButton} ${isExpanded ? "expanded" : "collapsed"}`}>

@@ -21,7 +21,7 @@ const WeatherInfo = () => {
 
     const dispatch = useDispatch();
     const now = useSelector((state) => state.currentDate);
-    const nowDate = new Date(now);
+    const initialDate = new Date(now);
 
     const selectedCity = useSelector((state) => state.selectedCity);
 
@@ -30,21 +30,7 @@ const WeatherInfo = () => {
     const [boxState, setBoxState] = useState(selectedCity ? 'info' : 'default');
     const [showIqaModal, setShowIqaModal] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-
-    const getFormattedDate = (date) => {
-        const options = {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-            timeZone: 'UTC'
-        };
-        return date.toLocaleString('pt-PT', options);
-    };
+    const [currentDate, setCurrentDate] = useState(initialDate);
 
     // * Ask user for location permissions
     const getLocation = () => {
@@ -97,6 +83,20 @@ const WeatherInfo = () => {
         }
     }, []);
 
+    useEffect(() => {
+        if (!isLoading) {
+            const intervalId = setInterval(() => {
+                setCurrentDate(prevDate => {
+                    const newDate = new Date(prevDate.getTime() + 1000);
+                    dispatch(updateDate(newDate));
+                    return newDate;
+                });
+            }, 1000);
+
+            return () => clearInterval(intervalId);
+        }
+    }, [dispatch, isLoading]);
+
     const handleCityClick = (cityName) => {
         const city = findCityByName(cityName);
         const cityDailyData = dailyData
@@ -104,7 +104,6 @@ const WeatherInfo = () => {
             .flatMap((item) => item.cityData);
 
         city.cityDailyData = cityDailyData;
-        console.log(city)
         dispatch(setSelectedCity(city));
         setBoxState('info');
     };
@@ -153,7 +152,7 @@ const WeatherInfo = () => {
                                                 city_name={city.name}
                                                 onClick={() => handleCityClick(city.name)}
                                                 className={`weather city-icon-${index}`}
-                                                date={nowDate}
+                                                date={initialDate}
                                                 dailyData={cityDailyData} />
                                         );
                                     })}
@@ -168,7 +167,6 @@ const WeatherInfo = () => {
                         }}
                     />
                 )}
-                <div className="today-date">Última atualização: {getFormattedDate(nowDate)}</div>
             </div>
             {showIqaModal && <IQAModal />}
         </div>

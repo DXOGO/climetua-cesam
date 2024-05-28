@@ -117,14 +117,14 @@ const WeatherBox = () => {
                     <div className="scroll-arrows">
                         {canScrollLeft ? (
                             <button className="scroll-arrow-left" onClick={scrollLeft}>
-                                <MdOutlineArrowBackIos />
+                                <p className='arrow-left'><MdOutlineArrowBackIos /></p>
                             </button>
                         ) : (
                             <div className="scroll-arrow-placeholder" />
                         )}
                         {canScrollRight ? (
                             <button className="scroll-arrow-right" onClick={scrollRight}>
-                                <MdOutlineArrowForwardIos />
+                                <p className='arrow-right'><MdOutlineArrowForwardIos /></p>
                             </button>
                         ) : (
                             <div className="scroll-arrow-placeholder" />

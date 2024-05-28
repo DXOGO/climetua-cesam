@@ -14,7 +14,6 @@ const Toggle = ({ label, name }) => {
 
   //* Here because data is not yet available
   if (name === "fog" || name === "snow" || name === "gust" || name === "highClouds" || name === "mediumClouds" || name === "lowClouds" || name === "solarRadiation" || name === "snowHeight" || name === "stormIndex" || name === "O3" || name === "NO2" || name === "PM2.5" || name === "PM10") {
-    console.log("here");
     isDisabled = 'disabled';
   }
 
