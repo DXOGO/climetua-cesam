@@ -101,7 +101,7 @@ const initializeMap = async () => {
     const { startTime, endTime } = await fetchTimeInterval();
     const layers = await fetchWMSLayers();
     const { cities } = dummyData;
-    
+
     const baseLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
         attribution: 'Centro de Estudos do Ambiente e do Mar - CESAM, Universidade de Aveiro',
     });
@@ -115,8 +115,8 @@ const initializeMap = async () => {
     });
 
     const map = L.map('map', {
-        center: [40.6346106, -8.6573321],
-        zoom: 5,
+        center: [39.5295, -10.0195],
+        zoom: 7.2,
         minZoom: 4,
         zoomControl: false,
         doubleClickZoom: false,
@@ -149,7 +149,6 @@ const initializeMap = async () => {
 
     L.control.zoom({ position: 'topright' }).addTo(map);
 
-    // Add your styling code here
     L.geoJSON(pt, {
         style: function (feature) {
             return {
@@ -188,13 +187,13 @@ const initializeMap = async () => {
 
     const legendControls = [];
 
-    const markers = cities.map(city => {
-        return {
-            name: city.name,
-            position: [city.lat, city.lon],
-        };
-    }
-    );
+    // const markers = cities.map(city => {
+    //     return {
+    //         name: city.name,
+    //         position: [city.lat, city.lon],
+    //     };
+    // }
+    // );
 
     const baseUrl = 'http://localhost:80/thredds/wms/cesamAll/wrfpost.nc';
 
@@ -213,12 +212,12 @@ const initializeMap = async () => {
 
         const wmsLayerTime = L.timeDimension.layer.wms.timeseries(wmsLayer, {
             updateTimeDimension: true,
-            name: layer.name,
+            name: layer.name ? layer.name : layer.code,
             // markers: markers,
             // enableNewMarkers: true,
         });
 
-        baseLayers[layer.name] = wmsLayerTime;
+        baseLayers[layer.name ? layer.name : layer.code] = wmsLayerTime;
 
         const legendControl = L.control({ position: 'bottomright' });
         legendControl.onAdd = function (map) {
@@ -250,6 +249,29 @@ const initializeMap = async () => {
             selectedLegendControl.addTo(map);
         }
     });
+
+        // Add control for displaying mouse coordinates
+        const coordsControl = L.control({ position: 'bottomright' });
+
+        coordsControl.onAdd = function (map) {
+            const div = L.DomUtil.create('div', 'coords-info');
+            div.style.padding = '5px';
+            div.style.background = 'rgba(255, 255, 255, 1)';
+            div.style.borderRadius = '5px';
+            div.style.boxShadow = '0 0 15px rgba(0, 0, 0, 0.2)';
+            div.style.marginRight = '20px'
+            div.style.transform = 'scale(1.1)'
+            div.innerHTML = 'Lat: , Lon: ';
+            return div;
+        };
+    
+        coordsControl.addTo(map);
+    
+        map.on('mousemove', function (e) {
+            const lat = e.latlng.lat.toFixed(4);
+            const lng = e.latlng.lng.toFixed(4);
+            document.querySelector('.coords-info').innerHTML = `Lat: ${lat}, Lon: ${lng}`;
+        });
 };
 
 fetchWMSLayers();

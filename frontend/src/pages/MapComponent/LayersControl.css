@@ -96,7 +96,24 @@
     }
 
     .leaflet-bar {
-        margin-bottom: 20px !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .coords-info {
+        display: none;
+    }
+
+    .leaflet-control-layers-list {
+        max-height: calc(100vh - 220px) !important;
+    }
+
+    .legend {
+        transform: scale(0.9) !important;
+        margin-bottom: 0px !important;
+    }
+
+    .leaflet-control-attribution {
+        display: none;
     }
 }
 
@@ -180,6 +197,7 @@
     align-items: center !important;
     justify-content: center !important;
     padding: 0px !important;
+    margin-left: 5px !important;
 }
 
 .leaflet-bar-timecontrol .timecontrol-speed .slider {

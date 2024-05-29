@@ -222,7 +222,7 @@ const WeatherChart = () => {
                 timezone: 'Europe/Lisbon'
             },
             type: 'spline',
-            animation: false,
+            animation: true,
             height: chartContainerClass,
             borderRadius: 10,
             spacingTop: 30,

@@ -33,30 +33,29 @@ const WeatherInfo = () => {
     const [currentDate, setCurrentDate] = useState(initialDate);
 
     // * Ask user for location permissions
-    const getLocation = () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    console.log('User location:', position.coords.latitude, position.coords.longitude);
-                    const closestCity = cities.reduce((prev, curr) =>
-                        Math.abs(curr.lat - position.coords.latitude) < Math.abs(prev.lat - position.coords.latitude) &&
-                            Math.abs(curr.lon - position.coords.longitude) < Math.abs(prev.lon - position.coords.longitude) ? curr : prev
-                    );
-                    dispatch(setSelectedCity(closestCity));
-                    setBoxState('info');
-                },
-                (error) => {
-                    console.error('Error getting user location:', error);
-                }
-            );
-        } else {
-            console.error('Geolocation is not supported by this browser');
-        }
-    };
+    // const getLocation = () => {
+    //     if (navigator.geolocation) {
+    //         navigator.geolocation.getCurrentPosition(
+    //             (position) => {
+    //                 console.log('User location:', position.coords.latitude, position.coords.longitude);
+    //                 const closestCity = cities.reduce((prev, curr) =>
+    //                     Math.abs(curr.lat - position.coords.latitude) < Math.abs(prev.lat - position.coords.latitude) &&
+    //                         Math.abs(curr.lon - position.coords.longitude) < Math.abs(prev.lon - position.coords.longitude) ? curr : prev
+    //                 );
+    //                 handleCityClick(closestCity.name)
+    //             },
+    //             (error) => {
+    //                 console.error('Error getting user location:', error);
+    //             }
+    //         );
+    //     } else {
+    //         console.error('Geolocation is not supported by this browser');
+    //     }
+    // };
 
-    useEffect(() => {
-        getLocation();
-    }, []);
+    // useEffect(() => {
+    //     getLocation();
+    // }, []);
 
     useEffect(() => {
         const fetchDailyData = async () => {
@@ -99,13 +98,16 @@ const WeatherInfo = () => {
 
     const handleCityClick = (cityName) => {
         const city = findCityByName(cityName);
-        const cityDailyData = dailyData
-            .filter((data) => data.city === city.id)
-            .flatMap((item) => item.cityData);
+        console.log(city)
+        if (city !== selectedCity) {
+            const cityDailyData = dailyData
+                .filter((data) => data.city === city.id)
+                .flatMap((item) => item.cityData);
 
-        city.cityDailyData = cityDailyData;
-        dispatch(setSelectedCity(city));
-        setBoxState('info');
+            city.cityDailyData = cityDailyData;
+            dispatch(setSelectedCity(city));
+            setBoxState('info');
+        }
     };
 
     const handleMouseEnter = () => { setShowIqaModal(true); };

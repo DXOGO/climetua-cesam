@@ -21,20 +21,29 @@
 
 .forecast-box {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
     font-size: 14px;
     font-weight: 400;
     color: #68727D;
     padding-right: 10px;
 }
 
+.forecast-box.expanded {
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.forecast-box.collapsed {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .forecast-box-text {
     display: flex;
     align-items: center;
     flex-direction: row;
-    align-self: flex-start;
+    height: 30px;
+    margin-left: 4px;
 }
 
 .forecast-content {
@@ -70,6 +79,11 @@
 .radio-options {
     font-size: 14px;
     font-weight: 400;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 20px;
+    margin-bottom: 10px;
 }
 
 .scroll-arrows {

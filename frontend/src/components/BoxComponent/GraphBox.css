@@ -135,6 +135,7 @@
     font-weight: 400;
     color: #68727D;
     align-self: flex-start;
+    height: 40px;
 }
 
 .warning-message {

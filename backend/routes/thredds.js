@@ -40,9 +40,24 @@ const cities = {
 
 const fetchData = async () => {
     try {
-        const response = await axios.get(`${threddsUrl}?service=WMS&version=1.3.0&request=GetCapabilities`);
+        const maxRetries = 5;
+        let retries = 0;
+        let response;
+        while (retries < maxRetries) {
+            try {
+                response = await axios.get(`${threddsUrl}?service=WMS&version=1.3.0&request=GetCapabilities`);
+                break;
+            } catch (error) {
+                console.error('Error fetching Thredds data:', error.message);
+                retries++;
+                await new Promise(resolve => setTimeout(resolve, 5000));
+            }
+        }
+        if (retries === maxRetries) {
+            throw new Error('Failed to fetch Thredds data');
+        }
         layersData = response.data;
-        console.log('/wms Thredds GetCapabilites fetched successfully');
+        console.log('/wms Thredds GetCapabilities fetched successfully');
 
         await fetchTimeDimensions();
     } catch (error) {
