@@ -78,11 +78,11 @@ const WeatherBox = () => {
     return (
         <div className="weather-box-container">
             <div className={`forecast-box ${isExpanded ? "expanded" : "collapsed"}`}>
-                <div className='forecast-box-text'>
+            <div className={`forecast-box-text ${isExpanded ? "expanded" : "collapsed"}`}>
                     <TbClockHour4 style={{ fontSize: 16 }} />
                     <p style={{ paddingLeft: 5 }}>Previsão diária</p>
                 </div>
-                <div className="radio-options">
+                <div className={`radio-options ${isExpanded ? "expanded" : "collapsed"}`}>
                     {/* {isExpanded ? (
                         <p>Intervalo de tempo:</p>
                     ) : null

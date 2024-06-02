@@ -45,9 +45,9 @@ const AtmosphericDataIcon = ({ type_data, humidity, wind, precipitation, pressur
       <div className="title">{title}</div>
       <div className="icon-column">
         {type_data === "humidity" ? (
-          <img src={icon} alt={title} style={{ width: "15px", height: "14px", marginTop: "2px" }} />
+          <img src={icon} alt={title} title={title} style={{ width: "15px", height: "14px", marginTop: "2px" }} />
         ) : (
-          <div style={type_data === "iqa" ? { width: "18px", height: "18px" } : { height: "18px" }}>{icon}</div>
+          <div title={title} style={type_data === "iqa" ? { width: "18px", height: "18px" } : { height: "18px" }}>{icon}</div>
         )}
         <div className={type_data === "iqa" ? "value-iqa" : "value"}>
           {value}
@@ -58,9 +58,9 @@ const AtmosphericDataIcon = ({ type_data, humidity, wind, precipitation, pressur
   ) : (
     <div className="icon-column-small">
       {type_data === "humidity" ? (
-        <img src={icon} alt={title} style={{ width: "15px", height: "14px", marginTop: "2px", marginRight: "2px" }} />
+        <img src={icon} alt={title} title={title} style={{ width: "15px", height: "14px", marginTop: "2px", marginRight: "2px" }} />
       ) : (
-        <div style={{ marginTop: "3px", marginRight: "2px" }}>{icon}</div>
+        <div title={title} style={{ marginTop: "3px", marginRight: "2px" }}>{icon}</div>
       )}
       <div className="value-column">
         <div className="value-small">

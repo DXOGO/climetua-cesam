@@ -31,31 +31,32 @@ const WeatherInfo = () => {
     const [showIqaModal, setShowIqaModal] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [currentDate, setCurrentDate] = useState(initialDate);
+    const [closestCityName, setClosestCityName] = useState(null);
 
     // * Ask user for location permissions
-    // const getLocation = () => {
-    //     if (navigator.geolocation) {
-    //         navigator.geolocation.getCurrentPosition(
-    //             (position) => {
-    //                 console.log('User location:', position.coords.latitude, position.coords.longitude);
-    //                 const closestCity = cities.reduce((prev, curr) =>
-    //                     Math.abs(curr.lat - position.coords.latitude) < Math.abs(prev.lat - position.coords.latitude) &&
-    //                         Math.abs(curr.lon - position.coords.longitude) < Math.abs(prev.lon - position.coords.longitude) ? curr : prev
-    //                 );
-    //                 handleCityClick(closestCity.name)
-    //             },
-    //             (error) => {
-    //                 console.error('Error getting user location:', error);
-    //             }
-    //         );
-    //     } else {
-    //         console.error('Geolocation is not supported by this browser');
-    //     }
-    // };
+    const getLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    console.log('User location:', position.coords.latitude, position.coords.longitude);
+                    const closestCity = cities.reduce((prev, curr) =>
+                        Math.abs(curr.lat - position.coords.latitude) < Math.abs(prev.lat - position.coords.latitude) &&
+                            Math.abs(curr.lon - position.coords.longitude) < Math.abs(prev.lon - position.coords.longitude) ? curr : prev
+                    );
+                    setClosestCityName(closestCity.name);
+                },
+                (error) => {
+                    console.error('Error getting user location:', error);
+                }
+            );
+        } else {
+            console.error('Geolocation is not supported by this browser');
+        }
+    };
 
-    // useEffect(() => {
-    //     getLocation();
-    // }, []);
+    useEffect(() => {
+        getLocation();
+    }, []);
 
     useEffect(() => {
         const fetchDailyData = async () => {
@@ -80,7 +81,7 @@ const WeatherInfo = () => {
         } else {
             setIsLoading(false);
         }
-    }, []);
+    }, [dispatch, dailyData]);
 
     useEffect(() => {
         if (!isLoading) {
@@ -96,17 +97,24 @@ const WeatherInfo = () => {
         }
     }, [dispatch, isLoading]);
 
+    useEffect(() => {
+        if (closestCityName && dailyData.length > 0) {
+            handleCityClick(closestCityName);
+        }
+    }, [closestCityName, dailyData]);
+
     const handleCityClick = (cityName) => {
         const city = findCityByName(cityName);
-        console.log(city)
-        if (city !== selectedCity) {
+        if (city && city !== selectedCity) {
             const cityDailyData = dailyData
                 .filter((data) => data.city === city.id)
                 .flatMap((item) => item.cityData);
 
-            city.cityDailyData = cityDailyData;
-            dispatch(setSelectedCity(city));
-            setBoxState('info');
+            if (cityDailyData.length > 0) {
+                city.cityDailyData = cityDailyData;
+                dispatch(setSelectedCity(city));
+                setBoxState('info');
+            }
         }
     };
 
@@ -143,20 +151,24 @@ const WeatherInfo = () => {
                         <div className='weather-info-map'>
                             <img src={portugal} alt='portugal' className='map-image' />
                             <div className='weather-icon-container'>
-                                {dailyData &&
+                                {dailyData.length > 0 && !isLoading &&
                                     cities.map((city, index) => {
                                         const cityDailyData = dailyData
                                             .filter((data) => data.city === city.id)
                                             .flatMap((item) => item.cityData);
-                                        return (
-                                            <WeatherIcon
-                                                key={index}
-                                                city_name={city.name}
-                                                onClick={() => handleCityClick(city.name)}
-                                                className={`weather city-icon-${index}`}
-                                                date={initialDate}
-                                                dailyData={cityDailyData} />
-                                        );
+                                        if (cityDailyData.length > 0) {
+                                            return (
+                                                <WeatherIcon
+                                                    key={index}
+                                                    city_name={city.name}
+                                                    onClick={() => handleCityClick(city.name)}
+                                                    className={`weather city-icon-${index}`}
+                                                    date={initialDate}
+                                                    dailyData={cityDailyData} />
+                                            );
+                                        } else {
+                                            return null;
+                                        }
                                     })}
                             </div>
                         </div>

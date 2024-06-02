@@ -39,17 +39,17 @@ export const setWeatherIcon = (precipitation, clouds, humidity, hours) => {
     const isNight = currentTime < 6 || currentTime > 20;
 
     const dayIcons = [
-        { condition: clouds <= 0.15 && precipitation < 0.5, icon: sun_icon, alt: "sun" },
-        { condition: clouds > 0.15 && clouds < 0.85 && precipitation < 0.5, icon: clouds_sun, alt: "clouds_sun" },
+        { condition: clouds <= 0.20 && precipitation < 0.5, icon: sun_icon, alt: "sun" },
+        { condition: clouds > 0.20 && clouds < 0.80 && precipitation < 0.5, icon: clouds_sun, alt: "clouds_sun" },
         { condition: precipitation >= 0.5 && humidity > 80, icon: rain_thunder, alt: "rain_thunder" },
         { condition: precipitation >= 0.2, icon: rain_icon, alt: "rain" },
-        { condition: clouds >= 0.85, icon: clouds_icon, alt: "clouds" },
+        { condition: clouds >= 0.80, icon: clouds_icon, alt: "clouds" },
         { condition: precipitation < 0.5 && precipitation >= 0.2 && humidity > 80, icon: thunder, alt: "thunder" },
     ];
 
     const nightIcons = [
-        { condition: clouds <= 0.15 && precipitation < 0.5, icon: night_icon, alt: "night" },
-        { condition: clouds > 0.15 && clouds < 0.85 && precipitation < 0.5, icon: night_clouds, alt: "night_clouds" },
+        { condition: clouds <= 0.20 && precipitation < 0.5, icon: night_icon, alt: "night" },
+        { condition: clouds > 0.20 && clouds < 0.80 && precipitation < 0.5, icon: night_clouds, alt: "night_clouds" },
         { condition: precipitation >= 0.5 && humidity > 80, icon: rain_thunder, alt: "rain_thunder" },
         { condition: precipitation >= 0.2, icon: rain_icon, alt: "rain" },
         { condition: true, icon: clouds_icon, alt: "clouds" },  // Default for night

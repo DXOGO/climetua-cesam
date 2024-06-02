@@ -10,7 +10,7 @@
   justify-content: center;
   /* move to the right */
   margin-left: 12px;
-  transform: scale(1.06);
+  transform: scale(1.08);
   cursor: pointer;
 }
 
@@ -19,8 +19,8 @@
   top: 26%;
   right: 0;
   transform: translateY(-50%);
-  width: 15px;
-  height: 30px;
+  width: 16px;
+  height: 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -35,8 +35,18 @@
   align-items: center;
   justify-content: center;
   color: white;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
+}
+
+.weather-detail-top {
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+
+.weather-detail-bottom {
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
 }
 
 .ellipse-container {
@@ -47,7 +57,7 @@
 
 .weather-text {
   position: absolute;
-  top: 56%;
+  top: 60%;
   right: 0px;
   font-size: 11px;
   font-weight: 500;
