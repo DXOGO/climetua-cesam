@@ -5,7 +5,7 @@ import Searchbar from '../../components/Searchbar/Searchbar';
 
 import { findCityByName } from '../../helpers/helpers';
 
-import { MdOutlineInfo } from "react-icons/md";
+import { AiOutlineQuestionCircle } from "react-icons/ai";
 import IQAModal from '../../components/Modal/IQAModal';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -139,13 +139,13 @@ const WeatherInfo = () => {
                 {!isExpanded ? (
                     <>
                         <div className='weather-info-text'>
+                            Índice de Qualidade do Ar
                             <div
                                 className='weather-info-text-content'
-                                onMouseEnter={handleMouseEnter}
+                                onClick={handleMouseEnter}
                                 onMouseLeave={handleMouseLeave}
                             >
-                                Índice de Qualidade do Ar
-                                <MdOutlineInfo className='iqa-info-icon' />
+                                <AiOutlineQuestionCircle className='iqa-info-icon' />
                             </div>
                         </div>
                         <div className='weather-info-map'>

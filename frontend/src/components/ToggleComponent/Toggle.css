@@ -6,7 +6,6 @@
   border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  /* size based on word size */
 }
 
 .toggle.on {

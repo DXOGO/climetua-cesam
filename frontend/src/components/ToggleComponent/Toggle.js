@@ -11,6 +11,7 @@ const Toggle = ({ label, name }) => {
   const isChecked = toggles.includes(name); // Check if the toggle is checked
   const isMaxTogglesReached = toggles.length === 3;
   let isDisabled = !isChecked && isMaxTogglesReached;
+  let title = '';
 
   //* Here because data is not yet available
   if (name === "fog" || name === "snow" || name === "gust" || name === "highClouds" || name === "mediumClouds" || name === "lowClouds" || name === "solarRadiation" || name === "snowHeight" || name === "stormIndex" || name === "O3" || name === "NO2" || name === "PM2.5" || name === "PM10") {
@@ -23,8 +24,15 @@ const Toggle = ({ label, name }) => {
     }
   };
 
+  useEffect(() => {
+    if (isDisabled) {
+      title = 'Maximum of 3 toggles reached';
+    }
+  }
+  );
+
   return (
-    <div className={`toggle ${isChecked ? 'on' : 'off'} ${isDisabled ? 'disabled' : ''}`} onClick={handleToggle}>
+    <div className={`toggle ${isChecked ? 'on' : 'off'} ${isDisabled ? 'disabled' : ''}`} onClick={handleToggle} title={title}>
       <span className={`label ${isChecked ? 'on' : 'off'}`}>{label}</span>
     </div>
   );

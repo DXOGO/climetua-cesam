@@ -32,9 +32,9 @@ const BoxComponent = ({ state }) => {
             <div className="box-header">
                 <div className="toggle-icon" onClick={toggleExpand}>
                     {isExpanded ? (
-                        <img src={fullscreen_exit} alt="exit fullscreen" style={{ width: "12px", height: "12px" }} />
+                        <img src={fullscreen_exit} alt="exit fullscreen" style={{ width: "18px", height: "18px" }} />
                     ) : (
-                        <img src={fullscreen} alt="fullscreen" style={{ width: "12px", height: "12px" }} />
+                        <img src={fullscreen} alt="fullscreen" style={{ width: "18px", height: "18px" }} />
                     )}
                 </div>
             </div>

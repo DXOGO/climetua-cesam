@@ -174,7 +174,7 @@
     }
 
     .info-buttons-graph.collapsed {
-        margin-right: 20px;
+        /* margin-right: 20px; */
         margin-top: 5px;
         width: 400px;
     }
@@ -192,10 +192,10 @@
     .info-box.graph {
         padding: 0 0px 10px 10px;
     }
-
+/* 
     .info-row.graph.collapsed {
         padding-right: 10px;
-    }
+    } */
 }
 
 @media screen and (min-width: 500px) {
@@ -206,6 +206,7 @@
         align-items: center;
         height: 96px;
         min-height: 96px;
+        margin-right: 10px;
     }
 
     .collapsed-atmospheric-data {
@@ -229,7 +230,8 @@
     }
 
     .info-buttons-table.collapsed {
-        margin-top: 20px;
+        padding-top: 20px;
+        padding-right: 10px;
         width: 100%;
     }
 
@@ -254,8 +256,8 @@
 }
 
 .info-buttons-table.expanded {
-    margin-top: 0px;
     width: 600px;
+    margin-left: 10px;
 }
 
 .info-buttons-graph {

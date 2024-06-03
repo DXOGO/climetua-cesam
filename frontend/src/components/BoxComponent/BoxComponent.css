@@ -47,7 +47,17 @@
 .toggle-icon {
   cursor: pointer;
   color: #68727D;
-  transform: scale(1.5);
+  height: 26px;
+  width: 26px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20%;
+  z-index: 100;
+}
+
+.toggle-icon:hover {
+  background-color: rgba(0, 0, 0, 0.06);
 }
 
 .box-content {
