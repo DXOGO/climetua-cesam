@@ -347,12 +347,11 @@ const WeatherChart = React.memo(function WeatherChart({ chartData }) {
                     } else {
                         const windSpeed = parseInt(point.point.value);
                         const windDirection = parseInt(point.point.direction);
-                        // north is 0 degrees, east is 90 degrees, south is 180 degrees, west is 270 degrees
                         const windDirectionDescription = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N'];
                         const windWay = windDirectionDescription[Math.round(windDirection / 45)];
                         const windDescription = point.point.beaufort;
 
-                        tooltipText += `<span style="color:${point.series.color}">\u25CF</span> Vento: <b>${windSpeed} m/s ${windWay}, (${windDescription})</b><br/>`;
+                        tooltipText += `<span style="color:${point.series.color}">\u25CF</span> Vento: <b>${windSpeed} m/s, ${windDescription} (${windWay})</b><br/>`;
                     }
                 });
 
