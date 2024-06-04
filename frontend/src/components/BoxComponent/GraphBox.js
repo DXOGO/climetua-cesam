@@ -10,7 +10,7 @@ import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 import WeatherChart from '../WeatherChart/WeatherChart';
 
 const GraphBox = ({ loading }) => {
-
+    
     const isExpanded = useSelector(state => state.isExpanded);
     const [levelExpanded, setLevelExpanded] = useState([true, true]);
 
@@ -59,6 +59,7 @@ const GraphBox = ({ loading }) => {
             { name: "temperature", label: "Temperatura" },
             { name: "humidity", label: "Humidade rel." },
             { name: "wind_speed", label: "Velocidade do vento" },
+            // { name: "wind_direction", label: "Direção do vento" },
             { name: "pressure", label: "Pressão" },
             { name: "cloudiness", label: "Nebulosidade" },
             { name: "precipitation", label: "Precipitação" },

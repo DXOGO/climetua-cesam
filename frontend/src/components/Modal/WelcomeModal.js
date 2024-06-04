@@ -28,7 +28,7 @@ const WelcomeModal = ({ onClose }) => {
                 <div className="welcome-modal-info">
                     <MdOutlineInfo style={{ fontSize: '16px', color: '#0A77FF', marginTop: '12px', marginRight: '4px' }} />
                     <p className="welcome-modal-small">
-                        Os dados de teste usados para esta prova de conceito pertencem ao intervalo de tempo de 7 julho 2021 às 00:00:00 até 15 julho 2021 às 12:00:00 e, no que toca aos dados disponíveis para cada distrito, inclui os seguintes: temperatura, humidade relativa, nebulosidade, precipitação total, precipitação convenctiva, precipitação não convenctiva, pressão, direção do vento e velocidade do vento.
+                        Os dados de teste usados para esta prova de conceito pertencem ao intervalo de tempo de 7 julho 2021 às 00:00:00 até 15 julho 2021 às 12:00:00 e, no que toca aos dados disponíveis para cada distrito, inclui os seguintes: temperatura, humidade relativa, nebulosidade, precipitação total, precipitação convenctiva, precipitação não convenctiva, pressão, velocidade do vento e direção do vento.
                     </p>
                 </div>
                 <button className="modal-button" onClick={onClose}>Continuar</button>

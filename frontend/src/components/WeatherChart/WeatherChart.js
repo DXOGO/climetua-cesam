@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-
 import './WeatherChart.css';
 
-const WeatherChart = () => {
-    // const city = useSelector((state) => state.selectedCity);
+import Highcharts from 'highcharts';
+import highchartsWindbarb from 'highcharts/modules/windbarb';
+import HighchartsReact from 'highcharts-react-official';
+
+highchartsWindbarb(Highcharts);
+
+const WeatherChart = React.memo(function WeatherChart({ chartData }) {
+
     const isExpanded = useSelector((state) => state.isExpanded);
     const selectedToggles = useSelector((state) => state.toggles);
 
@@ -29,23 +32,30 @@ const WeatherChart = () => {
 
     useEffect(() => {
         if (clientHeight > 900) {
-            setChartContainerClass(400);
+            setChartContainerClass(330);
         } else {
-            setChartContainerClass(300);
+            setChartContainerClass(270);
         }
 
         if (clientWidth <= 500) {
-            setChartContainerClass(260);
+            setChartContainerClass(240);
         }
     }, [clientHeight, clientWidth]);
 
     const precipitationRelatedToggles = ['precipitation', 'convectivePrecipitation', 'nonConvectivePrecipitation'];
     const percentageRelatedToggles = ['humidity', 'cloudiness'];
 
+    const [windBarbData, setWindBarbData] = useState([]);
+
+    useEffect(() => {
+        const newWindBarbData = variableData.filter((item, index) => index % 3 === 0).map(item => [new Date(item.time).getTime(), item.ws_10m, item.wd_10m]);
+        setWindBarbData(newWindBarbData);
+    }, [variableData]);
+
     const generateContinuousLineData = () => {
         const continuousLineData = [];
 
-        variableData.forEach(({ time, T_2m, rh_2m, ws_10m, precip_g, precip_c, precip_total, slp, cldfrac }) => {
+        variableData.forEach(({ time, T_2m, rh_2m, ws_10m, wd_10m, precip_g, precip_c, precip_total, slp, cldfrac }) => {
             const timestamp = new Date(time).getTime();
             const newDataPoint = { time: timestamp };
 
@@ -60,6 +70,10 @@ const WeatherChart = () => {
             if (selectedToggles.includes('wind_speed')) {
                 newDataPoint.wind_speed = Math.round(parseFloat(ws_10m));
             }
+
+            // if (selectedToggles.includes('wind_direction')) {
+            //     newDataPoint.wind_direction = parseInt(wd_10m);
+            // }
 
             if (selectedToggles.includes('convectivePrecipitation')) {
                 newDataPoint.convectivePrecipitation = parseFloat(precip_g);
@@ -83,10 +97,11 @@ const WeatherChart = () => {
 
             continuousLineData.push(newDataPoint);
         });
+
         return continuousLineData;
     };
 
-    const chartData = generateContinuousLineData();
+    chartData = generateContinuousLineData();
 
     const getInfo = (toggle) => {
         switch (toggle) {
@@ -96,6 +111,8 @@ const WeatherChart = () => {
                 return ['Humidade rel.', '%', '#82ca9d'];
             case 'wind_speed':
                 return ['Velocidade do vento', 'm/s', '#ffab0f '];
+            // case 'wind_direction':
+            //     return ['Direção do vento', '°', '#ffab0f'];
             case 'pressure':
                 return ['Pressão', 'hPa', '#e67e22'];
             case 'precipitation':
@@ -161,6 +178,10 @@ const WeatherChart = () => {
                 yAxisConfig.min = 0;
                 yAxisConfig.max = 100;
                 yAxisConfig.tickInterval = 20;
+                // } else if (toggle === 'wind_direction') {
+                //     yAxisConfig.min = 0;
+                //     yAxisConfig.max = 360;
+                //     yAxisConfig.tickInterval = 45;
             } else {
                 const minValue = Math.min(...toggleData);
                 const maxValue = Math.max(...toggleData);
@@ -222,7 +243,7 @@ const WeatherChart = () => {
                 timezone: 'Europe/Lisbon'
             },
             type: 'spline',
-            animation: true,
+            animation: false,
             height: chartContainerClass,
             borderRadius: 10,
             spacingTop: 30,
@@ -283,46 +304,69 @@ const WeatherChart = () => {
             formatter: function () {
                 let tooltipText = `<span style="font-size: 10px">${new Date(this.x).toLocaleString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', hour: 'numeric', minute: 'numeric' })}</span><br/>`;
                 this.points.forEach(point => {
-                    let toggle = point.series.userOptions.name;
-                    let unit = '';
 
-                    // Determine the unit based on the toggle name
-                    switch (toggle) {
-                        case 'Temperatura':
-                            unit = '°C';
-                            break;
-                        case 'Humidade rel.':
-                            unit = '%';
-                            break;
-                        case 'Precipitação':
-                            unit = 'mm';
-                            break;
-                        case 'Pressão atmosférica':
-                            unit = 'hPa';
-                            break;
-                        case 'Velocidade do vento':
-                            unit = 'm/s';
-                            break;
-                        case 'Prec. convectiva':
-                            unit = 'mm';
-                            break;
-                        case 'Prec. não convectiva':
-                            unit = 'mm';
-                            break;
-                        case 'Nebulosidade':
-                            unit = '%';
-                            break;
-                        default:
-                            unit = '';
+                    if (point.series.type !== 'windbarb') {
+                        let toggle = point.series.userOptions.name;
+                        let unit = '';
+
+                        // Determine the unit based on the toggle name
+                        switch (toggle) {
+                            case 'Temperatura':
+                                unit = '°C';
+                                break;
+                            case 'Humidade rel.':
+                                unit = '%';
+                                break;
+                            case 'Precipitação':
+                                unit = 'mm';
+                                break;
+                            case 'Pressão atmosférica':
+                                unit = 'hPa';
+                                break;
+                            case 'Velocidade do vento':
+                                unit = 'm/s';
+                                break;
+                            // case 'Direção do vento':
+                            //     unit = '°';
+                            //     break;
+                            case 'Prec. convectiva':
+                                unit = 'mm';
+                                break;
+                            case 'Prec. não convectiva':
+                                unit = 'mm';
+                                break;
+                            case 'Nebulosidade':
+                                unit = '%';
+                                break;
+                            default:
+                                unit = '';
+                        }
+
+                        tooltipText += `<span style="color:${point.series.color}">\u25CF</span> ${point.series.name}: <b>${point.y} ${unit}</b><br/>`;
+
+                    } else {
+                        const windSpeed = parseInt(point.point.value);
+                        const windDirection = parseInt(point.point.direction);
+                        // north is 0 degrees, east is 90 degrees, south is 180 degrees, west is 270 degrees
+                        const windDirectionDescription = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N'];
+                        const windWay = windDirectionDescription[Math.round(windDirection / 45)];
+                        const windDescription = point.point.beaufort;
+
+                        tooltipText += `<span style="color:${point.series.color}">\u25CF</span> Vento: <b>${windSpeed} m/s ${windWay}, (${windDescription})</b><br/>`;
                     }
-
-                    tooltipText += `<span style="color:${point.series.color}">\u25CF</span> ${point.series.name}: <b>${point.y} ${unit}</b><br/>`;
                 });
 
                 return tooltipText;
             }
         },
-        series: seriesData,
+        // series: seriesData,
+        series: selectedToggles.includes('wind_speed') ? [{
+            type: 'windbarb',
+            data: windBarbData,
+            color: '#68727D',
+            vectorLength: 15,
+            showInLegend: false,
+        }, ...seriesData] : seriesData,
     };
 
     return (
@@ -330,6 +374,6 @@ const WeatherChart = () => {
             <HighchartsReact highcharts={Highcharts} options={options} />
         </div>
     );
-};
+});
 
 export default WeatherChart;
