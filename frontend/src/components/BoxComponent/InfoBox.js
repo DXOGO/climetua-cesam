@@ -90,7 +90,7 @@ const InfoBox = () => {
     );
 
     useEffect(() => {
-        const fetchDataForCity = async () => {
+        const fetchWeeklyDataForCity = async () => {
             console.log('Fetching weekly data for city:', city.name);
             try {
                 const response = await fetch(`http://localhost:3001/api/data/${city.id}`);
@@ -107,7 +107,7 @@ const InfoBox = () => {
             }
         }
         setIsLoading(true);
-        fetchDataForCity();
+        fetchWeeklyDataForCity();
     }, [dispatch, city]);
 
     const renderState = activeButton === "graph" ? <GraphBox loading={isLoading} /> : <WeatherBox />;

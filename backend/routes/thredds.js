@@ -115,7 +115,7 @@ router.get('/time-dimensions', async (req, res) => {
     }
 });
 
-const fetchDataForCity = async (city, isDaily, variable) => {
+const fetchWeeklyDataForCity = async (city, isDaily, variable) => {
     const { X, Y } = cities[city];
 
     if (isDaily) {
@@ -194,7 +194,7 @@ router.get('/daily', async (req, res) => {
     console.log('Accessing /daily');
     try {
         const allCityData = await Promise.all(Object.keys(cities).map(async (city) => {
-            const cityData = await fetchDataForCity(city, true);
+            const cityData = await fetchWeeklyDataForCity(city, true);
             return { city, cityData };
         }));
 
@@ -209,7 +209,7 @@ router.get('/data/:city', async (req, res) => {
     const { city } = req.params;
     console.log(`Accessing /data/${city}`);
     try {
-        const data = await fetchDataForCity(city, false);
+        const data = await fetchWeeklyDataForCity(city, false);
         res.json(setData(data));
     } catch (error) {
         console.error(`Error fetching data for ${city}:`, error.message);
