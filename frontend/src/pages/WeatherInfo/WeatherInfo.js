@@ -7,6 +7,7 @@ import { findCityByName } from '../../helpers/helpers';
 
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import IQAModal from '../../components/Modal/IQAModal';
+import ErrorModal from '../../components/Modal/ErrorModal';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setSelectedCity, fetchDailyDataSuccess, updateDate } from '../../redux/actions';
@@ -121,12 +122,18 @@ const WeatherInfo = () => {
     const handleMouseEnter = () => { setShowIqaModal(true); };
     const handleMouseLeave = () => { setShowIqaModal(false); };
 
+    const handleReload = () => { window.location.reload(); };
+
     if (isLoading) {
         return (
             <div className="loading-container">
                 <div className="loading-icon" />
             </div>
         );
+    }
+
+    if (dailyData.length === 0) {
+        return <ErrorModal onClose={handleReload} />;
     }
 
     return (
@@ -169,7 +176,8 @@ const WeatherInfo = () => {
                                         } else {
                                             return null;
                                         }
-                                    })}
+                                    })
+                                } 
                             </div>
                         </div>
                     </>
