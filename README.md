@@ -5,7 +5,7 @@
 ##### To build and run the web app
 
 ```bash
-cd ./mctw-cesam
+cd ./climetua-cesam
 docker-compose -f docker-compose.dev.yml up
 ```
 
