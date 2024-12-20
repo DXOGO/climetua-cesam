@@ -10,9 +10,9 @@ Interface com informação de temperaturas máximas e mínimas diárias para tod
 
 
 
-Possibilidade de pesquisar por qualquer capital de distrito para obter informação atualizada e uma tabela de previsão diária de variáveis como temperatura, precipitação, velocidade do vento, humidade relativa e índice de qualidade do ar
+Possibilidade de pesquisar por qualquer capital de distrito para obter informação atualizada e uma tabela de previsão diária de variáveis como temperatura, precipitação, velocidade do vento, humidade relativa e índ. de qualidade do ar
 
-<img src="https://github.com/user-attachments/assets/73178c08-53fb-46da-87d6-0c8819aa3266" alt="image" width=35% height=35% /> <img src="https://github.com/user-attachments/assets/17edea60-becc-43f2-b328-6d5501363a58" alt="image" width=35% height=35% />
+<img src="https://github.com/user-attachments/assets/73178c08-53fb-46da-87d6-0c8819aa3266" alt="image" width=35% height=35% /> <img src="https://github.com/user-attachments/assets/17edea60-becc-43f2-b328-6d5501363a58" alt="image" width=34% height=34% />
 
 
 Interface responsiva e dinâmica que oferece tamém a funcionalidade de observar gráficos de previsão semanal de diferentes variáveis meteorológicas e de concentração de poluentes atmosféricos
